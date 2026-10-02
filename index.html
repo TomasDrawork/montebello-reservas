@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Montebello | Solicitud de Reservas</title>
+    <meta name="description" content="Solicita tu reserva en Club Montebello. Gastronomía de excelencia, almuerzos, cenas y la mejor vista panorámica de Villa Carlos Paz.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Style -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Background Hero Media (Official Restaurant Photo) -->
+    <div class="bg-wrapper">
+        <img src="fondo-panoramico.jpg" alt="Club Montebello - Vista Panorámica" class="bg-image" onerror="this.src='fondo-nuevo.jpg'">
+        <div class="bg-overlay"></div>
+    </div>
+
+    <!-- Main App Wrapper -->
+    <main class="app-container">
+        
+        <!-- Glass Card Widget (Club Montebello Style) -->
+        <div class="widget-card" id="widgetCard">
+            
+            <!-- Top Social, Maps & Menu Bar -->
+            <div class="top-nav-bar">
+                <a href="https://menu.fu.do/clubmontebello/qr-menu" target="_blank" class="menu-quick-link">
+                    📖 Carta Digital
+                </a>
+                
+                <div class="social-icons-group">
+                    <a href="https://wa.me/5493541760808" target="_blank" class="social-icon-btn wa" title="WhatsApp Business" aria-label="WhatsApp">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    </a>
+                    <a href="https://www.facebook.com/montebelloresto" target="_blank" class="social-icon-btn fb" title="Facebook Montebello" aria-label="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                    </a>
+                    <a href="https://www.instagram.com/clubmontebello/" target="_blank" class="social-icon-btn ig" title="Instagram Club Montebello" aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </a>
+                    <a href="https://maps.app.goo.gl/N98GZTW9BFzf8oLK7" target="_blank" class="social-icon-btn maps" title="Ubicación Google Maps" aria-label="Google Maps">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Brand Header (Custom Dynamic Layout) -->
+            <header class="widget-header custom-layout">
+                <!-- Centered Brand Group: Club Montebello -->
+                <div class="header-brand-centered">
+                    <h1 class="brand-title-large">Club Montebello</h1>
+                </div>
+            </header>
+
+            <!-- Dynamic Content Area -->
+            <div class="widget-body">
+                
+                <!-- STEP 0: WELCOME -->
+                <section class="step-pane active" id="step0">
+                    <div class="welcome-content">
+                        <div class="badge-tag">
+                            <span class="badge-star">✦</span> EXPERIENCIA GASTRONÓMICA
+                        </div>
+                        <h2 class="welcome-title">Reserva de Mesas</h2>
+                        <p class="welcome-desc">Asegurá tu lugar para disfrutar nuestros almuerzos o cenas con la mejor vista panorámica de Villa Carlos Paz.</p>
+                        
+                        <div class="welcome-cta-group">
+                            <button class="btn-primary" id="btnStartReservation">
+                                <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                HACER UNA RESERVA
+                            </button>
+                        </div>
+
+                        <div class="schedule-summary-badge">
+                            <span class="clock-icon">🍷</span> 
+                            <span>Almuerzos & Cenas | Mié a Dom</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- STEP 1: DINERS SELECTOR -->
+                <section class="step-pane" id="step1">
+                    <div class="step-heading">
+                        <h2 class="step-title">¿Cuántos comensales?</h2>
+                        <p class="step-subtitle">Selecciona la cantidad de personas</p>
+                    </div>
+
+                    <!-- Single Clean Interactive Diners Counter Box -->
+                    <div class="unified-diners-box">
+                        <span class="box-label">Número de personas</span>
+                        <div class="counter-controls">
+                            <button class="btn-counter-main" id="btnDecrementDiners" aria-label="Disminuir comensales">-</button>
+                            <div class="counter-display">
+                                <span id="customDinersNum">2</span>
+                                <span class="counter-unit" id="customDinersUnit">personas</span>
+                                <span class="counter-sub" id="customDinersSub">Con compañía</span>
+                            </div>
+                            <button class="btn-counter-main" id="btnIncrementDiners" aria-label="Aumentar comensales">+</button>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" id="btnToStep2">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 1 0 7.75"></path></svg>
+                        CONTINUAR CON <span id="btnDinersLabel">2 COMENSALES</span>
+                    </button>
+                </section>
+
+                <!-- STEP 2: DATE SELECTOR -->
+                <section class="step-pane" id="step2">
+                    <div class="step-heading">
+                        <div class="selection-pill-summary" id="summaryDinersPill">
+                            👥 <span id="pillDinersText">2 Personas</span>
+                        </div>
+                        <h2 class="step-title">¿Cuándo te gustaría visitarnos?</h2>
+                        <p class="step-subtitle">Selecciona tu fecha preferida</p>
+                    </div>
+
+                    <!-- Date Carousel -->
+                    <div class="date-carousel-wrapper">
+                        <button class="carousel-nav prev" id="carouselPrev" aria-label="Anteriores días">‹</button>
+                        <div class="date-carousel" id="dateCarousel">
+                            <!-- Dynamic Date Cards Inserted via JS -->
+                        </div>
+                        <button class="carousel-nav next" id="carouselNext" aria-label="Siguientes días">›</button>
+                    </div>
+
+                    <div class="full-calendar-toggle">
+                        <button class="btn-text-link" id="btnOpenCalendar">
+                            📅 Ver calendario completo
+                        </button>
+                    </div>
+                </section>
+
+                <!-- STEP 3: TIME SELECTOR -->
+                <section class="step-pane" id="step3">
+                    <div class="step-heading">
+                        <div class="selection-pill-summary">
+                            👥 <span id="pillDinersTextStep3">2 Personas</span> &nbsp;|&nbsp; 📅 <span id="pillDateTextStep3">Sáb 3 Oct</span>
+                        </div>
+                        <h2 class="step-title">Selecciona el horario</h2>
+                        <p class="step-subtitle">Elige tu turno para almorzar o cenar</p>
+                    </div>
+
+                    <div class="time-slots-container" id="timeSlotsContainer">
+                        <!-- Dynamic Time Slot Buttons Inserted via JS -->
+                    </div>
+                </section>
+
+                <!-- STEP 4: CONTACT & NOTES -->
+                <section class="step-pane" id="step4">
+                    <div class="step-heading">
+                        <h2 class="step-title">Tus Datos</h2>
+                        <p class="step-subtitle">Información para enviar tu solicitud</p>
+                    </div>
+
+                    <form id="contactForm" onsubmit="event.preventDefault();">
+                        <div class="form-group">
+                            <label for="inputName">Nombre completo *</label>
+                            <input type="text" id="inputName" placeholder="Ej: María González" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputPhone">Teléfono WhatsApp *</label>
+                            <input type="tel" id="inputPhone" placeholder="Ej: 3541 123456" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputPreferences">Ubicación Preferida</label>
+                            <div class="preference-options">
+                                <label class="pref-chip">
+                                    <input type="radio" name="locationPref" value="Indistinto" checked>
+                                    <span>🪑 Indistinto</span>
+                                </label>
+                                <label class="pref-chip">
+                                    <input type="radio" name="locationPref" value="Balcón">
+                                    <span>🌅 Balcón</span>
+                                </label>
+                                <label class="pref-chip">
+                                    <input type="radio" name="locationPref" value="Rooftop">
+                                    <span>🍸 Rooftop</span>
+                                </label>
+                                <label class="pref-chip">
+                                    <input type="radio" name="locationPref" value="Interior">
+                                    <span>🏛️ Interior</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputNotes">Notas especiales o motivo (Opcional)</label>
+                            <textarea id="inputNotes" rows="2" placeholder="Ej: Cumpleaños, aniversario, silla alta para bebé..."></textarea>
+                        </div>
+
+                        <button class="btn-primary btn-whatsapp" id="btnSubmitWhatsApp">
+                            <svg class="wa-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                            SOLICITAR RESERVA POR WHATSAPP
+                        </button>
+                    </form>
+                </section>
+
+                <!-- STEP 5: SUCCESS / CONFIRMATION MODAL -->
+                <section class="step-pane" id="step5">
+                    <div class="success-box">
+                        <div class="success-icon-wrapper">✓</div>
+                        <h2 class="step-title">¡Solicitud de Reserva Lista!</h2>
+                        <p class="step-subtitle">Tu solicitud está lista para que nuestro equipo te confirme la disponibilidad por WhatsApp:</p>
+
+                        <div class="reservation-summary-card" id="finalSummaryCard">
+                            <!-- Injected dynamically -->
+                        </div>
+
+                        <a href="#" id="manualWaLink" target="_blank" class="btn-primary btn-whatsapp">
+                            ENVIAR SOLICITUD A WHATSAPP
+                        </a>
+
+                        <div class="secondary-links-row">
+                            <button class="btn-text-link" id="btnRestart">Hacer otra solicitud</button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Footer & Navigation Progress -->
+            <footer class="widget-footer" id="widgetFooter">
+                <div class="footer-nav">
+                    <button class="btn-back" id="btnBackStep" aria-label="Volver atrás">
+                        ‹
+                    </button>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="progressBarFill"></div>
+                    </div>
+                </div>
+
+                <div class="footer-links-bar">
+                    <span>Sitio Oficial <strong>Club Montebello</strong> • Villa Carlos Paz</span>
+                    <div class="footer-socials">
+                        <a href="https://www.instagram.com/clubmontebello/" target="_blank">Instagram</a> •
+                        <a href="https://www.facebook.com/montebelloresto" target="_blank">Facebook</a> •
+                        <a href="https://maps.app.goo.gl/N98GZTW9BFzf8oLK7" target="_blank">Google Maps</a>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- CUSTOM CALENDAR MODAL -->
+    <div class="modal-overlay" id="calendarModal">
+        <div class="calendar-modal-box">
+            <div class="modal-header">
+                <h3>📅 Calendario Completo</h3>
+                <button class="modal-close" id="btnCloseModal" aria-label="Cerrar modal">✕</button>
+            </div>
+            
+            <div class="modal-month-nav">
+                <button class="month-nav-btn" id="modalPrevMonth">‹</button>
+                <span class="month-title" id="modalMonthTitle">Octubre 2026</span>
+                <button class="month-nav-btn" id="modalNextMonth">›</button>
+            </div>
+
+            <div class="modal-weekdays">
+                <span>Lu</span><span>Ma</span><span>Mi</span><span>Ju</span><span>Vi</span><span>Sá</span><span>Do</span>
+            </div>
+
+            <div class="modal-days-grid" id="modalDaysGrid">
+                <!-- Dynamic Days Grid Injected via JS -->
+            </div>
+
+            <div class="modal-footer-legend">
+                <span><span class="legend-dot closed"></span> Cerrado (Lun/Mar)</span>
+                <span><span class="legend-dot open"></span> Disponible</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
