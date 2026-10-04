@@ -63,6 +63,27 @@
             </div>
         </header>
 
+        <!-- Calendar & Date Navigation Bar -->
+        <section class="calendar-bar-section">
+            <div class="calendar-bar">
+                <div class="date-navigator">
+                    <button class="btn-date-nav" id="btnPrevDay" title="Día Anterior">‹ Día Anterior</button>
+                    <div class="date-picker-wrapper">
+                        <span class="calendar-icon">📅</span>
+                        <span class="selected-date-text" id="selectedDateTitle">Todas las Fechas</span>
+                        <input type="date" id="datePicker" class="date-picker-input">
+                    </div>
+                    <button class="btn-date-nav" id="btnNextDay" title="Día Siguiente">Día Siguiente ›</button>
+                </div>
+
+                <div class="date-quick-pills">
+                    <button class="btn-date-pill active" id="btnFilterAllDates">Todas las Fechas</button>
+                    <button class="btn-date-pill" id="btnFilterToday">Hoy</button>
+                    <button class="btn-date-pill" id="btnFilterTomorrow">Mañana</button>
+                </div>
+            </div>
+        </section>
+
         <!-- KPI Metrics Row -->
         <section class="metrics-grid">
             <div class="metric-card gold">

@@ -264,6 +264,108 @@ body {
     border-color: rgba(239, 68, 68, 0.2);
 }
 
+/* --- CALENDAR & DATE BAR --- */
+.calendar-bar-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-lg);
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.calendar-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.date-navigator {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-date-nav {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-dark);
+    color: var(--text-white);
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-date-nav:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-primary);
+    color: var(--text-gold);
+}
+
+.date-picker-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-input);
+    border: 1.5px solid var(--border-gold);
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+
+.calendar-icon { font-size: 16px; }
+
+.selected-date-text {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--text-gold);
+    font-size: 14px;
+}
+
+.date-picker-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.date-quick-pills {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-date-pill {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-dark);
+    color: var(--text-muted);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-date-pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btn-date-pill.active {
+    background: var(--gold-gradient);
+    border-color: transparent;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(224, 90, 16, 0.3);
+}
+
 /* Metrics Row */
 .metrics-grid {
     display: grid;

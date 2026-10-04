@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- STATE ---
     let reservationsData = [];
     let currentFilterStatus = 'ALL';
+    let selectedDateFilter = null; // null = All Dates, Date object = specific day
     let searchQuery = '';
     let authToken = sessionStorage.getItem('montebello_admin_token');
 
@@ -14,6 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminDashboard = document.getElementById('adminDashboard');
     const btnLogout = document.getElementById('btnLogout');
     const btnRefresh = document.getElementById('btnRefresh');
+
+    // Calendar Elements
+    const btnPrevDay = document.getElementById('btnPrevDay');
+    const btnNextDay = document.getElementById('btnNextDay');
+    const datePicker = document.getElementById('datePicker');
+    const selectedDateTitle = document.getElementById('selectedDateTitle');
+    const btnFilterAllDates = document.getElementById('btnFilterAllDates');
+    const btnFilterToday = document.getElementById('btnFilterToday');
+    const btnFilterTomorrow = document.getElementById('btnFilterTomorrow');
 
     // Metrics
     const countPending = document.getElementById('countPending');
@@ -71,6 +81,54 @@ document.addEventListener('DOMContentLoaded', () => {
         adminDashboard.style.display = 'block';
     }
 
+    // --- DATE HELPERS ---
+    function formatDateShort(date) {
+        if (!date) return '';
+        const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+        const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        return `${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`;
+    }
+
+    function formatFullTitle(date) {
+        if (!date) return 'Todas las Fechas';
+        const options = { weekday: 'short', month: 'short', day: 'numeric' };
+        return date.toLocaleDateString('es-ES', options);
+    }
+
+    function setDateFilter(dateObj) {
+        selectedDateFilter = dateObj;
+        
+        // Update quick pills UI
+        [btnFilterAllDates, btnFilterToday, btnFilterTomorrow].forEach(b => b.classList.remove('active'));
+
+        if (!dateObj) {
+            selectedDateTitle.textContent = 'Todas las Fechas';
+            btnFilterAllDates.classList.add('active');
+            datePicker.value = '';
+        } else {
+            const today = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 1);
+
+            if (dateObj.toDateString() === today.toDateString()) {
+                btnFilterToday.classList.add('active');
+            } else if (dateObj.toDateString() === tomorrow.toDateString()) {
+                btnFilterTomorrow.classList.add('active');
+            }
+
+            selectedDateTitle.textContent = formatFullTitle(dateObj);
+            
+            // Set datePicker HTML5 YYYY-MM-DD
+            const yyyy = dateObj.getFullYear();
+            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const dd = String(dateObj.getDate()).padStart(2, '0');
+            datePicker.value = `${yyyy}-${mm}-${dd}`;
+        }
+
+        updateMetrics();
+        renderReservations();
+    }
+
     // --- FETCH RESERVATIONS ---
     async function fetchReservations() {
         try {
@@ -87,24 +145,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- METRICS ---
-    function updateMetrics() {
-        const pending = reservationsData.filter(r => r.status === 'PENDIENTE').length;
-        const confirmed = reservationsData.filter(r => r.status === 'CONFIRMADA').length;
-        const totalDiners = reservationsData
-            .filter(r => r.status === 'CONFIRMADA')
-            .reduce((sum, r) => sum + (parseInt(r.diners, 10) || 0), 0);
-
-        countPending.textContent = pending;
-        badgePending.textContent = pending;
-        countConfirmed.textContent = confirmed;
-        countTotalDiners.textContent = totalDiners;
-        countTotal.textContent = reservationsData.length;
-    }
-
-    // --- RENDER RESERVATIONS GRID ---
-    function renderReservations() {
+    // --- FILTER HELPER ---
+    function getFilteredReservations() {
         let filtered = reservationsData;
+
+        // Filter by Date
+        if (selectedDateFilter) {
+            const dateShortStr = formatDateShort(selectedDateFilter).toLowerCase();
+            filtered = filtered.filter(r => r.dateStr && r.dateStr.toLowerCase().includes(dateShortStr));
+        }
 
         // Filter by Tab Status
         if (currentFilterStatus !== 'ALL') {
@@ -121,6 +170,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 (r.id && r.id.toLowerCase().includes(q))
             );
         }
+
+        return filtered;
+    }
+
+    // --- METRICS ---
+    function updateMetrics() {
+        let pool = reservationsData;
+        if (selectedDateFilter) {
+            const dateShortStr = formatDateShort(selectedDateFilter).toLowerCase();
+            pool = pool.filter(r => r.dateStr && r.dateStr.toLowerCase().includes(dateShortStr));
+        }
+
+        const pending = pool.filter(r => r.status === 'PENDIENTE').length;
+        const confirmed = pool.filter(r => r.status === 'CONFIRMADA').length;
+        const totalDiners = pool
+            .filter(r => r.status === 'CONFIRMADA')
+            .reduce((sum, r) => sum + (parseInt(r.diners, 10) || 0), 0);
+
+        countPending.textContent = pending;
+        badgePending.textContent = pending;
+        countConfirmed.textContent = confirmed;
+        countTotalDiners.textContent = totalDiners;
+        countTotal.textContent = pool.length;
+    }
+
+    // --- RENDER RESERVATIONS GRID ---
+    function renderReservations() {
+        const filtered = getFilteredReservations();
 
         reservationsGrid.innerHTML = '';
 
@@ -286,6 +363,39 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.addEventListener('input', (e) => {
             searchQuery = e.target.value.trim();
             renderReservations();
+        });
+
+        // Calendar Controls
+        btnFilterAllDates.addEventListener('click', () => setDateFilter(null));
+        
+        btnFilterToday.addEventListener('click', () => {
+            setDateFilter(new Date());
+        });
+
+        btnFilterTomorrow.addEventListener('click', () => {
+            const tom = new Date();
+            tom.setDate(tom.getDate() + 1);
+            setDateFilter(tom);
+        });
+
+        btnPrevDay.addEventListener('click', () => {
+            const base = selectedDateFilter ? new Date(selectedDateFilter) : new Date();
+            base.setDate(base.getDate() - 1);
+            setDateFilter(base);
+        });
+
+        btnNextDay.addEventListener('click', () => {
+            const base = selectedDateFilter ? new Date(selectedDateFilter) : new Date();
+            base.setDate(base.getDate() + 1);
+            setDateFilter(base);
+        });
+
+        datePicker.addEventListener('change', (e) => {
+            if (e.target.value) {
+                const parts = e.target.value.split('-');
+                const pickedDate = new Date(parts[0], parts[1] - 1, parts[2]);
+                setDateFilter(pickedDate);
+            }
         });
 
         // Tabs
