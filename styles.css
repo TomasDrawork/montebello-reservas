@@ -683,6 +683,7 @@ body {
 }
 
 .form-group input[type="text"],
+.form-group input[type="email"],
 .form-group input[type="tel"],
 .form-group textarea {
     box-sizing: border-box;
