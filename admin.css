@@ -496,8 +496,24 @@ body {
 .res-card-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 12px;
+}
+
+.btn-delete-icon {
+    background: transparent;
+    border: none;
+    color: #9CA3AF;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+}
+
+.btn-delete-icon:hover {
+    color: #EF4444;
+    background: rgba(239, 68, 68, 0.15);
 }
 
 .res-id {

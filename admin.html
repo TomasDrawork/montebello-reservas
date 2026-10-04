@@ -204,6 +204,25 @@
         </div>
     </div>
 
+    <!-- Action Modal: Delete Confirmation -->
+    <div class="action-modal" id="deleteModal">
+        <div class="modal-content">
+            <button class="modal-close" id="btnCloseDeleteModal">&times;</button>
+            <h2 class="modal-title red">Eliminar Reserva <span id="modalDeleteResId"></span></h2>
+            <p class="modal-subtitle">¿Estás seguro de que deseas eliminar permanentemente esta reserva del sistema? Esta acción no se puede deshacer.</p>
+            
+            <form id="deleteForm">
+                <input type="hidden" id="deleteResId">
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="btnCancelDelete">Cancelar</button>
+                    <button type="submit" class="btn-confirm-red">
+                        🗑️ ELIMINAR DEFINITIVAMENTE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Admin JS -->
     <script src="admin.js"></script>
 </body>

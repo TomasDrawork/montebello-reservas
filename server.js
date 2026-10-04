@@ -194,6 +194,33 @@ app.put('/api/admin/reservations/:id/status', async (req, res) => {
     }
 });
 
+/**
+ * Admin Endpoint: Delete a reservation permanently
+ */
+app.delete('/api/admin/reservations/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        let reservations = readReservations();
+        const initialCount = reservations.length;
+
+        reservations = reservations.filter(r => r.id !== id && r.uuid !== id);
+
+        if (reservations.length === initialCount) {
+            return res.status(404).json({ success: false, message: 'Reserva no encontrada.' });
+        }
+
+        writeReservations(reservations);
+
+        res.json({
+            success: true,
+            message: `Reserva ${id} eliminada correctamente.`
+        });
+    } catch (err) {
+        console.error('Error en DELETE /api/admin/reservations/:id:', err);
+        res.status(500).json({ success: false, message: 'Error al eliminar reserva.' });
+    }
+});
+
 // Fallback to index.html for unknown routes
 app.use((req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));

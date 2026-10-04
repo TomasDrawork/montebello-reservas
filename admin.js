@@ -57,6 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCloseRejectModal = document.getElementById('btnCloseRejectModal');
     const btnCancelReject = document.getElementById('btnCancelReject');
 
+    // Delete Modal
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteForm = document.getElementById('deleteForm');
+    const deleteResId = document.getElementById('deleteResId');
+    const modalDeleteResId = document.getElementById('modalDeleteResId');
+    const btnCloseDeleteModal = document.getElementById('btnCloseDeleteModal');
+    const btnCancelDelete = document.getElementById('btnCancelDelete');
+
     // --- INITIALIZATION ---
     function init() {
         if (authToken) {
@@ -246,7 +254,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div>
                     <div class="res-card-header">
                         <span class="res-id">${res.id}</span>
-                        <span class="res-status-badge ${res.status}">${res.status}</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="res-status-badge ${res.status}">${res.status}</span>
+                            <button class="btn-delete-icon" onclick="openDeleteModal('${res.id}')" title="Eliminar reserva">
+                                🗑️
+                            </button>
+                        </div>
                     </div>
 
                     <h3 class="res-customer-name">${res.customerName}</h3>
@@ -317,6 +330,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeRejectModal() {
         rejectModal.classList.remove('active');
+    }
+
+    window.openDeleteModal = function(resId) {
+        deleteResId.value = resId;
+        modalDeleteResId.textContent = `[${resId}]`;
+        deleteModal.classList.add('active');
+    };
+
+    function closeDeleteModal() {
+        deleteModal.classList.remove('active');
     }
 
     // --- EVENT BINDINGS ---
@@ -466,12 +489,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Delete Modal Form Submit
+        deleteForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = deleteResId.value;
+
+            try {
+                const res = await fetch(`/api/admin/reservations/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    closeDeleteModal();
+                    fetchReservations();
+                } else {
+                    alert(data.message || 'Error al eliminar reserva.');
+                }
+            } catch (err) {
+                alert('Error de conexión.');
+            }
+        });
+
         // Modal Close Buttons
         btnCloseApproveModal.addEventListener('click', closeApproveModal);
         btnCancelApprove.addEventListener('click', closeApproveModal);
 
         btnCloseRejectModal.addEventListener('click', closeRejectModal);
         btnCancelReject.addEventListener('click', closeRejectModal);
+
+        btnCloseDeleteModal.addEventListener('click', closeDeleteModal);
+        btnCancelDelete.addEventListener('click', closeDeleteModal);
     }
 
     init();
