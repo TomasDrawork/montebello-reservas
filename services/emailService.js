@@ -9,11 +9,16 @@ let transporter = null;
 
 if (GMAIL_APP_PASSWORD) {
     transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
         auth: {
             user: MONTEBELLO_EMAIL,
             pass: GMAIL_APP_PASSWORD
-        }
+        },
+        connectionTimeout: 10000,
+        greetingTimeout: 5000,
+        socketTimeout: 10000
     });
 } else {
     // Development / Test mode transporter (logs to console and returns success)

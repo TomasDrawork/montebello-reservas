@@ -90,10 +90,13 @@ app.post('/api/reservations', async (req, res) => {
         reservations.unshift(newReservation);
         writeReservations(reservations);
 
-        // Send email to customer asynchronously
-        sendPendingNotification(newReservation).catch(err => {
+        // Send email to customer (await before Lambda freezes)
+        try {
+            await sendPendingNotification(newReservation);
+            console.log(`✅ Mail de recepción enviado correctamente a ${newReservation.customerEmail}`);
+        } catch (err) {
             console.error('Error enviando mail de recepción:', err);
-        });
+        }
 
         res.status(201).json({
             success: true,
@@ -179,15 +182,17 @@ app.put('/api/admin/reservations/:id/status', async (req, res) => {
         reservations[index] = reservation;
         writeReservations(reservations);
 
-        // Send Email Notification if status changed
-        if (status === 'CONFIRMADA' && previousStatus !== 'CONFIRMADA') {
-            sendConfirmationNotification(reservation).catch(err => {
-                console.error('Error enviando mail de confirmación:', err);
-            });
-        } else if (status === 'RECHAZADA' && previousStatus !== 'RECHAZADA') {
-            sendRejectionNotification(reservation).catch(err => {
-                console.error('Error enviando mail de rechazo:', err);
-            });
+        // Send Email Notification if status changed (await before Lambda freezes)
+        try {
+            if (status === 'CONFIRMADA' && previousStatus !== 'CONFIRMADA') {
+                await sendConfirmationNotification(reservation);
+                console.log(`✅ Mail de confirmación enviado correctamente a ${reservation.customerEmail}`);
+            } else if (status === 'RECHAZADA' && previousStatus !== 'RECHAZADA') {
+                await sendRejectionNotification(reservation);
+                console.log(`✅ Mail de rechazo enviado correctamente a ${reservation.customerEmail}`);
+            }
+        } catch (err) {
+            console.error('Error enviando mail de estado:', err);
         }
 
         res.json({
