@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Gestión de Reservas | Club Montebello</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Admin CSS -->
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <!-- Background Overlay -->
+    <div class="bg-wrapper">
+        <div class="bg-overlay"></div>
+    </div>
+
+    <!-- Login Modal (Active if unauthenticated) -->
+    <div class="admin-login-modal" id="loginModal">
+        <div class="login-card">
+            <div class="brand-badge">STAFF ONLY</div>
+            <h1 class="login-title">Club Montebello</h1>
+            <p class="login-subtitle">Panel de Gestión de Reservas</p>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="adminPassword">Contraseña de Acceso</label>
+                    <input type="password" id="adminPassword" placeholder="Ingrese clave..." required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn-primary-admin" id="btnLoginSubmit">
+                    INGRESAR AL PANEL
+                </button>
+                <div class="login-error" id="loginError"></div>
+            </form>
+            <div class="login-footer">Acceso restringido al personal autorizado</div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div class="admin-container" id="adminDashboard" style="display: none;">
+        
+        <!-- Header Bar -->
+        <header class="admin-header">
+            <div class="header-brand">
+                <span class="brand-tag">ROOFTOP & GASTRONOMÍA</span>
+                <h1 class="header-title">Club Montebello</h1>
+            </div>
+            
+            <div class="header-actions">
+                <div class="live-status-badge">
+                    <span class="status-dot"></span> EN VIVO
+                </div>
+                <button class="btn-icon-text" id="btnRefresh" title="Actualizar datos">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    Actualizar
+                </button>
+                <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
+            </div>
+        </header>
+
+        <!-- KPI Metrics Row -->
+        <section class="metrics-grid">
+            <div class="metric-card gold">
+                <div class="metric-icon">⏳</div>
+                <div class="metric-info">
+                    <span class="metric-value" id="countPending">0</span>
+                    <span class="metric-label">Solicitudes Pendientes</span>
+                </div>
+            </div>
+
+            <div class="metric-card green">
+                <div class="metric-icon">✅</div>
+                <div class="metric-info">
+                    <span class="metric-value" id="countConfirmed">0</span>
+                    <span class="metric-label">Reservas Confirmadas</span>
+                </div>
+            </div>
+
+            <div class="metric-card blue">
+                <div class="metric-icon">👥</div>
+                <div class="metric-info">
+                    <span class="metric-value" id="countTotalDiners">0</span>
+                    <span class="metric-label">Comensales Totales</span>
+                </div>
+            </div>
+
+            <div class="metric-card dark">
+                <div class="metric-icon">📋</div>
+                <div class="metric-info">
+                    <span class="metric-value" id="countTotal">0</span>
+                    <span class="metric-label">Total de Solicitudes</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Toolbar & Filters -->
+        <section class="toolbar-section">
+            <div class="tabs-group">
+                <button class="tab-btn active" data-status="ALL">Todas</button>
+                <button class="tab-btn badge-alert" data-status="PENDIENTE">
+                    Pendientes <span class="tab-count" id="badgePending">0</span>
+                </button>
+                <button class="tab-btn" data-status="CONFIRMADA">Confirmadas</button>
+                <button class="tab-btn" data-status="RECHAZADA">Rechazadas</button>
+            </div>
+
+            <div class="filter-controls">
+                <input type="text" id="searchInput" placeholder="Buscar por cliente, email, ID..." class="search-input">
+            </div>
+        </section>
+
+        <!-- Reservations List / Table -->
+        <main class="reservations-main">
+            <div class="reservations-grid" id="reservationsGrid">
+                <!-- Injected via JavaScript -->
+            </div>
+            
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">🍷</div>
+                <h3>No hay reservas para mostrar</h3>
+                <p>No se encontraron solicitudes con los filtros aplicados.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Action Modal: Approve / Confirm -->
+    <div class="action-modal" id="approveModal">
+        <div class="modal-content">
+            <button class="modal-close" id="btnCloseApproveModal">&times;</button>
+            <h2 class="modal-title green">Confirmar Reserva <span id="modalResId"></span></h2>
+            <p class="modal-subtitle">Al confirmar, se enviará automáticamente un email al cliente de <strong>Reserva Confirmada</strong>.</p>
+            
+            <form id="approveForm">
+                <input type="hidden" id="approveResId">
+                <div class="form-group">
+                    <label for="approveTableName">Mesa / Sector Asignado (Opcional)</label>
+                    <input type="text" id="approveTableName" placeholder="Ej: Mesa 14 - Rooftop Balcón">
+                </div>
+                
+                <div class="form-group">
+                    <label for="approveStaffNotes">Mensaje o nota adicional para el cliente (Opcional)</label>
+                    <textarea id="approveStaffNotes" rows="2" placeholder="Ej: Te guardamos la mejor vista al atardecer..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="btnCancelApprove">Cancelar</button>
+                    <button type="submit" class="btn-confirm-green">
+                        ✅ APROBAR Y ENVIAR EMAIL
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Action Modal: Reject -->
+    <div class="action-modal" id="rejectModal">
+        <div class="modal-content">
+            <button class="modal-close" id="btnCloseRejectModal">&times;</button>
+            <h2 class="modal-title red">Rechazar Solicitud <span id="modalRejectResId"></span></h2>
+            <p class="modal-subtitle">Se enviará un correo informando amablemente la falta de disponibilidad.</p>
+            
+            <form id="rejectForm">
+                <input type="hidden" id="rejectResId">
+                
+                <div class="form-group">
+                    <label for="rejectReason">Motivo o alternativa sugerida (Opcional)</label>
+                    <textarea id="rejectReason" rows="3" placeholder="Ej: No disponemos de mesa para ese horario. Te sugerimos el turno de las 22:45 hs."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="btnCancelReject">Cancelar</button>
+                    <button type="submit" class="btn-confirm-red">
+                        🔴 RECHAZAR Y NOTIFICAR
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin JS -->
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -166,6 +166,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="inputEmail">Correo Electrónico (para recibir confirmación) *</label>
+                            <input type="email" id="inputEmail" placeholder="Ej: maria@gmail.com" required>
+                        </div>
+
+                        <div class="form-group">
                             <label for="inputPhone">Teléfono WhatsApp *</label>
                             <input type="tel" id="inputPhone" placeholder="Ej: 3541 123456" required>
                         </div>
@@ -198,8 +203,8 @@
                         </div>
 
                         <button class="btn-primary btn-whatsapp" id="btnSubmitWhatsApp">
-                            <svg class="wa-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                            SOLICITAR RESERVA POR WHATSAPP
+                            <svg class="wa-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            SOLICITAR RESERVA AHORA
                         </button>
                     </form>
                 </section>
@@ -208,18 +213,14 @@
                 <section class="step-pane" id="step5">
                     <div class="success-box">
                         <div class="success-icon-wrapper">✓</div>
-                        <h2 class="step-title">¡Solicitud de Reserva Lista!</h2>
-                        <p class="step-subtitle">Tu solicitud está lista para que nuestro equipo te confirme la disponibilidad por WhatsApp:</p>
+                        <h2 class="step-title">¡Solicitud Registrada!</h2>
+                        <p class="step-subtitle">Tu solicitud ha sido recibida y se envió un correo de confirmación pendiente a tu email.</p>
 
                         <div class="reservation-summary-card" id="finalSummaryCard">
                             <!-- Injected dynamically -->
                         </div>
 
-                        <a href="#" id="manualWaLink" target="_blank" class="btn-primary btn-whatsapp">
-                            ENVIAR SOLICITUD A WHATSAPP
-                        </a>
-
-                        <div class="secondary-links-row">
+                        <div class="secondary-links-row" style="margin-top: 20px;">
                             <button class="btn-text-link" id="btnRestart">Hacer otra solicitud</button>
                         </div>
                     </div>

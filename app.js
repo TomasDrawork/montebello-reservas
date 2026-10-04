@@ -70,11 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Contact Form & Submit
     const contactForm = document.getElementById('contactForm');
     const inputName = document.getElementById('inputName');
+    const inputEmail = document.getElementById('inputEmail');
     const inputPhone = document.getElementById('inputPhone');
     const inputNotes = document.getElementById('inputNotes');
     const btnSubmitWhatsApp = document.getElementById('btnSubmitWhatsApp');
     const finalSummaryCard = document.getElementById('finalSummaryCard');
-    const manualWaLink = document.getElementById('manualWaLink');
     const btnRestart = document.getElementById('btnRestart');
 
 
@@ -340,70 +340,97 @@ document.addEventListener('DOMContentLoaded', () => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
-    // --- WHATSAPP MESSAGE SUBMISSION ---
-    function handleReservationSubmit() {
-        state.customerName = inputName.value.trim();
-        state.customerPhone = inputPhone.value.trim();
-        state.customerNotes = inputNotes.value.trim();
+    // --- RESERVATION API SUBMISSION ---
+    async function handleReservationSubmit() {
+        state.customerName = inputName ? inputName.value.trim() : '';
+        state.customerEmail = inputEmail ? inputEmail.value.trim() : '';
+        state.customerPhone = inputPhone ? inputPhone.value.trim() : '';
+        state.customerNotes = inputNotes ? inputNotes.value.trim() : '';
 
         const selectedPref = document.querySelector('input[name="locationPref"]:checked');
         state.locationPref = selectedPref ? selectedPref.value : 'Indistinto';
 
-        if (!state.customerName || !state.customerPhone) {
-            alert('Por favor completa tu nombre y teléfono para continuar.');
+        if (!state.customerName || !state.customerEmail || !state.customerPhone) {
+            alert('Por favor completa tu nombre, correo electrónico y teléfono para continuar.');
             return;
         }
 
-        const dateFormatted = formatDateFull(state.selectedDate);
+        const dateFormatted = formatDateShort(state.selectedDate);
 
-        // Build WhatsApp Message Text
-        const messageText = 
-`🍷 *SOLICITUD DE RESERVA - CLUB MONTEBELLO*
+        // Disable submit button during request
+        btnSubmitWhatsApp.disabled = true;
+        btnSubmitWhatsApp.innerHTML = `Enviando Solicitud...`;
 
-👤 *Nombre:* ${state.customerName}
-📱 *Teléfono:* ${state.customerPhone}
-👥 *Comensales:* ${state.diners} ${state.diners === 1 ? 'persona' : 'personas'}
-📅 *Fecha:* ${dateFormatted}
-⏰ *Turno:* ${state.selectedTime}
-🪑 *Ubicación:* ${state.locationPref}
-📝 *Notas/Motivo:* ${state.customerNotes || 'Sin observaciones'}
+        try {
+            const response = await fetch('/api/reservations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    diners: state.diners,
+                    dateStr: dateFormatted,
+                    timeSlot: state.selectedTime,
+                    locationPref: state.locationPref,
+                    customerName: state.customerName,
+                    customerEmail: state.customerEmail,
+                    customerPhone: state.customerPhone,
+                    customerNotes: state.customerNotes
+                })
+            });
 
-_Por favor confírmeme la disponibilidad para agendar esta reserva. ¡Muchas gracias!_`;
+            const data = await response.json();
 
-        const encodedMsg = encodeURIComponent(messageText);
-        const waUrl = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodedMsg}`;
+            if (data.success && data.reservation) {
+                const res = data.reservation;
+                // Populate final summary card
+                finalSummaryCard.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 14px;">
+                        <span style="background: rgba(224,90,16,0.15); border: 1px solid #E05A10; color: #FFA767; font-family: 'Montserrat', sans-serif; font-weight: 700; padding: 6px 14px; border-radius: 6px; font-size: 15px; display: inline-block;">
+                            CÓDIGO: ${res.id}
+                        </span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Nombre:</span>
+                        <span class="summary-val">${res.customerName}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Correo:</span>
+                        <span class="summary-val">${res.customerEmail}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Comensales:</span>
+                        <span class="summary-val">${res.diners} personas</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Fecha:</span>
+                        <span class="summary-val">${res.dateStr}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Turno:</span>
+                        <span class="summary-val">${res.timeSlot}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Ubicación:</span>
+                        <span class="summary-val">${res.locationPref}</span>
+                    </div>
+                    <div style="background: rgba(224,90,16,0.1); border-left: 3px solid #E05A10; padding: 12px; border-radius: 6px; font-size: 13px; color: #AD9F93; margin-top: 14px; text-align: left;">
+                        ⏳ <strong>Estado: Pendiente de Confirmación</strong>.<br>Hemos enviado un correo a <strong>${res.customerEmail}</strong>. Te avisaremos cuando el equipo apruebe tu mesa.
+                    </div>
+                `;
 
-        // Populate final summary card
-        finalSummaryCard.innerHTML = `
-            <div class="summary-row">
-                <span class="summary-label">Nombre:</span>
-                <span class="summary-val">${state.customerName}</span>
-            </div>
-            <div class="summary-row">
-                <span class="summary-label">Comensales:</span>
-                <span class="summary-val">${state.diners} personas</span>
-            </div>
-            <div class="summary-row">
-                <span class="summary-label">Fecha:</span>
-                <span class="summary-val">${formatDateShort(state.selectedDate)}</span>
-            </div>
-            <div class="summary-row">
-                <span class="summary-label">Turno:</span>
-                <span class="summary-val">${state.selectedTime}</span>
-            </div>
-            <div class="summary-row">
-                <span class="summary-label">Ubicación:</span>
-                <span class="summary-val">${state.locationPref}</span>
-            </div>
-        `;
-
-        manualWaLink.href = waUrl;
-        
-        // Go to Step 5
-        goToStep(5);
-
-        // Open WhatsApp window automatically
-        window.open(waUrl, '_blank');
+                goToStep(5);
+            } else {
+                alert(data.message || 'Ocurrió un error al registrar tu solicitud. Por favor reintenta.');
+            }
+        } catch (err) {
+            console.error('Error enviando reserva:', err);
+            alert('Error de conexión al servidor. Por favor verifica tu red e intenta nuevamente.');
+        } finally {
+            btnSubmitWhatsApp.disabled = false;
+            btnSubmitWhatsApp.innerHTML = `
+                <svg class="wa-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                SOLICITAR RESERVA AHORA
+            `;
+        }
     }
 
     // --- EVENT BINDINGS ---

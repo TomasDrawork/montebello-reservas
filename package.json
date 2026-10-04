@@ -2,10 +2,10 @@
   "name": "montebello-reservas",
   "version": "1.0.0",
   "description": "Sistema web interactivo de solicitudes de reserva para Club Montebello (Villa Carlos Paz) desplegado en AWS con Terraform.",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "npx live-server --port=8080",
-    "dev": "npx live-server --port=8080",
+    "start": "node server.js",
+    "dev": "node server.js",
     "deploy": "./deploy.sh"
   },
   "keywords": [
@@ -20,5 +20,11 @@
     "css3"
   ],
   "author": "tomasipd98",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "nodemailer": "^10.0.14",
+    "uuid": "^14.0.2"
+  }
 }
