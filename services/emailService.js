@@ -1,8 +1,8 @@
 const nodemailer = require('nodemailer');
 
 // Official Montebello Email Configuration
-const MONTEBELLO_EMAIL = process.env.MONTEBELLO_EMAIL || 'clubmontebellovcp@gmail.com';
-const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || '';
+const MONTEBELLO_EMAIL = process.env.MONTEBELLO_EMAIL || 'reservas.montebellovcp@gmail.com';
+const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || 'fepixwspdvunpxin';
 
 // Create Transporter (uses Gmail SMTP if password provided, or Ethereal/Console fallback)
 let transporter = null;

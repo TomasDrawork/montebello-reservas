@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 const {
     sendPendingNotification,
     sendConfirmationNotification,
@@ -11,7 +11,9 @@ const {
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const DATA_FILE = path.join(__dirname, 'data', 'reservations.json');
+const IS_LAMBDA = !!process.env.AWS_LAMBDA_FUNCTION_NAME || !!process.env.LAMBDA_TASK_ROOT;
+const DATA_DIR = IS_LAMBDA ? '/tmp' : path.join(__dirname, 'data');
+const DATA_FILE = path.join(DATA_DIR, 'reservations.json');
 
 // Middleware
 app.use(cors());
@@ -19,13 +21,18 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 // Ensure data directory exists
-if (!fs.existsSync(path.join(__dirname, 'data'))) {
-    fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
+if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
 // Ensure JSON file exists
 if (!fs.existsSync(DATA_FILE)) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
+    let initialContent = '[]';
+    const seedPath = path.join(__dirname, 'data', 'reservations.json');
+    if (fs.existsSync(seedPath)) {
+        try { initialContent = fs.readFileSync(seedPath, 'utf8'); } catch (e) {}
+    }
+    fs.writeFileSync(DATA_FILE, initialContent);
 }
 
 // Helper to read reservations
@@ -65,7 +72,7 @@ app.post('/api/reservations', async (req, res) => {
 
         const newReservation = {
             id: reservationId,
-            uuid: uuidv4(),
+            uuid: crypto.randomUUID(),
             diners: parseInt(diners, 10) || 2,
             dateStr,
             timeSlot,
@@ -226,9 +233,16 @@ app.use((req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Start Server
-app.listen(PORT, () => {
-    console.log(`\n🍷 Club Montebello Backend Server corriendo en: http://localhost:${PORT}`);
-    console.log(`📱 Widget de Reservas Cliente: http://localhost:${PORT}`);
-    console.log(`👨‍🍳 Panel de Administración Staff: http://localhost:${PORT}/admin.html\n`);
-});
+const serverless = require('serverless-http');
+
+// Export handler for AWS Lambda
+module.exports.handler = serverless(app);
+
+// Start Standalone Server for local development
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`\n🍷 Club Montebello Backend Server corriendo en: http://localhost:${PORT}`);
+        console.log(`📱 Widget de Reservas Cliente: http://localhost:${PORT}`);
+        console.log(`👨‍🍳 Panel de Administración Staff: http://localhost:${PORT}/admin.html\n`);
+    });
+}
