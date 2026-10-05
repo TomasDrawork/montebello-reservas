@@ -11,6 +11,8 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 .terraform.lock.hcl
+*.zip
+terraform/*.zip
 
 # ==========================================
 # Environment & Secrets
@@ -29,7 +31,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # ==========================================
-# Node Dependencies & Storage
+# Node Dependencies & Data Storage
 # ==========================================
 node_modules/
 data/*.json
