@@ -32,8 +32,17 @@ app.post('/api/reservations', async (req, res) => {
 
         const reservations = await dbService.getAllReservations();
         
-        // Generate short custom ID: MB-1001, MB-1002...
-        const nextNum = 1000 + reservations.length + 1;
+        // Find highest existing numeric ID (e.g., MB-1005 -> 1005) to prevent recycling or collisions
+        let maxNum = 1000;
+        reservations.forEach(r => {
+            if (r.id && typeof r.id === 'string' && r.id.startsWith('MB-')) {
+                const num = parseInt(r.id.replace('MB-', ''), 10);
+                if (!isNaN(num) && num > maxNum) {
+                    maxNum = num;
+                }
+            }
+        });
+        const nextNum = maxNum + 1;
         const reservationId = `MB-${nextNum}`;
 
         const newReservation = {
