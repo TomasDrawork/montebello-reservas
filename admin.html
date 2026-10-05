@@ -68,7 +68,7 @@
             <div class="calendar-bar">
                 <div class="date-navigator">
                     <button class="btn-date-nav" id="btnPrevDay" title="Día Anterior">‹ Día Anterior</button>
-                    <div class="date-picker-wrapper">
+                    <div class="date-picker-wrapper" id="datePickerWrapper">
                         <span class="calendar-icon">📅</span>
                         <span class="selected-date-text" id="selectedDateTitle">Todas las Fechas</span>
                         <input type="date" id="datePicker" class="date-picker-input">
@@ -220,6 +220,36 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Action Modal: Custom Monthly Calendar Picker for Admin -->
+    <div class="action-modal" id="adminCalendarModal">
+        <div class="calendar-modal-box">
+            <div class="admin-modal-header">
+                <h3>📅 Seleccionar Fecha</h3>
+                <button class="modal-close" id="btnCloseAdminCalendar">&times;</button>
+            </div>
+            
+            <div class="modal-month-nav">
+                <button class="month-nav-btn" id="adminCalPrevMonth" type="button">‹</button>
+                <span class="month-title" id="adminCalMonthTitle">Octubre 2026</span>
+                <button class="month-nav-btn" id="adminCalNextMonth" type="button">›</button>
+            </div>
+
+            <div class="modal-weekdays">
+                <span>Dom</span><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span>
+            </div>
+
+            <div class="modal-days-grid" id="adminCalDaysGrid">
+                <!-- Dynamic Days Grid Injected via JS -->
+            </div>
+
+            <div class="calendar-modal-footer">
+                <button type="button" class="btn-select-all-dates" id="btnAdminCalAllDates">
+                    ✨ Mostrar Todas las Fechas
+                </button>
+            </div>
         </div>
     </div>
 

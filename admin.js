@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnRefresh = document.getElementById('btnRefresh');
 
     // Calendar Elements
+    const datePickerWrapper = document.getElementById('datePickerWrapper');
     const btnPrevDay = document.getElementById('btnPrevDay');
     const btnNextDay = document.getElementById('btnNextDay');
     const datePicker = document.getElementById('datePicker');
@@ -24,6 +25,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnFilterAllDates = document.getElementById('btnFilterAllDates');
     const btnFilterToday = document.getElementById('btnFilterToday');
     const btnFilterTomorrow = document.getElementById('btnFilterTomorrow');
+
+    // Custom Admin Monthly Calendar Modal Elements
+    const adminCalendarModal = document.getElementById('adminCalendarModal');
+    const btnCloseAdminCalendar = document.getElementById('btnCloseAdminCalendar');
+    const adminCalPrevMonth = document.getElementById('adminCalPrevMonth');
+    const adminCalNextMonth = document.getElementById('adminCalNextMonth');
+    const adminCalMonthTitle = document.getElementById('adminCalMonthTitle');
+    const adminCalDaysGrid = document.getElementById('adminCalDaysGrid');
+    const btnAdminCalAllDates = document.getElementById('btnAdminCalAllDates');
+
+    let adminCalMonth = new Date().getMonth();
+    let adminCalYear = new Date().getFullYear();
 
     // Metrics
     const countPending = document.getElementById('countPending');
@@ -342,6 +355,82 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteModal.classList.remove('active');
     }
 
+    // --- ADMIN CALENDAR MODAL FUNCTIONS ---
+    function openAdminCalendarModal() {
+        if (selectedDateFilter) {
+            adminCalMonth = selectedDateFilter.getMonth();
+            adminCalYear = selectedDateFilter.getFullYear();
+        } else {
+            const now = new Date();
+            adminCalMonth = now.getMonth();
+            adminCalYear = now.getFullYear();
+        }
+        renderAdminCalendar();
+        adminCalendarModal.classList.add('active');
+    }
+
+    function closeAdminCalendarModal() {
+        adminCalendarModal.classList.remove('active');
+    }
+
+    function renderAdminCalendar() {
+        const monthNames = [
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
+        adminCalMonthTitle.textContent = `${monthNames[adminCalMonth]} ${adminCalYear}`;
+
+        const firstDay = new Date(adminCalYear, adminCalMonth, 1).getDay();
+        const daysInMonth = new Date(adminCalYear, adminCalMonth + 1, 0).getDate();
+        const today = new Date();
+
+        adminCalDaysGrid.innerHTML = '';
+
+        // Empty cells before 1st day of month
+        for (let i = 0; i < firstDay; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'admin-day-cell empty';
+            adminCalDaysGrid.appendChild(emptyCell);
+        }
+
+        // Day cells
+        for (let day = 1; day <= daysInMonth; day++) {
+            const cell = document.createElement('div');
+            cell.className = 'admin-day-cell';
+
+            const dateObj = new Date(adminCalYear, adminCalMonth, day);
+
+            // Check if today
+            if (dateObj.toDateString() === today.toDateString()) {
+                cell.classList.add('today');
+            }
+
+            // Check if selected
+            if (selectedDateFilter && dateObj.toDateString() === selectedDateFilter.toDateString()) {
+                cell.classList.add('selected');
+            }
+
+            // Count reservations on this date
+            const dateShortStr = formatDateShort(dateObj).toLowerCase();
+            const resCount = reservationsData.filter(r => r.dateStr && r.dateStr.toLowerCase().includes(dateShortStr)).length;
+
+            let countHtml = '';
+            if (resCount > 0) {
+                countHtml = `<span class="res-count-dot">${resCount} res</span>`;
+            }
+
+            cell.innerHTML = `<span>${day}</span>${countHtml}`;
+
+            cell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setDateFilter(dateObj);
+                closeAdminCalendarModal();
+            });
+
+            adminCalDaysGrid.appendChild(cell);
+        }
+    }
+
     // --- EVENT BINDINGS ---
     function bindEvents() {
         // Login Form
@@ -413,12 +502,63 @@ document.addEventListener('DOMContentLoaded', () => {
             setDateFilter(base);
         });
 
-        datePicker.addEventListener('change', (e) => {
-            if (e.target.value) {
-                const parts = e.target.value.split('-');
-                const pickedDate = new Date(parts[0], parts[1] - 1, parts[2]);
-                setDateFilter(pickedDate);
+        // Admin Calendar Modal Trigger & Events
+        if (datePickerWrapper) {
+            datePickerWrapper.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openAdminCalendarModal();
+            });
+        }
+
+        if (datePicker) {
+            datePicker.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openAdminCalendarModal();
+            });
+
+            datePicker.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    const parts = e.target.value.split('-');
+                    const pickedDate = new Date(parts[0], parts[1] - 1, parts[2]);
+                    setDateFilter(pickedDate);
+                }
+            });
+        }
+
+        btnCloseAdminCalendar.addEventListener('click', closeAdminCalendarModal);
+
+        adminCalendarModal.addEventListener('click', (e) => {
+            if (e.target === adminCalendarModal) {
+                closeAdminCalendarModal();
             }
+        });
+
+        adminCalPrevMonth.addEventListener('click', (e) => {
+            e.stopPropagation();
+            adminCalMonth--;
+            if (adminCalMonth < 0) {
+                adminCalMonth = 11;
+                adminCalYear--;
+            }
+            renderAdminCalendar();
+        });
+
+        adminCalNextMonth.addEventListener('click', (e) => {
+            e.stopPropagation();
+            adminCalMonth++;
+            if (adminCalMonth > 11) {
+                adminCalMonth = 0;
+                adminCalYear++;
+            }
+            renderAdminCalendar();
+        });
+
+        btnAdminCalAllDates.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setDateFilter(null);
+            closeAdminCalendarModal();
         });
 
         // Tabs

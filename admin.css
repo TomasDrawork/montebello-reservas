@@ -725,3 +725,168 @@ body {
     color: var(--text-muted);
 }
 .empty-icon { font-size: 48px; margin-bottom: 12px; }
+
+/* --- CUSTOM ADMIN CALENDAR MODAL --- */
+.calendar-modal-box {
+    background: #181512;
+    border: 1.5px solid var(--border-gold);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
+    animation: popIn 0.3s ease-out;
+    position: relative;
+}
+
+.admin-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.admin-modal-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-gold);
+    margin: 0;
+}
+
+.modal-month-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.month-nav-btn {
+    background: rgba(229, 168, 35, 0.12);
+    border: 1px solid var(--border-gold);
+    color: var(--text-gold);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.month-nav-btn:hover {
+    background: var(--gold-primary);
+    color: #0F0D0B;
+}
+
+.month-title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-white);
+    text-transform: capitalize;
+}
+
+.modal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.modal-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 18px;
+}
+
+.admin-day-cell {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-white);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-dark);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.admin-day-cell:hover:not(.empty) {
+    background: var(--gold-light);
+    border-color: var(--gold-primary);
+    color: var(--text-gold);
+}
+
+.admin-day-cell.empty {
+    background: transparent;
+    border-color: transparent;
+    cursor: default;
+}
+
+.admin-day-cell.today {
+    border-color: rgba(229, 168, 35, 0.6);
+    box-shadow: inset 0 0 0 1px rgba(229, 168, 35, 0.4);
+}
+
+.admin-day-cell.selected {
+    background: var(--gold-gradient);
+    border-color: var(--gold-primary);
+    color: #0F0D0B;
+    font-weight: 800;
+    box-shadow: 0 4px 15px rgba(224, 90, 16, 0.4);
+}
+
+.res-count-dot {
+    font-size: 0.6rem;
+    background: rgba(224, 90, 16, 0.3);
+    color: var(--text-gold);
+    border-radius: 10px;
+    padding: 1px 4px;
+    margin-top: 2px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.admin-day-cell.selected .res-count-dot {
+    background: rgba(15, 13, 11, 0.3);
+    color: #0F0D0B;
+}
+
+.calendar-modal-footer {
+    text-align: center;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border-dark);
+}
+
+.btn-select-all-dates {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-dark);
+    color: var(--text-gold);
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-select-all-dates:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-primary);
+}
