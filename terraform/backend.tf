@@ -21,6 +21,28 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "lambda_dynamodb" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+}
+
+# AWS DynamoDB Table for Permanent Reservation Storage
+resource "aws_dynamodb_table" "reservations_table" {
+  name         = "montebello_reservations"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "id"
+
+  attribute {
+    name = "id"
+    type = "S"
+  }
+
+  tags = {
+    Name        = "MontebelloReservations"
+    Environment = "Staging"
+  }
+}
+
 # AWS Lambda Function for Express Backend
 resource "aws_lambda_function" "api_lambda" {
   filename         = "${path.module}/lambda.zip"
@@ -37,6 +59,7 @@ resource "aws_lambda_function" "api_lambda" {
       NODE_ENV           = "production"
       MONTEBELLO_EMAIL   = "reservas.montebellovcp@gmail.com"
       GMAIL_APP_PASSWORD = "fepixwspdvunpxin"
+      DYNAMODB_TABLE     = aws_dynamodb_table.reservations_table.name
     }
   }
 }

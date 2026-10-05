@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const dbService = require('./services/dbService');
 const {
     sendPendingNotification,
     sendConfirmationNotification,
@@ -11,45 +11,11 @@ const {
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const IS_LAMBDA = !!process.env.AWS_LAMBDA_FUNCTION_NAME || !!process.env.LAMBDA_TASK_ROOT;
-const DATA_DIR = IS_LAMBDA ? '/tmp' : path.join(__dirname, 'data');
-const DATA_FILE = path.join(DATA_DIR, 'reservations.json');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
-
-// Ensure data directory exists
-if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-}
-
-// Ensure JSON file exists
-if (!fs.existsSync(DATA_FILE)) {
-    let initialContent = '[]';
-    const seedPath = path.join(__dirname, 'data', 'reservations.json');
-    if (fs.existsSync(seedPath)) {
-        try { initialContent = fs.readFileSync(seedPath, 'utf8'); } catch (e) {}
-    }
-    fs.writeFileSync(DATA_FILE, initialContent);
-}
-
-// Helper to read reservations
-function readReservations() {
-    try {
-        const raw = fs.readFileSync(DATA_FILE, 'utf8');
-        return JSON.parse(raw);
-    } catch (err) {
-        console.error('Error leyendo reservations.json:', err);
-        return [];
-    }
-}
-
-// Helper to write reservations
-function writeReservations(data) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-}
 
 // --- API ENDPOINTS ---
 
@@ -64,7 +30,7 @@ app.post('/api/reservations', async (req, res) => {
             return res.status(400).json({ success: false, message: 'Faltan campos obligatorios en el formulario.' });
         }
 
-        const reservations = readReservations();
+        const reservations = await dbService.getAllReservations();
         
         // Generate short custom ID: MB-1001, MB-1002...
         const nextNum = 1000 + reservations.length + 1;
@@ -87,8 +53,7 @@ app.post('/api/reservations', async (req, res) => {
             staffNotes: ''
         };
 
-        reservations.unshift(newReservation);
-        writeReservations(reservations);
+        await dbService.saveReservation(newReservation);
 
         // Send email to customer (await before Lambda freezes)
         try {
@@ -126,9 +91,9 @@ app.post('/api/admin/login', (req, res) => {
 /**
  * Admin Endpoint: Get list of reservations with optional filtering
  */
-app.get('/api/admin/reservations', (req, res) => {
+app.get('/api/admin/reservations', async (req, res) => {
     try {
-        const reservations = readReservations();
+        const reservations = await dbService.getAllReservations();
         const { date, status } = req.query;
 
         let filtered = reservations;
@@ -164,32 +129,28 @@ app.put('/api/admin/reservations/:id/status', async (req, res) => {
             return res.status(400).json({ success: false, message: 'Estado inválido.' });
         }
 
-        const reservations = readReservations();
-        const index = reservations.findIndex(r => r.id === id || r.uuid === id);
+        const reservations = await dbService.getAllReservations();
+        const existing = reservations.find(r => r.id === id || r.uuid === id);
 
-        if (index === -1) {
+        if (!existing) {
             return res.status(404).json({ success: false, message: 'Reserva no encontrada.' });
         }
 
-        const reservation = reservations[index];
-        const previousStatus = reservation.status;
+        const previousStatus = existing.status;
+        const updateFields = { status };
+        if (tableName !== undefined) updateFields.tableName = tableName.trim();
+        if (staffNotes !== undefined) updateFields.staffNotes = staffNotes.trim();
 
-        reservation.status = status;
-        if (tableName !== undefined) reservation.tableName = tableName.trim();
-        if (staffNotes !== undefined) reservation.staffNotes = staffNotes.trim();
-        reservation.updatedAt = new Date().toISOString();
-
-        reservations[index] = reservation;
-        writeReservations(reservations);
+        const updated = await dbService.updateReservation(id, updateFields);
 
         // Send Email Notification if status changed (await before Lambda freezes)
         try {
             if (status === 'CONFIRMADA' && previousStatus !== 'CONFIRMADA') {
-                await sendConfirmationNotification(reservation);
-                console.log(`✅ Mail de confirmación enviado correctamente a ${reservation.customerEmail}`);
+                await sendConfirmationNotification(updated);
+                console.log(`✅ Mail de confirmación enviado correctamente a ${updated.customerEmail}`);
             } else if (status === 'RECHAZADA' && previousStatus !== 'RECHAZADA') {
-                await sendRejectionNotification(reservation);
-                console.log(`✅ Mail de rechazo enviado correctamente a ${reservation.customerEmail}`);
+                await sendRejectionNotification(updated);
+                console.log(`✅ Mail de rechazo enviado correctamente a ${updated.customerEmail}`);
             }
         } catch (err) {
             console.error('Error enviando mail de estado:', err);
@@ -198,7 +159,7 @@ app.put('/api/admin/reservations/:id/status', async (req, res) => {
         res.json({
             success: true,
             message: `Reserva ${id} actualizada a ${status}`,
-            reservation
+            reservation: updated
         });
     } catch (err) {
         console.error('Error en PUT /api/admin/reservations/:id/status:', err);
@@ -209,19 +170,10 @@ app.put('/api/admin/reservations/:id/status', async (req, res) => {
 /**
  * Admin Endpoint: Delete a reservation permanently
  */
-app.delete('/api/admin/reservations/:id', (req, res) => {
+app.delete('/api/admin/reservations/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        let reservations = readReservations();
-        const initialCount = reservations.length;
-
-        reservations = reservations.filter(r => r.id !== id && r.uuid !== id);
-
-        if (reservations.length === initialCount) {
-            return res.status(404).json({ success: false, message: 'Reserva no encontrada.' });
-        }
-
-        writeReservations(reservations);
+        await dbService.deleteReservation(id);
 
         res.json({
             success: true,
