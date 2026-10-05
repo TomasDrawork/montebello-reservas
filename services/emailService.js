@@ -231,13 +231,6 @@ async function sendPendingNotification(reservation) {
  * Send email when reservation is CONFIRMED by restaurant staff
  */
 async function sendConfirmationNotification(reservation) {
-    const tableInfoHtml = reservation.tableName ? `
-        <tr>
-            <td style="padding: 6px 0; color: #AD9F93; font-size: 14px;">Mesa Asignada:</td>
-            <td style="padding: 6px 0; color: #22C55E; font-weight: 700; font-size: 14px; text-align: right;">${reservation.tableName}</td>
-        </tr>
-    ` : '';
-
     const staffNotesHtml = reservation.staffNotes ? `
         <p style="background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22C55E; padding: 12px; font-size: 14px; color: #E0E0E0; margin-top: 15px;">
             📝 <strong>Mensaje del Restaurante:</strong> ${reservation.staffNotes}
@@ -273,7 +266,6 @@ async function sendConfirmationNotification(reservation) {
                     <td style="padding: 6px 0; color: #AD9F93; font-size: 14px;">Sector:</td>
                     <td style="padding: 6px 0; color: #FFFFFF; font-weight: 600; font-size: 14px; text-align: right;">${reservation.locationPref}</td>
                 </tr>
-                ${tableInfoHtml}
             </table>
         </div>
 
@@ -283,12 +275,15 @@ async function sendConfirmationNotification(reservation) {
             📌 <strong>Información Importante:</strong>
             <ul style="margin: 8px 0 0 0; padding-left: 20px;">
                 <li>Tolerancia de impuntualidad: <strong>15 minutos</strong>.</li>
-                <li>Si necesitas modificar o cancelar la reserva, contáctanos a clubmontebellovcp@gmail.com o respondiendo este mail.</li>
+                <li>Si necesitas <strong>cancelar tu reserva</strong>, por favor comunícate a nuestro <a href="https://wa.me/5493541760808" target="_blank" style="color: #25D366; text-decoration: underline; font-weight: 600;">WhatsApp (+54 9 3541 760808) aquí</a>. <em>(Por favor escribir únicamente en caso de cancelación).</em></li>
             </ul>
         </div>
 
         <div style="text-align: center; margin-top: 25px;">
-            <a href="https://maps.app.goo.gl/N98GZTW9BFzf8oLK7" target="_blank" class="btn-action">
+            <a href="https://menu.fu.do/clubmontebello/qr-menu" target="_blank" class="btn-action" style="margin: 6px 4px; background: linear-gradient(135deg, #E05A10 0%, #B83A00 100%);">
+                📖 VER CARTA DIGITAL
+            </a>
+            <a href="https://maps.app.goo.gl/N98GZTW9BFzf8oLK7" target="_blank" class="btn-action" style="margin: 6px 4px;">
                 📍 CÓMO LLEGAR AL CLUB
             </a>
         </div>

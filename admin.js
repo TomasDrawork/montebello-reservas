@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const tableNameHtml = res.tableName ? `
                 <div class="res-detail-row">
-                    <span class="res-detail-label">Mesa Asignada:</span>
+                    <span class="res-detail-label">Nota / Mesa:</span>
                     <span class="res-detail-val" style="color: #22C55E;">${res.tableName}</span>
                 </div>
             ` : '';
