@@ -69,7 +69,7 @@ Hola *${reservation.customerName}*, nos complace informarte que tu mesa en *Club
 • *Sector:* ${reservation.locationPref}${tableText}${staffNotesText}
 
 📌 *Información Importante:*
-• Tolerancia de impuntualidad: *15 minutos*.
+• Tolerancia de impuntualidad: *10 minutos*.
 • En caso de necesitar cancelar, por favor responde a este mensaje.
 
 📖 *Ver Carta Digital:* https://menu.fu.do/clubmontebello/qr-menu

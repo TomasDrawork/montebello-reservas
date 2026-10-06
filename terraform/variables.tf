@@ -6,6 +6,6 @@ variable "aws_region" {
 
 variable "bucket_name" {
   type        = string
-  default     = "montebello-reservas-staging-560615624375"
+  default     = "montebello-reservas-staging-756808989980"
   description = "Nombre único del bucket S3 para alojar la web estática"
 }

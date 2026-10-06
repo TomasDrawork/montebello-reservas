@@ -44,21 +44,24 @@ function writeLocalReservations(data) {
  * Storage API Interface with DynamoDB + Local Fallback
  */
 async function getAllReservations() {
+    let items = [];
     if (IS_LAMBDA) {
         try {
             const command = new ScanCommand({ TableName: TABLE_NAME });
             const response = await docClient.send(command);
-            const items = response.Items || [];
-            // Sort by createdAt descending
-            items.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-            return items;
+            items = response.Items || [];
         } catch (err) {
             console.error('DynamoDB Scan error, fallback a local:', err.message);
-            return readLocalReservations();
+            items = readLocalReservations();
         }
     } else {
-        return readLocalReservations();
+        items = readLocalReservations();
     }
+    // Filter out system settings item
+    const reservations = items.filter(i => i.id !== 'SETTINGS_AVAILABILITY');
+    // Sort by createdAt descending
+    reservations.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+    return reservations;
 }
 
 async function saveReservation(reservation) {
@@ -135,9 +138,76 @@ async function deleteReservation(id) {
     return true;
 }
 
+const DEFAULT_AVAILABILITY = {
+    id: 'SETTINGS_AVAILABILITY',
+    closedWeekdays: [1, 2], // 1 = Lunes, 2 = Martes
+    blockedDates: [],       // Array of "YYYY-MM-DD"
+    allowedOverrideDates: [] // Array of "YYYY-MM-DD"
+};
+
+async function getAvailabilitySettings() {
+    let items = [];
+    if (IS_LAMBDA) {
+        try {
+            const command = new ScanCommand({ TableName: TABLE_NAME });
+            const response = await docClient.send(command);
+            items = response.Items || [];
+        } catch (err) {
+            items = readLocalReservations();
+        }
+    } else {
+        items = readLocalReservations();
+    }
+    const settings = items.find(i => i.id === 'SETTINGS_AVAILABILITY');
+    if (!settings) return DEFAULT_AVAILABILITY;
+    return {
+        id: 'SETTINGS_AVAILABILITY',
+        closedWeekdays: Array.isArray(settings.closedWeekdays) ? settings.closedWeekdays : [1, 2],
+        blockedDates: Array.isArray(settings.blockedDates) ? settings.blockedDates : [],
+        allowedOverrideDates: Array.isArray(settings.allowedOverrideDates) ? settings.allowedOverrideDates : []
+    };
+}
+
+async function saveAvailabilitySettings(settings) {
+    const updated = {
+        id: 'SETTINGS_AVAILABILITY',
+        closedWeekdays: Array.isArray(settings.closedWeekdays) ? settings.closedWeekdays : [1, 2],
+        blockedDates: Array.isArray(settings.blockedDates) ? settings.blockedDates : [],
+        allowedOverrideDates: Array.isArray(settings.allowedOverrideDates) ? settings.allowedOverrideDates : [],
+        updatedAt: new Date().toISOString()
+    };
+
+    if (IS_LAMBDA) {
+        try {
+            const command = new PutCommand({
+                TableName: TABLE_NAME,
+                Item: updated
+            });
+            await docClient.send(command);
+            console.log('✅ Ajustes de disponibilidad guardados en DynamoDB');
+        } catch (err) {
+            console.error('DynamoDB Put availability settings error:', err.message);
+        }
+    }
+
+    // Backup local
+    const items = readLocalReservations();
+    const idx = items.findIndex(i => i.id === 'SETTINGS_AVAILABILITY');
+    if (idx !== -1) {
+        items[idx] = updated;
+    } else {
+        items.push(updated);
+    }
+    writeLocalReservations(items);
+
+    return updated;
+}
+
 module.exports = {
     getAllReservations,
     saveReservation,
     updateReservation,
-    deleteReservation
+    deleteReservation,
+    getAvailabilitySettings,
+    saveAvailabilitySettings
 };

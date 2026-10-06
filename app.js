@@ -11,6 +11,17 @@ document.addEventListener('DOMContentLoaded', () => {
         closedDays: [1, 2] // 1 = Lunes, 2 = Martes
     };
 
+    // --- UTILS: SANITIZATION ---
+    function escapeHtml(str) {
+        if (!str || typeof str !== 'string') return str || '';
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
     // --- APPLICATION STATE ---
     const state = {
         currentStep: 0,
@@ -25,6 +36,42 @@ document.addEventListener('DOMContentLoaded', () => {
         viewMonth: new Date().getMonth(),
         viewYear: new Date().getFullYear()
     };
+
+    let availabilityConfig = {
+        closedWeekdays: [1, 2],
+        blockedDates: [],
+        allowedOverrideDates: []
+    };
+
+    async function fetchAvailability() {
+        try {
+            const res = await fetch('/api/availability');
+            const data = await res.json();
+            if (data.success && data.availability) {
+                availabilityConfig = {
+                    closedWeekdays: data.availability.closedWeekdays || [1, 2],
+                    blockedDates: data.availability.blockedDates || [],
+                    allowedOverrideDates: data.availability.allowedOverrideDates || []
+                };
+            }
+        } catch (err) {
+            console.error('Error cargando disponibilidad:', err);
+        }
+    }
+
+    function isDateBlocked(dateObj) {
+        if (!dateObj) return true;
+        const yyyy = dateObj.getFullYear();
+        const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const dd = String(dateObj.getDate()).padStart(2, '0');
+        const dateStr = `${yyyy}-${mm}-${dd}`;
+        const dayOfWeek = dateObj.getDay();
+
+        if (availabilityConfig.blockedDates.includes(dateStr)) return true;
+        if (availabilityConfig.allowedOverrideDates.includes(dateStr)) return false;
+        if (availabilityConfig.closedWeekdays.includes(dayOfWeek)) return true;
+        return false;
+    }
 
     // --- DOM ELEMENTS ---
     const panes = {
@@ -79,7 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- INITIALIZATION ---
-    function init() {
+    async function init() {
+        await fetchAvailability();
         renderDateCarousel();
         bindEvents();
         updateUI();
@@ -89,6 +137,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function goToStep(stepNumber) {
         if (stepNumber < 0 || stepNumber > 5) return;
         state.currentStep = stepNumber;
+
+        // Dynamic Background Transition
+        const bgImg = document.getElementById('bgImage');
+        if (bgImg) {
+            const targetSrc = stepNumber === 0 ? 'imagenes/fondo-vino.jpg' : 'imagenes/fondo-coctel.jpg';
+            if (!bgImg.src.includes(targetSrc)) {
+                bgImg.style.opacity = '0.3';
+                setTimeout(() => {
+                    bgImg.src = targetSrc;
+                    bgImg.style.opacity = '1';
+                }, 180);
+            }
+        }
 
         // Hide all panes
         Object.values(panes).forEach(pane => pane.classList.remove('active'));
@@ -159,8 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const date = new Date(today);
             date.setDate(today.getDate() + i);
 
-            const dayOfWeek = date.getDay(); // 0 = Dom, 1 = Lun, 2 = Mar...
-            const isClosed = CONFIG.closedDays.includes(dayOfWeek);
+            const isClosed = isDateBlocked(date);
 
             const card = document.createElement('div');
             card.className = `date-card ${isClosed ? 'closed' : ''}`;
@@ -238,8 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const cellDate = new Date(state.viewYear, state.viewMonth, day);
             cellDate.setHours(0, 0, 0, 0);
 
-            const dayOfWeek = cellDate.getDay();
-            const isClosed = CONFIG.closedDays.includes(dayOfWeek);
+            const isClosed = isDateBlocked(cellDate);
             const isPast = cellDate < today;
 
             const cell = document.createElement('div');
@@ -276,16 +335,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cena: 21:30 hs (Miércoles a Domingos)
     function renderTimeSlotsForDate(date) {
         timeSlotsContainer.innerHTML = '';
-        const dayOfWeek = date.getDay(); // 0 = Dom, 1 = Lun, 2 = Mar, 3 = Mié, 4 = Jue, 5 = Vie, 6 = Sáb
 
-        if (dayOfWeek === 1 || dayOfWeek === 2) {
-            timeSlotsContainer.innerHTML = `<p class="step-subtitle">Los días Lunes y Martes el restaurante permanece cerrado.</p>`;
+        if (isDateBlocked(date)) {
+            timeSlotsContainer.innerHTML = `<p class="step-subtitle">El restaurante permanece cerrado para esta fecha.</p>`;
             return;
         }
 
+        const dayOfWeek = date.getDay(); // 0 = Dom, 1 = Lun, 2 = Mar, 3 = Mié, 4 = Jue, 5 = Vie, 6 = Sáb
         let slots = [];
 
-        if (dayOfWeek >= 3 && dayOfWeek <= 5) {
+        if (dayOfWeek === 1 || dayOfWeek === 2) {
+            // If admin opened a Monday or Tuesday, offer Cena 21:30 hs slot
+            slots = [
+                { title: 'Cena Especial', time: '21:30 hs', icon: '🍷', desc: 'Turno de Cena Habilitado' }
+            ];
+        } else if (dayOfWeek >= 3 && dayOfWeek <= 5) {
             // Miércoles, Jueves y Viernes: Únicamente Cena 21:30 hs
             slots = [
                 { title: 'Cena', time: '21:30 hs', icon: '🍷', desc: 'Horario Único de Cena' }
@@ -343,15 +407,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- RESERVATION API SUBMISSION ---
     async function handleReservationSubmit() {
         state.customerName = inputName ? inputName.value.trim() : '';
-        state.customerEmail = inputEmail ? inputEmail.value.trim() : '';
         state.customerPhone = inputPhone ? inputPhone.value.trim() : '';
         state.customerNotes = inputNotes ? inputNotes.value.trim() : '';
 
         const selectedPref = document.querySelector('input[name="locationPref"]:checked');
         state.locationPref = selectedPref ? selectedPref.value : 'Indistinto';
 
-        if (!state.customerName || !state.customerEmail || !state.customerPhone) {
-            alert('Por favor completa tu nombre, correo electrónico y teléfono para continuar.');
+        if (!state.customerName || !state.customerPhone) {
+            alert('Por favor completa tu nombre y número de teléfono celular (WhatsApp) para continuar.');
             return;
         }
 
@@ -371,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     timeSlot: state.selectedTime,
                     locationPref: state.locationPref,
                     customerName: state.customerName,
-                    customerEmail: state.customerEmail,
+                    customerEmail: 'noreply@clubmontebello.com',
                     customerPhone: state.customerPhone,
                     customerNotes: state.customerNotes
                 })
@@ -384,36 +447,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Populate final summary card
                 finalSummaryCard.innerHTML = `
                     <div style="text-align: center; margin-bottom: 14px;">
-                        <span style="background: rgba(224,90,16,0.15); border: 1px solid #E05A10; color: #FFA767; font-family: 'Montserrat', sans-serif; font-weight: 700; padding: 6px 14px; border-radius: 6px; font-size: 15px; display: inline-block;">
-                            CÓDIGO: ${res.id}
+                        <span style="background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.35); color: #FFFFFF; font-family: 'Outfit', sans-serif; font-weight: 700; padding: 6px 16px; border-radius: 20px; font-size: 14px; display: inline-block;">
+                            CÓDIGO: ${escapeHtml(res.id)}
                         </span>
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">Nombre:</span>
-                        <span class="summary-val">${res.customerName}</span>
+                        <span class="summary-val">${escapeHtml(res.customerName)}</span>
                     </div>
                     <div class="summary-row">
-                        <span class="summary-label">Correo:</span>
-                        <span class="summary-val">${res.customerEmail}</span>
+                        <span class="summary-label">Teléfono (WhatsApp):</span>
+                        <span class="summary-val">${escapeHtml(res.customerPhone)}</span>
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">Comensales:</span>
-                        <span class="summary-val">${res.diners} personas</span>
+                        <span class="summary-val">${escapeHtml(String(res.diners))} personas</span>
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">Fecha:</span>
-                        <span class="summary-val">${res.dateStr}</span>
+                        <span class="summary-val">${escapeHtml(res.dateStr)}</span>
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">Turno:</span>
-                        <span class="summary-val">${res.timeSlot}</span>
+                        <span class="summary-val">${escapeHtml(res.timeSlot)}</span>
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">Ubicación:</span>
-                        <span class="summary-val">${res.locationPref}</span>
+                        <span class="summary-val">${escapeHtml(res.locationPref)}</span>
                     </div>
-                    <div style="background: rgba(224,90,16,0.1); border-left: 3px solid #E05A10; padding: 12px; border-radius: 6px; font-size: 13px; color: #AD9F93; margin-top: 14px; text-align: left;">
-                        ⏳ <strong>Estado: Pendiente de Confirmación</strong>.<br>Hemos enviado un correo a <strong>${res.customerEmail}</strong>. Te avisaremos cuando el equipo apruebe tu mesa.
+                    <div style="background: rgba(255, 255, 255, 0.08); border-left: 3px solid #FFFFFF; padding: 14px; border-radius: 8px; font-size: 13.5px; color: rgba(255, 255, 255, 0.85); margin-top: 14px; text-align: left;">
+                        ⏳ <strong>Estado: Pendiente de Confirmación</strong>.<br>Te enviaremos una notificación por WhatsApp al celular <strong>${escapeHtml(res.customerPhone)}</strong> en cuanto el maitre apruebe tu mesa.
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <a href="https://wa.me/5493541760808?text=${encodeURIComponent('Hola Club Montebello, acabo de solicitar la reserva ' + res.id + ' a nombre de ' + res.customerName)}" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: #FFF; text-decoration: none; padding: 14px 20px; border-radius: 12px; font-weight: 600; font-size: 14px; width: 100%; box-shadow: 0 4px 12px rgba(37,211,102,0.3);">
+                            💬 Abrir Chat de WhatsApp con Montebello
+                        </a>
                     </div>
                 `;
 

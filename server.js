@@ -4,20 +4,66 @@ const path = require('path');
 const crypto = require('crypto');
 const dbService = require('./services/dbService');
 const {
-    sendPendingNotification,
-    sendConfirmationNotification,
-    sendRejectionNotification
-} = require('./services/emailService');
+    sendPendingWhatsApp,
+    sendConfirmationWhatsApp,
+    sendRejectionWhatsApp,
+    buildWhatsAppLink,
+    getConfirmationMessageText,
+    getRejectionMessageText
+} = require('./services/whatsappService');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Security Middleware
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader(
+        'Content-Security-Policy',
+        "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline'; connect-src 'self' https:;"
+    );
+    next();
+});
+
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50kb' }));
 app.use(express.static(__dirname));
 
 // --- API ENDPOINTS ---
+
+/**
+ * Public Endpoint: Get Availability Settings (Blocked Dates & Closed Weekdays)
+ */
+app.get('/api/availability', async (req, res) => {
+    try {
+        const availability = await dbService.getAvailabilitySettings();
+        res.json({ success: true, availability });
+    } catch (err) {
+        console.error('Error en GET /api/availability:', err);
+        res.status(500).json({ success: false, message: 'Error obteniendo disponibilidad.' });
+    }
+});
+
+/**
+ * Admin Endpoint: Update Availability Settings
+ */
+app.post('/api/admin/availability', async (req, res) => {
+    try {
+        const { blockedDates, allowedOverrideDates, closedWeekdays } = req.body;
+        const updated = await dbService.saveAvailabilitySettings({
+            closedWeekdays: closedWeekdays || [1, 2],
+            blockedDates: blockedDates || [],
+            allowedOverrideDates: allowedOverrideDates || []
+        });
+        res.json({ success: true, message: 'Ajustes de disponibilidad actualizados.', availability: updated });
+    } catch (err) {
+        console.error('Error en POST /api/admin/availability:', err);
+        res.status(500).json({ success: false, message: 'Error guardando disponibilidad.' });
+    }
+});
 
 /**
  * Public Endpoint: Customer creates a new reservation request
@@ -26,7 +72,7 @@ app.post('/api/reservations', async (req, res) => {
     try {
         const { diners, dateStr, timeSlot, locationPref, customerName, customerPhone, customerEmail, customerNotes } = req.body;
 
-        if (!customerName || !customerPhone || !customerEmail || !dateStr || !timeSlot) {
+        if (!customerName || !customerPhone || !dateStr || !timeSlot) {
             return res.status(400).json({ success: false, message: 'Faltan campos obligatorios en el formulario.' });
         }
 
@@ -64,12 +110,12 @@ app.post('/api/reservations', async (req, res) => {
 
         await dbService.saveReservation(newReservation);
 
-        // Send email to customer (await before Lambda freezes)
+        // Send WhatsApp Notification to customer (await before Lambda freezes)
         try {
-            await sendPendingNotification(newReservation);
-            console.log(`✅ Mail de recepción enviado correctamente a ${newReservation.customerEmail}`);
+            await sendPendingWhatsApp(newReservation);
+            console.log(`✅ Notificación WhatsApp de recepción enviada a ${newReservation.customerPhone}`);
         } catch (err) {
-            console.error('Error enviando mail de recepción:', err);
+            console.error('Error enviando notificación WhatsApp de recepción:', err);
         }
 
         res.status(201).json({
@@ -152,23 +198,29 @@ app.put('/api/admin/reservations/:id/status', async (req, res) => {
 
         const updated = await dbService.updateReservation(id, updateFields);
 
-        // Send Email Notification if status changed (await before Lambda freezes)
+        // Send WhatsApp Notification if status changed
+        let waLink = '';
         try {
             if (status === 'CONFIRMADA' && previousStatus !== 'CONFIRMADA') {
-                await sendConfirmationNotification(updated);
-                console.log(`✅ Mail de confirmación enviado correctamente a ${updated.customerEmail}`);
+                const res = await sendConfirmationWhatsApp(updated);
+                waLink = res.waLink;
+                console.log(`✅ Notificación WhatsApp de confirmación enviada a ${updated.customerPhone}`);
             } else if (status === 'RECHAZADA' && previousStatus !== 'RECHAZADA') {
-                await sendRejectionNotification(updated);
-                console.log(`✅ Mail de rechazo enviado correctamente a ${updated.customerEmail}`);
+                const res = await sendRejectionWhatsApp(updated);
+                waLink = res.waLink;
+                console.log(`✅ Notificación WhatsApp de rechazo enviada a ${updated.customerPhone}`);
+            } else {
+                waLink = buildWhatsAppLink(updated.customerPhone, getConfirmationMessageText(updated));
             }
         } catch (err) {
-            console.error('Error enviando mail de estado:', err);
+            console.error('Error enviando notificación WhatsApp de estado:', err);
         }
 
         res.json({
             success: true,
             message: `Reserva ${id} actualizada a ${status}`,
-            reservation: updated
+            reservation: updated,
+            waLink
         });
     } catch (err) {
         console.error('Error en PUT /api/admin/reservations/:id/status:', err);

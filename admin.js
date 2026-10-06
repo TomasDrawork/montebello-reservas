@@ -78,11 +78,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCloseDeleteModal = document.getElementById('btnCloseDeleteModal');
     const btnCancelDelete = document.getElementById('btnCancelDelete');
 
+    // Availability Modal Elements
+    const btnManageAvailability = document.getElementById('btnManageAvailability');
+    const availabilityModal = document.getElementById('availabilityModal');
+    const btnCloseAvailability = document.getElementById('btnCloseAvailability');
+    const availCalPrevMonth = document.getElementById('availCalPrevMonth');
+    const availCalNextMonth = document.getElementById('availCalNextMonth');
+    const availCalMonthTitle = document.getElementById('availCalMonthTitle');
+    const availCalDaysGrid = document.getElementById('availCalDaysGrid');
+    const btnBlockCurrentMonth = document.getElementById('btnBlockCurrentMonth');
+    const btnOpenCurrentMonth = document.getElementById('btnOpenCurrentMonth');
+    const btnResetDefaults = document.getElementById('btnResetDefaults');
+    const btnSaveAvailability = document.getElementById('btnSaveAvailability');
+
+    let availabilityConfig = {
+        closedWeekdays: [1, 2],
+        blockedDates: [],
+        allowedOverrideDates: []
+    };
+    let availViewMonth = new Date().getMonth();
+    let availViewYear = new Date().getFullYear();
+
     // --- INITIALIZATION ---
     function init() {
         if (authToken) {
             showDashboard();
             fetchReservations();
+            fetchAvailabilitySettings();
             // Start polling every 10 seconds for live updates
             setInterval(fetchReservations, 10000);
         } else {
@@ -216,6 +238,17 @@ document.addEventListener('DOMContentLoaded', () => {
         countTotal.textContent = pool.length;
     }
 
+    // --- UTILS: SANITIZATION ---
+    function escapeHtml(str) {
+        if (!str || typeof str !== 'string') return str || '';
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
     // --- RENDER RESERVATIONS GRID ---
     function renderReservations() {
         const filtered = getFilteredReservations();
@@ -235,22 +268,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const actionButtonsHtml = res.status === 'PENDIENTE' ? `
                 <div class="res-card-actions">
-                    <button class="btn-approve" onclick="openApproveModal('${res.id}')">
+                    <button class="btn-approve" onclick="openApproveModal('${escapeHtml(res.id)}')">
                         🟢 Aprobar Mesa
                     </button>
-                    <button class="btn-reject" onclick="openRejectModal('${res.id}')">
+                    <button class="btn-reject" onclick="openRejectModal('${escapeHtml(res.id)}')">
                         🔴 Rechazar
                     </button>
                 </div>
             ` : res.status === 'CONFIRMADA' ? `
                 <div class="res-card-actions">
-                    <button class="btn-reject" style="width: 100%;" onclick="openRejectModal('${res.id}')">
+                    <button class="btn-reject" style="width: 100%;" onclick="openRejectModal('${escapeHtml(res.id)}')">
                         Cambiar a Rechazada
                     </button>
                 </div>
             ` : `
                 <div class="res-card-actions">
-                    <button class="btn-approve" style="width: 100%;" onclick="openApproveModal('${res.id}')">
+                    <button class="btn-approve" style="width: 100%;" onclick="openApproveModal('${escapeHtml(res.id)}')">
                         Re-Aprobar Reserva
                     </button>
                 </div>
@@ -259,62 +292,75 @@ document.addEventListener('DOMContentLoaded', () => {
             const tableNameHtml = res.tableName ? `
                 <div class="res-detail-row">
                     <span class="res-detail-label">Nota / Mesa:</span>
-                    <span class="res-detail-val" style="color: #22C55E;">${res.tableName}</span>
+                    <span class="res-detail-val" style="color: #22C55E;">${escapeHtml(res.tableName)}</span>
                 </div>
             ` : '';
+
+            const cleanPhone = (res.customerPhone || '').replace(/\D/g, '');
+            const formattedPhone = (cleanPhone.length === 10 && !cleanPhone.startsWith('54')) ? '549' + cleanPhone : cleanPhone;
+            
+            const waDirectUrl = `https://wa.me/${formattedPhone}`;
+
+            const waBtnHtml = `
+                <a href="${waDirectUrl}" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 6px; background-color: #25D366; color: #FFFFFF; font-weight: 600; font-size: 13px; padding: 9px 12px; border-radius: 8px; text-decoration: none; margin-top: 8px; box-shadow: 0 2px 8px rgba(37,211,102,0.25);">
+                    💬 Enviar WhatsApp al Cliente
+                </a>
+            `;
 
             card.innerHTML = `
                 <div>
                     <div class="res-card-header">
-                        <span class="res-id">${res.id}</span>
+                        <span class="res-id">${escapeHtml(res.id)}</span>
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="res-status-badge ${res.status}">${res.status}</span>
-                            <button class="btn-delete-icon" onclick="openDeleteModal('${res.id}')" title="Eliminar reserva">
+                            <span class="res-status-badge ${escapeHtml(res.status)}">${escapeHtml(res.status)}</span>
+                            <button class="btn-delete-icon" onclick="openDeleteModal('${escapeHtml(res.id)}')" title="Eliminar reserva">
                                 🗑️
                             </button>
                         </div>
                     </div>
 
-                    <h3 class="res-customer-name">${res.customerName}</h3>
+                    <h3 class="res-customer-name">${escapeHtml(res.customerName)}</h3>
                     <div class="res-contact-info">
-                        📧 ${res.customerEmail}<br>
-                        📱 ${res.customerPhone}
+                        📱 ${escapeHtml(res.customerPhone)}
                     </div>
 
                     <div class="res-details-box">
                         <div class="res-detail-row">
                             <span class="res-detail-label">Comensales:</span>
-                            <span class="res-detail-val">${res.diners} personas</span>
+                            <span class="res-detail-val">${escapeHtml(String(res.diners))} personas</span>
                         </div>
                         <div class="res-detail-row">
                             <span class="res-detail-label">Fecha:</span>
-                            <span class="res-detail-val">${res.dateStr}</span>
+                            <span class="res-detail-val">${escapeHtml(res.dateStr)}</span>
                         </div>
                         <div class="res-detail-row">
                             <span class="res-detail-label">Turno:</span>
-                            <span class="res-detail-val">${res.timeSlot}</span>
+                            <span class="res-detail-val">${escapeHtml(res.timeSlot)}</span>
                         </div>
                         <div class="res-detail-row">
                             <span class="res-detail-label">Sector Preferido:</span>
-                            <span class="res-detail-val">${res.locationPref}</span>
+                            <span class="res-detail-val">${escapeHtml(res.locationPref)}</span>
                         </div>
                         ${tableNameHtml}
                     </div>
 
                     ${res.customerNotes ? `
                         <div class="res-notes-box">
-                            <strong>Nota Cliente:</strong> ${res.customerNotes}
+                            <strong>Nota Cliente:</strong> ${escapeHtml(res.customerNotes)}
                         </div>
                     ` : ''}
 
                     ${res.staffNotes ? `
                         <div class="res-notes-box" style="border-color: #22C55E; background: rgba(34,197,94,0.08);">
-                            <strong>Mensaje Staff:</strong> ${res.staffNotes}
+                            <strong>Mensaje Staff:</strong> ${escapeHtml(res.staffNotes)}
                         </div>
                     ` : ''}
                 </div>
 
-                ${actionButtonsHtml}
+                <div>
+                    ${actionButtonsHtml}
+                    ${waBtnHtml}
+                </div>
             `;
 
             reservationsGrid.appendChild(card);
@@ -431,8 +477,215 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- AVAILABILITY MANAGEMENT FUNCTIONS ---
+    async function fetchAvailabilitySettings() {
+        try {
+            const res = await fetch('/api/availability');
+            const data = await res.json();
+            if (data.success && data.availability) {
+                availabilityConfig = {
+                    closedWeekdays: data.availability.closedWeekdays || [1, 2],
+                    blockedDates: data.availability.blockedDates || [],
+                    allowedOverrideDates: data.availability.allowedOverrideDates || []
+                };
+            }
+        } catch (err) {
+            console.error('Error cargando disponibilidad:', err);
+        }
+    }
+
+    function openAvailabilityModal() {
+        const now = new Date();
+        availViewMonth = now.getMonth();
+        availViewYear = now.getFullYear();
+        renderAvailabilityCalendar();
+        availabilityModal.classList.add('active');
+    }
+
+    function closeAvailabilityModal() {
+        availabilityModal.classList.remove('active');
+    }
+
+    function getFormattedDateStr(year, month, day) {
+        const mm = String(month + 1).padStart(2, '0');
+        const dd = String(day).padStart(2, '0');
+        return `${year}-${mm}-${dd}`;
+    }
+
+    function isDateBlockedInConfig(dateObj) {
+        const dateStr = getFormattedDateStr(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
+        const dayOfWeek = dateObj.getDay();
+
+        if (availabilityConfig.blockedDates.includes(dateStr)) return true;
+        if (availabilityConfig.allowedOverrideDates.includes(dateStr)) return false;
+        if (availabilityConfig.closedWeekdays.includes(dayOfWeek)) return true;
+        return false;
+    }
+
+    function renderAvailabilityCalendar() {
+        const monthNames = [
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
+        availCalMonthTitle.textContent = `${monthNames[availViewMonth]} ${availViewYear}`;
+
+        const firstDay = new Date(availViewYear, availViewMonth, 1).getDay();
+        let startingDay = firstDay - 1;
+        if (startingDay < 0) startingDay = 6;
+
+        const daysInMonth = new Date(availViewYear, availViewMonth + 1, 0).getDate();
+
+        availCalDaysGrid.innerHTML = '';
+
+        for (let i = 0; i < startingDay; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'avail-day-cell empty';
+            availCalDaysGrid.appendChild(emptyCell);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const cellDate = new Date(availViewYear, availViewMonth, day);
+            const dateStr = getFormattedDateStr(availViewYear, availViewMonth, day);
+            const isBlocked = isDateBlockedInConfig(cellDate);
+
+            const cell = document.createElement('div');
+            cell.className = `avail-day-cell ${isBlocked ? 'is-blocked' : 'is-available'}`;
+            cell.innerHTML = `
+                <span>${day}</span>
+                <span class="day-status-label">${isBlocked ? 'Cerrado' : 'Abierto'}</span>
+            `;
+
+            cell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDateAvailability(cellDate, dateStr, isBlocked);
+            });
+
+            availCalDaysGrid.appendChild(cell);
+        }
+    }
+
+    function toggleDateAvailability(dateObj, dateStr, currentlyBlocked) {
+        const dayOfWeek = dateObj.getDay();
+
+        if (currentlyBlocked) {
+            // Unblock / Open date
+            availabilityConfig.blockedDates = availabilityConfig.blockedDates.filter(d => d !== dateStr);
+            if (availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
+                if (!availabilityConfig.allowedOverrideDates.includes(dateStr)) {
+                    availabilityConfig.allowedOverrideDates.push(dateStr);
+                }
+            }
+        } else {
+            // Block date
+            availabilityConfig.allowedOverrideDates = availabilityConfig.allowedOverrideDates.filter(d => d !== dateStr);
+            if (!availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
+                if (!availabilityConfig.blockedDates.includes(dateStr)) {
+                    availabilityConfig.blockedDates.push(dateStr);
+                }
+            }
+        }
+
+        renderAvailabilityCalendar();
+    }
+
+    function blockCurrentViewMonth() {
+        const daysInMonth = new Date(availViewYear, availViewMonth + 1, 0).getDate();
+        for (let day = 1; day <= daysInMonth; day++) {
+            const cellDate = new Date(availViewYear, availViewMonth, day);
+            const dateStr = getFormattedDateStr(availViewYear, availViewMonth, day);
+            const dayOfWeek = cellDate.getDay();
+
+            availabilityConfig.allowedOverrideDates = availabilityConfig.allowedOverrideDates.filter(d => d !== dateStr);
+            if (!availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
+                if (!availabilityConfig.blockedDates.includes(dateStr)) {
+                    availabilityConfig.blockedDates.push(dateStr);
+                }
+            }
+        }
+        renderAvailabilityCalendar();
+    }
+
+    function openCurrentViewMonth() {
+        const daysInMonth = new Date(availViewYear, availViewMonth + 1, 0).getDate();
+        for (let day = 1; day <= daysInMonth; day++) {
+            const cellDate = new Date(availViewYear, availViewMonth, day);
+            const dateStr = getFormattedDateStr(availViewYear, availViewMonth, day);
+            const dayOfWeek = cellDate.getDay();
+
+            availabilityConfig.blockedDates = availabilityConfig.blockedDates.filter(d => d !== dateStr);
+            if (availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
+                if (!availabilityConfig.allowedOverrideDates.includes(dateStr)) {
+                    availabilityConfig.allowedOverrideDates.push(dateStr);
+                }
+            }
+        }
+        renderAvailabilityCalendar();
+    }
+
+    function resetAvailabilityDefaults() {
+        availabilityConfig.blockedDates = [];
+        availabilityConfig.allowedOverrideDates = [];
+        renderAvailabilityCalendar();
+    }
+
+    async function saveAvailabilitySettings() {
+        btnSaveAvailability.disabled = true;
+        btnSaveAvailability.textContent = 'Guardando...';
+
+        try {
+            const res = await fetch('/api/admin/availability', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(availabilityConfig)
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                alert('✅ Cambios de disponibilidad guardados correctamente.');
+                closeAvailabilityModal();
+            } else {
+                alert(data.message || 'Error guardando disponibilidad.');
+            }
+        } catch (err) {
+            alert('Error de conexión.');
+        } finally {
+            btnSaveAvailability.disabled = false;
+            btnSaveAvailability.textContent = '💾 GUARDAR CAMBIOS DE DISPONIBILIDAD';
+        }
+    }
+
     // --- EVENT BINDINGS ---
     function bindEvents() {
+        // Availability Event Listeners
+        if (btnManageAvailability) btnManageAvailability.addEventListener('click', openAvailabilityModal);
+        if (btnCloseAvailability) btnCloseAvailability.addEventListener('click', closeAvailabilityModal);
+        if (availCalPrevMonth) {
+            availCalPrevMonth.addEventListener('click', (e) => {
+                e.stopPropagation();
+                availViewMonth--;
+                if (availViewMonth < 0) {
+                    availViewMonth = 11;
+                    availViewYear--;
+                }
+                renderAvailabilityCalendar();
+            });
+        }
+        if (availCalNextMonth) {
+            availCalNextMonth.addEventListener('click', (e) => {
+                e.stopPropagation();
+                availViewMonth++;
+                if (availViewMonth > 11) {
+                    availViewMonth = 0;
+                    availViewYear++;
+                }
+                renderAvailabilityCalendar();
+            });
+        }
+        if (btnBlockCurrentMonth) btnBlockCurrentMonth.addEventListener('click', blockCurrentViewMonth);
+        if (btnOpenCurrentMonth) btnOpenCurrentMonth.addEventListener('click', openCurrentViewMonth);
+        if (btnResetDefaults) btnResetDefaults.addEventListener('click', resetAvailabilityDefaults);
+        if (btnSaveAvailability) btnSaveAvailability.addEventListener('click', saveAvailabilitySettings);
+
         // Login Form
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -578,6 +831,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const tableName = approveTableName.value.trim();
             const staffNotes = approveStaffNotes.value.trim();
 
+            // Pre-open window synchronously to prevent iOS/Safari popup blockers
+            const waWin = window.open('', '_blank');
+
             try {
                 const res = await fetch(`/api/admin/reservations/${id}/status`, {
                     method: 'PUT',
@@ -593,10 +849,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.success) {
                     closeApproveModal();
                     fetchReservations();
+                    if (data.waLink) {
+                        if (waWin && !waWin.closed) {
+                            waWin.location.href = data.waLink;
+                        } else {
+                            window.location.href = data.waLink;
+                        }
+                    } else if (waWin && !waWin.closed) {
+                        waWin.close();
+                    }
                 } else {
+                    if (waWin && !waWin.closed) waWin.close();
                     alert(data.message || 'Error al confirmar reserva.');
                 }
             } catch (err) {
+                if (waWin && !waWin.closed) waWin.close();
                 alert('Error de conexión.');
             }
         });
@@ -606,6 +873,9 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const id = rejectResId.value;
             const staffNotes = rejectReason.value.trim();
+
+            // Pre-open window synchronously to prevent iOS/Safari popup blockers
+            const waWin = window.open('', '_blank');
 
             try {
                 const res = await fetch(`/api/admin/reservations/${id}/status`, {
@@ -621,10 +891,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.success) {
                     closeRejectModal();
                     fetchReservations();
+                    if (data.waLink) {
+                        if (waWin && !waWin.closed) {
+                            waWin.location.href = data.waLink;
+                        } else {
+                            window.location.href = data.waLink;
+                        }
+                    } else if (waWin && !waWin.closed) {
+                        waWin.close();
+                    }
                 } else {
+                    if (waWin && !waWin.closed) waWin.close();
                     alert(data.message || 'Error al rechazar reserva.');
                 }
             } catch (err) {
+                if (waWin && !waWin.closed) waWin.close();
                 alert('Error de conexión.');
             }
         });

@@ -5,7 +5,7 @@ echo "🚀 Iniciando despliegue de Restaurante Montebello Reservas en AWS..."
 
 # 1. Empaquetar backend para AWS Lambda
 echo "📦 Empaquetando backend de reservas para AWS Lambda..."
-zip -q -r terraform/lambda.zip server.js services package.json node_modules index.html app.js styles.css admin.html admin.js admin.css data
+zip -q -r terraform/lambda.zip server.js services imagenes package.json node_modules index.html app.js styles.css admin.html admin.js admin.css data
 
 # 2. Aplicar la infraestructura con Terraform
 cd terraform
