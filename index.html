@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- CSS Style -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=1.2">
 </head>
 <body>
 
@@ -182,7 +182,7 @@
                                     <input type="radio" name="locationPref" value="Balcón">
                                     <span>🌅 Balcón</span>
                                 </label>
-                                <label class="pref-chip">
+                                <label class="pref-chip" onclick="if(window.openRooftopNotice) window.openRooftopNotice();">
                                     <input type="radio" name="locationPref" value="Rooftop">
                                     <span>🍸 Rooftop</span>
                                 </label>
@@ -277,7 +277,22 @@
         </div>
     </div>
 
+    <!-- ROOFTOP NOTICE MODAL -->
+    <div class="modal-overlay" id="rooftopModal">
+        <div class="notice-modal-box">
+            <button class="modal-close" id="btnCloseRooftopTop" aria-label="Cerrar modal" style="position: absolute; top: 16px; right: 16px;">✕</button>
+            <div class="notice-icon-circle">🍸</div>
+            <h3 class="notice-modal-title">Aviso — Sector Rooftop</h3>
+            <p class="notice-modal-desc">
+                En el espacio rooftop, solamente se puede consumir coctelería.
+            </p>
+            <button class="btn-primary" id="btnCloseRooftopModal" style="margin-top: 18px; width: 100%;">
+                ENTENDIDO
+            </button>
+        </div>
+    </div>
+
     <!-- JS Logic -->
-    <script src="app.js"></script>
+    <script src="app.js?v=1.2"></script>
 </body>
 </html>

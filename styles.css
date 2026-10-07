@@ -1116,6 +1116,52 @@ body {
     background: #FFFFFF;
 }
 
+/* ROOFTOP NOTICE MODAL STYLES */
+.notice-modal-box {
+    background: rgba(16, 16, 16, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 380px;
+    padding: 32px 24px 24px 24px;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
+    text-align: center;
+    position: relative;
+    animation: popIn 0.3s ease-out;
+}
+
+.notice-icon-circle {
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.9rem;
+    margin: 0 auto 16px auto;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+}
+
+.notice-modal-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    margin-bottom: 10px;
+}
+
+.notice-modal-desc {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
 /* Keyframe Animations */
 @keyframes fadeInUp {
     from {

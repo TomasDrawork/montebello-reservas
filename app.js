@@ -556,6 +556,43 @@ document.addEventListener('DOMContentLoaded', () => {
         // Submit Form
         btnSubmitWhatsApp.addEventListener('click', handleReservationSubmit);
 
+        // Rooftop Location Notice Modal
+        const rooftopModal = document.getElementById('rooftopModal');
+        const btnCloseRooftopModal = document.getElementById('btnCloseRooftopModal');
+        const btnCloseRooftopTop = document.getElementById('btnCloseRooftopTop');
+
+        window.openRooftopNotice = function() {
+            if (rooftopModal) rooftopModal.classList.add('active');
+        };
+
+        window.closeRooftopNotice = function() {
+            if (rooftopModal) rooftopModal.classList.remove('active');
+        };
+
+        document.addEventListener('click', (e) => {
+            const chip = e.target.closest('.pref-chip');
+            if (chip) {
+                const radio = chip.querySelector('input[name="locationPref"]');
+                if (radio && radio.value === 'Rooftop') {
+                    window.openRooftopNotice();
+                }
+            }
+        });
+
+        document.addEventListener('change', (e) => {
+            if (e.target && e.target.name === 'locationPref' && e.target.value === 'Rooftop') {
+                window.openRooftopNotice();
+            }
+        });
+
+        if (btnCloseRooftopModal) btnCloseRooftopModal.addEventListener('click', window.closeRooftopNotice);
+        if (btnCloseRooftopTop) btnCloseRooftopTop.addEventListener('click', window.closeRooftopNotice);
+        if (rooftopModal) {
+            rooftopModal.addEventListener('click', (e) => {
+                if (e.target === rooftopModal) window.closeRooftopNotice();
+            });
+        }
+
         // Restart
         btnRestart.addEventListener('click', () => {
             contactForm.reset();

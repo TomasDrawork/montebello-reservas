@@ -17,6 +17,8 @@ terraform apply -auto-approve
 BUCKET_NAME=$(terraform output -raw s3_bucket_name)
 CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id)
 CLOUDFRONT_URL=$(terraform output -raw cloudfront_url)
+CUSTOM_DOMAIN_URL=$(terraform output -raw custom_domain_url)
+ADMIN_PANEL_URL=$(terraform output -raw admin_panel_url)
 
 cd ..
 
@@ -36,6 +38,9 @@ aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/
 
 echo "--------------------------------------------------------"
 echo "✅ ¡Despliegue en AWS exitoso!"
-echo "📱 Sitio Web Cliente: ${CLOUDFRONT_URL}"
-echo "👨‍🍳 Panel de Administración Staff: ${CLOUDFRONT_URL}/admin.html"
+echo "🌐 Dominio Principal: ${CUSTOM_DOMAIN_URL}"
+echo "📱 Sitio Web Cliente: ${CUSTOM_DOMAIN_URL}"
+echo "👨‍🍳 Panel de Administración Staff: ${ADMIN_PANEL_URL}"
+echo "⚡ CDN Directo CloudFront: ${CLOUDFRONT_URL}"
 echo "--------------------------------------------------------"
+
