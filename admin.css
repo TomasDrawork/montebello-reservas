@@ -1,36 +1,32 @@
-/* ==========================================================================
-   Club Montebello - Admin Dashboard Styles (Montserrat & Poppins Theme)
-   ========================================================================== */
-
 :root {
-    /* Club Montebello - Admin Dashboard Fine Dining Theme */
-    --gold-primary: #E05A10;
-    --gold-hover: #F47B20;
-    --gold-light: rgba(224, 90, 16, 0.16);
-    --gold-gradient: linear-gradient(135deg, #F47B20 0%, #B83A00 100%);
+    /* Club Montebello - Admin Dashboard Luxury Monochrome Theme */
+    --gold-primary: #FFFFFF;
+    --gold-hover: #F0F0F0;
+    --gold-light: rgba(255, 255, 255, 0.12);
+    --gold-gradient: #FFFFFF;
     
-    --bg-dark: #090705;
-    --bg-card: rgba(18, 15, 12, 0.96);
-    --bg-input: #171310;
+    --bg-dark: #070707;
+    --bg-card: rgba(16, 16, 16, 0.65);
+    --bg-input: rgba(14, 14, 14, 0.75);
     
-    --text-gold: #FFB37C;
+    --text-gold: #FFFFFF;
     --text-white: #FFFFFF;
-    --text-muted: #B3A497;
+    --text-muted: rgba(255, 255, 255, 0.7);
     
-    --border-gold: rgba(224, 90, 16, 0.32);
-    --border-dark: rgba(255, 255, 255, 0.09);
+    --border-gold: rgba(255, 255, 255, 0.2);
+    --border-dark: rgba(255, 255, 255, 0.12);
     
     --status-green: #22C55E;
-    --status-green-bg: rgba(34, 197, 94, 0.12);
-    --status-green-border: rgba(34, 197, 94, 0.35);
+    --status-green-bg: rgba(34, 197, 94, 0.14);
+    --status-green-border: rgba(34, 197, 94, 0.4);
 
     --status-red: #EF4444;
-    --status-red-bg: rgba(239, 68, 68, 0.12);
-    --status-red-border: rgba(239, 68, 68, 0.35);
+    --status-red-bg: rgba(239, 68, 68, 0.14);
+    --status-red-border: rgba(239, 68, 68, 0.4);
 
     --status-pending: #F59E0B;
-    --status-pending-bg: rgba(245, 158, 11, 0.12);
-    --status-pending-border: rgba(245, 158, 11, 0.35);
+    --status-pending-bg: rgba(245, 158, 11, 0.14);
+    --status-pending-border: rgba(245, 158, 11, 0.4);
 
     --radius-lg: 20px;
     --radius-md: 12px;
@@ -61,7 +57,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at 50% 20%, #1A1511 0%, #0E0C0A 80%);
+    background: radial-gradient(circle at 50% 20%, #151210 0%, #070707 90%);
     z-index: -1;
 }
 
@@ -69,8 +65,9 @@ body {
 .admin-login-modal {
     position: fixed;
     inset: 0;
-    background: rgba(14, 12, 10, 0.94);
-    backdrop-filter: blur(12px);
+    background: rgba(4, 4, 4, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -79,35 +76,39 @@ body {
 }
 
 .login-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-gold);
+    background: rgba(16, 16, 16, 0.85);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: var(--radius-lg);
-    padding: 40px 32px;
+    padding: 44px 36px;
     width: 100%;
     max-width: 400px;
     text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
 }
 
 .brand-badge {
-    font-family: var(--font-heading);
+    font-family: 'Outfit', sans-serif;
     font-size: 11px;
-    letter-spacing: 2.5px;
-    color: var(--gold-primary);
-    font-weight: 700;
+    letter-spacing: 3.5px;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .login-title {
-    font-family: var(--font-heading);
-    font-size: 26px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    letter-spacing: 0.8px;
     margin: 0 0 4px 0;
-    color: var(--text-white);
+    color: #FFFFFF;
 }
 
 .login-subtitle {
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 13px;
     margin: 0 0 24px 0;
 }
@@ -119,48 +120,54 @@ body {
 
 .form-group label {
     display: block;
+    font-family: 'Outfit', sans-serif;
     font-size: 12px;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.8);
     margin-bottom: 6px;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .form-group input, .form-group textarea {
     width: 100%;
-    padding: 12px 16px;
-    background-color: var(--bg-input);
-    border: 1px solid var(--border-dark);
+    padding: 13px 16px;
+    background-color: rgba(14, 14, 14, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-md);
     color: var(--text-white);
     font-family: var(--font-body);
     font-size: 14px;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-group input:focus, .form-group textarea:focus {
-    border-color: var(--gold-primary);
+    border-color: #FFFFFF;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
 .btn-primary-admin {
     width: 100%;
-    padding: 14px;
-    background: var(--gold-gradient);
+    padding: 16px;
+    background: #FFFFFF !important;
     border: none;
     border-radius: var(--radius-md);
-    color: white;
-    font-family: var(--font-heading);
+    color: #000000 !important;
+    font-family: 'Outfit', sans-serif;
     font-weight: 700;
     font-size: 14px;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(224, 90, 16, 0.3);
-    transition: transform 0.15s, opacity 0.15s;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.15s, box-shadow 0.15s;
 }
 
 .btn-primary-admin:hover {
-    opacity: 0.92;
-    transform: translateY(-1px);
+    background: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(255, 255, 255, 0.25);
 }
 
 .login-error {
@@ -268,12 +275,14 @@ body {
 
 /* --- CALENDAR & DATE BAR --- */
 .calendar-bar-section {
-    background: var(--bg-card);
-    border: 1px solid var(--border-gold);
+    background: rgba(14, 14, 14, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-lg);
-    padding: 14px 20px;
+    padding: 16px 22px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 .calendar-bar {
@@ -291,21 +300,22 @@ body {
 }
 
 .btn-date-nav {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border-dark);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: var(--text-white);
-    padding: 8px 14px;
+    padding: 8px 16px;
     border-radius: var(--radius-md);
+    font-family: 'Outfit', sans-serif;
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
 }
 
 .btn-date-nav:hover {
-    background: var(--gold-light);
-    border-color: var(--gold-primary);
-    color: var(--text-gold);
+    background: #FFFFFF;
+    color: #000000;
 }
 
 .date-picker-wrapper {
@@ -313,19 +323,20 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: var(--bg-input);
-    border: 1.5px solid var(--border-gold);
-    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 8px 18px;
     border-radius: var(--radius-md);
     cursor: pointer;
+    backdrop-filter: blur(10px);
 }
 
 .calendar-icon { font-size: 16px; }
 
 .selected-date-text {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    color: var(--text-gold);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    color: #FFFFFF;
     font-size: 14px;
 }
 
@@ -344,11 +355,12 @@ body {
 }
 
 .btn-date-pill {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-dark);
-    color: var(--text-muted);
-    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.75);
+    padding: 8px 16px;
     border-radius: 20px;
+    font-family: 'Outfit', sans-serif;
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
@@ -356,16 +368,16 @@ body {
 }
 
 .btn-date-pill:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: rgba(255, 255, 255, 0.18);
+    color: #FFFFFF;
 }
 
 .btn-date-pill.active {
-    background: var(--gold-gradient);
-    border-color: transparent;
-    color: white;
-    font-weight: 600;
-    box-shadow: 0 2px 10px rgba(224, 90, 16, 0.3);
+    background: #FFFFFF !important;
+    border-color: #FFFFFF !important;
+    color: #000000 !important;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
 }
 
 /* Metrics Row */
@@ -377,17 +389,20 @@ body {
 }
 
 .metric-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-dark);
+    background: rgba(14, 14, 14, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-lg);
-    padding: 18px 20px;
+    padding: 20px 22px;
     display: flex;
     align-items: center;
     gap: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-.metric-card.gold { border-color: var(--border-gold); }
-.metric-card.green { border-color: var(--status-green-border); }
+.metric-card.gold { border-color: rgba(255, 255, 255, 0.25); }
+.metric-card.green { border-color: rgba(34, 197, 94, 0.4); }
 
 .metric-icon {
     font-size: 28px;
@@ -395,15 +410,17 @@ body {
 
 .metric-value {
     display: block;
-    font-family: var(--font-heading);
-    font-size: 26px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
     font-weight: 700;
+    color: #FFFFFF;
     line-height: 1.1;
 }
 
 .metric-label {
+    font-family: 'Outfit', sans-serif;
     font-size: 12px;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.7);
 }
 
 /* Toolbar */
@@ -419,18 +436,19 @@ body {
 .tabs-group {
     display: flex;
     gap: 8px;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 5px;
     border-radius: var(--radius-md);
-    border: 1px solid var(--border-dark);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
 }
 
 .tab-btn {
     background: transparent;
     border: none;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.7);
     padding: 8px 16px;
-    font-family: var(--font-body);
+    font-family: 'Outfit', sans-serif;
     font-size: 13px;
     font-weight: 500;
     border-radius: var(--radius-sm);
@@ -442,10 +460,10 @@ body {
 }
 
 .tab-btn.active {
-    background: var(--gold-gradient);
-    color: white;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(224, 90, 16, 0.3);
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
 }
 
 .tab-count {
@@ -459,17 +477,21 @@ body {
 
 .search-input {
     min-width: 260px;
-    padding: 9px 14px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-dark);
+    padding: 10px 16px;
+    background: rgba(14, 14, 14, 0.65);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-md);
     color: white;
+    font-family: 'Outfit', sans-serif;
     font-size: 13px;
     outline: none;
+    transition: all 0.2s;
 }
 
 .search-input:focus {
-    border-color: var(--gold-primary);
+    border-color: #FFFFFF;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
 /* Reservations Grid & Cards */
@@ -480,10 +502,12 @@ body {
 }
 
 .res-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-dark);
+    background: rgba(14, 14, 14, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-lg);
-    padding: 20px;
+    padding: 22px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -491,7 +515,7 @@ body {
 }
 
 .res-card:hover {
-    border-color: rgba(224, 90, 16, 0.4);
+    border-color: rgba(255, 255, 255, 0.35);
     transform: translateY(-2px);
 }
 
@@ -505,7 +529,7 @@ body {
 .btn-delete-icon {
     background: transparent;
     border: none;
-    color: #9CA3AF;
+    color: rgba(255, 255, 255, 0.6);
     font-size: 14px;
     padding: 4px 8px;
     border-radius: var(--radius-sm);
@@ -519,10 +543,14 @@ body {
 }
 
 .res-id {
-    font-family: var(--font-heading);
+    font-family: 'Outfit', sans-serif;
     font-weight: 700;
-    color: var(--text-gold);
-    font-size: 15px;
+    color: #FFFFFF;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 4px 10px;
+    border-radius: 12px;
 }
 
 .res-status-badge {
@@ -551,22 +579,24 @@ body {
 }
 
 .res-customer-name {
-    font-family: var(--font-heading);
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0 0 4px 0;
+    font-family: 'Outfit', sans-serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 8px 0 4px 0;
 }
 
 .res-contact-info {
-    font-size: 12px;
-    color: var(--text-muted);
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, 0.7);
     margin-bottom: 14px;
 }
 
 .res-details-box {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-md);
-    padding: 12px;
+    padding: 14px;
     font-size: 13px;
     margin-bottom: 14px;
 }
@@ -578,16 +608,16 @@ body {
 }
 .res-detail-row:last-child { margin-bottom: 0; }
 
-.res-detail-label { color: var(--text-muted); }
-.res-detail-val { font-weight: 600; color: var(--text-white); }
+.res-detail-label { color: rgba(255, 255, 255, 0.65); }
+.res-detail-val { font-weight: 600; color: #FFFFFF; }
 
 .res-notes-box {
-    font-size: 12px;
-    color: #D1C7BD;
-    background: rgba(224, 90, 16, 0.08);
-    border-left: 2px solid var(--gold-primary);
-    padding: 8px 10px;
-    border-radius: 4px;
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 3px solid #FFFFFF;
+    padding: 10px 12px;
+    border-radius: 6px;
     margin-bottom: 14px;
 }
 

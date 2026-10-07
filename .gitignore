@@ -37,6 +37,15 @@ node_modules/
 data/*.json
 
 # ==========================================
+# Internal Documentation, Budgets & Manuals
+# ==========================================
+docs/
+*.pdf
+manual_montebello.html
+generate_pdf.js
+presupuesto*.html
+
+# ==========================================
 # OS & Editor files
 # ==========================================
 .DS_Store

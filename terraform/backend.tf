@@ -56,10 +56,8 @@ resource "aws_lambda_function" "api_lambda" {
 
   environment {
     variables = {
-      NODE_ENV           = "production"
-      MONTEBELLO_EMAIL   = "reservas.montebellovcp@gmail.com"
-      GMAIL_APP_PASSWORD = "fepixwspdvunpxin"
-      DYNAMODB_TABLE     = aws_dynamodb_table.reservations_table.name
+      NODE_ENV       = "production"
+      DYNAMODB_TABLE = aws_dynamodb_table.reservations_table.name
     }
   }
 }

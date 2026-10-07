@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!dateObj) {
             selectedDateTitle.textContent = 'Todas las Fechas';
             btnFilterAllDates.classList.add('active');
-            datePicker.value = '';
+            if (datePicker) datePicker.value = '';
         } else {
             const today = new Date();
             const tomorrow = new Date();
@@ -161,11 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             selectedDateTitle.textContent = formatFullTitle(dateObj);
             
-            // Set datePicker HTML5 YYYY-MM-DD
-            const yyyy = dateObj.getFullYear();
-            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const dd = String(dateObj.getDate()).padStart(2, '0');
-            datePicker.value = `${yyyy}-${mm}-${dd}`;
+            if (datePicker) {
+                const yyyy = dateObj.getFullYear();
+                const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+                const dd = String(dateObj.getDate()).padStart(2, '0');
+                datePicker.value = `${yyyy}-${mm}-${dd}`;
+            }
         }
 
         updateMetrics();
