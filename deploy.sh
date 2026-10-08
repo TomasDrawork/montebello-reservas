@@ -32,9 +32,16 @@ aws s3 sync . s3://${BUCKET_NAME} \
   --exclude "node_modules/*" \
   --delete
 
+if [ -f "Manual_Club_Montebello.pdf" ]; then
+  echo "📄 Subiendo Manual PDF con política de no-caché..."
+  aws s3 cp Manual_Club_Montebello.pdf s3://${BUCKET_NAME}/Manual_Club_Montebello.pdf \
+    --content-type "application/pdf" \
+    --cache-control "no-cache, no-store, must-revalidate"
+fi
+
 # 5. Invalidación de caché en CloudFront
 echo "🔄 Invalidando caché de CloudFront (${CLOUDFRONT_ID})..."
-aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*" > /dev/null
+aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*" "/Manual_Club_Montebello.pdf" > /dev/null
 
 echo "--------------------------------------------------------"
 echo "✅ ¡Despliegue en AWS exitoso!"

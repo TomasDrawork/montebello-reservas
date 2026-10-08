@@ -52,11 +52,12 @@ app.get('/api/availability', async (req, res) => {
  */
 app.post('/api/admin/availability', async (req, res) => {
     try {
-        const { blockedDates, allowedOverrideDates, closedWeekdays } = req.body;
+        const { blockedDates, allowedOverrideDates, closedWeekdays, dateSlotOverrides } = req.body;
         const updated = await dbService.saveAvailabilitySettings({
             closedWeekdays: closedWeekdays || [1, 2],
             blockedDates: blockedDates || [],
-            allowedOverrideDates: allowedOverrideDates || []
+            allowedOverrideDates: allowedOverrideDates || [],
+            dateSlotOverrides: dateSlotOverrides || {}
         });
         res.json({ success: true, message: 'Ajustes de disponibilidad actualizados.', availability: updated });
     } catch (err) {

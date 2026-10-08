@@ -21,6 +21,14 @@ terraform/*.zip
 .env.*
 aws_credentials
 secrets/
+credenciales_privadas.html
+*credenciales*.html
+*credenciales*.pdf
+generate_private_pdf.js
+serve_local.js
+
+
+
 
 # ==========================================
 # Logs & Server

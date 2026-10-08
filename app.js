@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let availabilityConfig = {
         closedWeekdays: [1, 2],
         blockedDates: [],
-        allowedOverrideDates: []
+        allowedOverrideDates: [],
+        dateSlotOverrides: {}
     };
 
     async function fetchAvailability() {
@@ -51,7 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 availabilityConfig = {
                     closedWeekdays: data.availability.closedWeekdays || [1, 2],
                     blockedDates: data.availability.blockedDates || [],
-                    allowedOverrideDates: data.availability.allowedOverrideDates || []
+                    allowedOverrideDates: data.availability.allowedOverrideDates || [],
+                    dateSlotOverrides: data.availability.dateSlotOverrides || {}
                 };
             }
         } catch (err) {
@@ -66,6 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const dd = String(dateObj.getDate()).padStart(2, '0');
         const dateStr = `${yyyy}-${mm}-${dd}`;
         const dayOfWeek = dateObj.getDay();
+
+        const overrideMode = availabilityConfig.dateSlotOverrides ? availabilityConfig.dateSlotOverrides[dateStr] : null;
+        if (overrideMode === 'CLOSED') return true;
+        if (overrideMode === 'LUNCH_ONLY' || overrideMode === 'DINNER_ONLY' || overrideMode === 'BOTH') return false;
 
         if (availabilityConfig.blockedDates.includes(dateStr)) return true;
         if (availabilityConfig.allowedOverrideDates.includes(dateStr)) return false;
@@ -127,10 +133,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- INITIALIZATION ---
     async function init() {
+        preloadBackgroundImages();
         await fetchAvailability();
         renderDateCarousel();
         bindEvents();
         updateUI();
+    }
+
+    function preloadBackgroundImages() {
+        const bgSources = ['imagenes/fondo-vino.jpg', 'imagenes/fondo-coctel.jpg'];
+        bgSources.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+    }
+
+    function updateBackgroundImage(stepNumber) {
+        const bg1 = document.getElementById('bgImage1');
+        const bg2 = document.getElementById('bgImage2');
+        if (!bg1 || !bg2) return;
+
+        const targetSrc = (stepNumber === 0) ? 'imagenes/fondo-vino.jpg' : 'imagenes/fondo-coctel.jpg';
+        
+        const isBg1Active = bg1.classList.contains('active');
+        const activeBg = isBg1Active ? bg1 : bg2;
+        const inactiveBg = isBg1Active ? bg2 : bg1;
+
+        if (activeBg.getAttribute('src') && activeBg.getAttribute('src').includes(targetSrc)) {
+            return;
+        }
+
+        inactiveBg.src = targetSrc;
+        inactiveBg.classList.add('active');
+        activeBg.classList.remove('active');
     }
 
     // --- STEP NAVIGATION ---
@@ -138,18 +173,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stepNumber < 0 || stepNumber > 5) return;
         state.currentStep = stepNumber;
 
-        // Dynamic Background Transition
-        const bgImg = document.getElementById('bgImage');
-        if (bgImg) {
-            const targetSrc = stepNumber === 0 ? 'imagenes/fondo-vino.jpg' : 'imagenes/fondo-coctel.jpg';
-            if (!bgImg.src.includes(targetSrc)) {
-                bgImg.style.opacity = '0.3';
-                setTimeout(() => {
-                    bgImg.src = targetSrc;
-                    bgImg.style.opacity = '1';
-                }, 180);
-            }
-        }
+        // Dynamic Background Transition (Seamless Crossfade)
+        updateBackgroundImage(stepNumber);
 
         // Hide all panes
         Object.values(panes).forEach(pane => pane.classList.remove('active'));
@@ -341,25 +366,49 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const dayOfWeek = date.getDay(); // 0 = Dom, 1 = Lun, 2 = Mar, 3 = Mié, 4 = Jue, 5 = Vie, 6 = Sáb
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const dd = String(date.getDate()).padStart(2, '0');
+        const dateStr = `${yyyy}-${mm}-${dd}`;
+        const dayOfWeek = date.getDay();
+
+        const overrideMode = availabilityConfig.dateSlotOverrides ? availabilityConfig.dateSlotOverrides[dateStr] : null;
+
         let slots = [];
 
-        if (dayOfWeek === 1 || dayOfWeek === 2) {
-            // If admin opened a Monday or Tuesday, offer Cena 21:30 hs slot
+        if (overrideMode === 'LUNCH_ONLY') {
             slots = [
-                { title: 'Cena Especial', time: '21:30 hs', icon: '🍷', desc: 'Turno de Cena Habilitado' }
+                { title: 'Almuerzo', time: '13:00 hs', icon: '☀️', desc: 'Horario Especial de Almuerzo' }
             ];
-        } else if (dayOfWeek >= 3 && dayOfWeek <= 5) {
-            // Miércoles, Jueves y Viernes: Únicamente Cena 21:30 hs
+        } else if (overrideMode === 'DINNER_ONLY') {
             slots = [
-                { title: 'Cena', time: '21:30 hs', icon: '🍷', desc: 'Horario Único de Cena' }
+                { title: 'Cena', time: '21:00 hs', icon: '🍷', desc: 'Primer Turno de Cena' },
+                { title: 'Cena', time: '21:30 hs', icon: '🍷', desc: 'Segundo Turno de Cena' }
             ];
-        } else if (dayOfWeek === 6 || dayOfWeek === 0) {
-            // Sábados y Domingos: Almuerzo 13:00 hs y Cena 21:30 hs
+        } else if (overrideMode === 'BOTH') {
             slots = [
-                { title: 'Almuerzo', time: '13:00 hs', icon: '☀️', desc: 'Horario Único de Almuerzo' },
-                { title: 'Cena', time: '21:30 hs', icon: '🍷', desc: 'Horario Único de Cena' }
+                { title: 'Almuerzo', time: '13:00 hs', icon: '☀️', desc: 'Turno de Almuerzo Habilitado' },
+                { title: 'Cena', time: '21:00 hs', icon: '🍷', desc: 'Primer Turno de Cena' },
+                { title: 'Cena', time: '21:30 hs', icon: '🍷', desc: 'Segundo Turno de Cena' }
             ];
+        } else {
+            if (dayOfWeek === 1 || dayOfWeek === 2) {
+                slots = [
+                    { title: 'Cena Especial', time: '21:00 hs', icon: '🍷', desc: 'Primer Turno de Cena' },
+                    { title: 'Cena Especial', time: '21:30 hs', icon: '🍷', desc: 'Segundo Turno de Cena' }
+                ];
+            } else if (dayOfWeek >= 3 && dayOfWeek <= 5) {
+                slots = [
+                    { title: 'Cena', time: '21:00 hs', icon: '🍷', desc: 'Primer Turno de Cena' },
+                    { title: 'Cena', time: '21:30 hs', icon: '🍷', desc: 'Segundo Turno de Cena' }
+                ];
+            } else if (dayOfWeek === 6 || dayOfWeek === 0) {
+                slots = [
+                    { title: 'Almuerzo', time: '13:00 hs', icon: '☀️', desc: 'Turno de Almuerzo Habilitado' },
+                    { title: 'Cena', time: '21:00 hs', icon: '🍷', desc: 'Primer Turno de Cena' },
+                    { title: 'Cena', time: '21:30 hs', icon: '🍷', desc: 'Segundo Turno de Cena' }
+                ];
+            }
         }
 
         slots.forEach(slotObj => {

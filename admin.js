@@ -91,10 +91,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnResetDefaults = document.getElementById('btnResetDefaults');
     const btnSaveAvailability = document.getElementById('btnSaveAvailability');
 
+    // Day Slots Modal Elements
+    const daySlotsModal = document.getElementById('daySlotsModal');
+    const btnCloseDaySlotsModal = document.getElementById('btnCloseDaySlotsModal');
+    const daySlotsModalDateTitle = document.getElementById('daySlotsModalDateTitle');
+    const btnSlotOptions = document.querySelectorAll('.btn-slot-option');
+    let activeDaySlotsDateStr = null;
+
     let availabilityConfig = {
         closedWeekdays: [1, 2],
         blockedDates: [],
-        allowedOverrideDates: []
+        allowedOverrideDates: [],
+        dateSlotOverrides: {}
     };
     let availViewMonth = new Date().getMonth();
     let availViewYear = new Date().getFullYear();
@@ -487,7 +495,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 availabilityConfig = {
                     closedWeekdays: data.availability.closedWeekdays || [1, 2],
                     blockedDates: data.availability.blockedDates || [],
-                    allowedOverrideDates: data.availability.allowedOverrideDates || []
+                    allowedOverrideDates: data.availability.allowedOverrideDates || [],
+                    dateSlotOverrides: data.availability.dateSlotOverrides || {}
                 };
             }
         } catch (err) {
@@ -523,6 +532,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
     }
 
+    function getDateSlotMode(dateObj, dateStr) {
+        if (availabilityConfig.dateSlotOverrides && availabilityConfig.dateSlotOverrides[dateStr]) {
+            return availabilityConfig.dateSlotOverrides[dateStr];
+        }
+        if (availabilityConfig.blockedDates && availabilityConfig.blockedDates.includes(dateStr)) {
+            return 'CLOSED';
+        }
+        if (availabilityConfig.allowedOverrideDates && availabilityConfig.allowedOverrideDates.includes(dateStr)) {
+            return 'BOTH';
+        }
+        const dayOfWeek = dateObj.getDay();
+        if (availabilityConfig.closedWeekdays && availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
+            return 'CLOSED';
+        }
+        if (dayOfWeek >= 3 && dayOfWeek <= 5) {
+            return 'DINNER_ONLY';
+        } else if (dayOfWeek === 6 || dayOfWeek === 0) {
+            return 'BOTH';
+        }
+        return 'CLOSED';
+    }
+
     function renderAvailabilityCalendar() {
         const monthNames = [
             'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -547,58 +578,115 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let day = 1; day <= daysInMonth; day++) {
             const cellDate = new Date(availViewYear, availViewMonth, day);
             const dateStr = getFormattedDateStr(availViewYear, availViewMonth, day);
-            const isBlocked = isDateBlockedInConfig(cellDate);
+            const mode = getDateSlotMode(cellDate, dateStr);
+
+            let cssClass = 'is-both';
+            let labelText = '✨ Ambos';
+
+            if (mode === 'CLOSED') {
+                cssClass = 'is-blocked';
+                labelText = '🔴 Cerrado';
+            } else if (mode === 'LUNCH_ONLY') {
+                cssClass = 'is-lunch';
+                labelText = '☀️ Almuerzo';
+            } else if (mode === 'DINNER_ONLY') {
+                cssClass = 'is-dinner';
+                labelText = '🍷 Cena';
+            } else if (mode === 'BOTH') {
+                cssClass = 'is-both';
+                labelText = '✨ Ambos';
+            }
 
             const cell = document.createElement('div');
-            cell.className = `avail-day-cell ${isBlocked ? 'is-blocked' : 'is-available'}`;
+            cell.className = `avail-day-cell ${cssClass}`;
             cell.innerHTML = `
                 <span>${day}</span>
-                <span class="day-status-label">${isBlocked ? 'Cerrado' : 'Abierto'}</span>
+                <span class="day-status-label">${labelText}</span>
             `;
 
             cell.addEventListener('click', (e) => {
                 e.stopPropagation();
-                toggleDateAvailability(cellDate, dateStr, isBlocked);
+                openDaySlotsModal(cellDate, dateStr);
             });
 
             availCalDaysGrid.appendChild(cell);
         }
     }
 
-    function toggleDateAvailability(dateObj, dateStr, currentlyBlocked) {
-        const dayOfWeek = dateObj.getDay();
+    function openDaySlotsModal(dateObj, dateStr) {
+        activeDaySlotsDateStr = dateStr;
 
-        if (currentlyBlocked) {
-            // Unblock / Open date
-            availabilityConfig.blockedDates = availabilityConfig.blockedDates.filter(d => d !== dateStr);
-            if (availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
-                if (!availabilityConfig.allowedOverrideDates.includes(dateStr)) {
-                    availabilityConfig.allowedOverrideDates.push(dateStr);
+        const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const formattedTitle = `${days[dateObj.getDay()]} ${dateObj.getDate()} de ${months[dateObj.getMonth()]} (${dateStr})`;
+
+        if (daySlotsModalDateTitle) {
+            daySlotsModalDateTitle.textContent = formattedTitle;
+        }
+
+        const currentMode = getDateSlotMode(dateObj, dateStr);
+        btnSlotOptions.forEach(btn => {
+            if (btn.dataset.mode === currentMode) {
+                btn.style.outline = '2px solid #FFFFFF';
+                btn.style.boxShadow = '0 0 12px rgba(255, 255, 255, 0.4)';
+            } else {
+                btn.style.outline = 'none';
+                btn.style.boxShadow = 'none';
+            }
+        });
+
+        if (daySlotsModal) daySlotsModal.classList.add('active');
+    }
+
+    function closeDaySlotsModal() {
+        if (daySlotsModal) daySlotsModal.classList.remove('active');
+    }
+
+    function selectDaySlotMode(mode) {
+        if (!activeDaySlotsDateStr) return;
+        const parts = activeDaySlotsDateStr.split('-');
+        const cellDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        const dayOfWeek = cellDate.getDay();
+
+        if (!availabilityConfig.dateSlotOverrides) {
+            availabilityConfig.dateSlotOverrides = {};
+        }
+        availabilityConfig.dateSlotOverrides[activeDaySlotsDateStr] = mode;
+
+        if (mode === 'CLOSED') {
+            availabilityConfig.allowedOverrideDates = (availabilityConfig.allowedOverrideDates || []).filter(d => d !== activeDaySlotsDateStr);
+            if (!availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
+                if (!(availabilityConfig.blockedDates || []).includes(activeDaySlotsDateStr)) {
+                    availabilityConfig.blockedDates.push(activeDaySlotsDateStr);
                 }
             }
         } else {
-            // Block date
-            availabilityConfig.allowedOverrideDates = availabilityConfig.allowedOverrideDates.filter(d => d !== dateStr);
-            if (!availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
-                if (!availabilityConfig.blockedDates.includes(dateStr)) {
-                    availabilityConfig.blockedDates.push(dateStr);
+            availabilityConfig.blockedDates = (availabilityConfig.blockedDates || []).filter(d => d !== activeDaySlotsDateStr);
+            if (availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
+                if (!(availabilityConfig.allowedOverrideDates || []).includes(activeDaySlotsDateStr)) {
+                    availabilityConfig.allowedOverrideDates.push(activeDaySlotsDateStr);
                 }
             }
         }
 
+        closeDaySlotsModal();
         renderAvailabilityCalendar();
     }
 
     function blockCurrentViewMonth() {
         const daysInMonth = new Date(availViewYear, availViewMonth + 1, 0).getDate();
+        if (!availabilityConfig.dateSlotOverrides) availabilityConfig.dateSlotOverrides = {};
+
         for (let day = 1; day <= daysInMonth; day++) {
             const cellDate = new Date(availViewYear, availViewMonth, day);
             const dateStr = getFormattedDateStr(availViewYear, availViewMonth, day);
             const dayOfWeek = cellDate.getDay();
 
-            availabilityConfig.allowedOverrideDates = availabilityConfig.allowedOverrideDates.filter(d => d !== dateStr);
+            availabilityConfig.dateSlotOverrides[dateStr] = 'CLOSED';
+
+            availabilityConfig.allowedOverrideDates = (availabilityConfig.allowedOverrideDates || []).filter(d => d !== dateStr);
             if (!availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
-                if (!availabilityConfig.blockedDates.includes(dateStr)) {
+                if (!(availabilityConfig.blockedDates || []).includes(dateStr)) {
                     availabilityConfig.blockedDates.push(dateStr);
                 }
             }
@@ -608,14 +696,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openCurrentViewMonth() {
         const daysInMonth = new Date(availViewYear, availViewMonth + 1, 0).getDate();
+        if (!availabilityConfig.dateSlotOverrides) availabilityConfig.dateSlotOverrides = {};
+
         for (let day = 1; day <= daysInMonth; day++) {
             const cellDate = new Date(availViewYear, availViewMonth, day);
             const dateStr = getFormattedDateStr(availViewYear, availViewMonth, day);
             const dayOfWeek = cellDate.getDay();
 
-            availabilityConfig.blockedDates = availabilityConfig.blockedDates.filter(d => d !== dateStr);
+            availabilityConfig.dateSlotOverrides[dateStr] = 'BOTH';
+
+            availabilityConfig.blockedDates = (availabilityConfig.blockedDates || []).filter(d => d !== dateStr);
             if (availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
-                if (!availabilityConfig.allowedOverrideDates.includes(dateStr)) {
+                if (!(availabilityConfig.allowedOverrideDates || []).includes(dateStr)) {
                     availabilityConfig.allowedOverrideDates.push(dateStr);
                 }
             }
@@ -626,6 +718,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetAvailabilityDefaults() {
         availabilityConfig.blockedDates = [];
         availabilityConfig.allowedOverrideDates = [];
+        availabilityConfig.dateSlotOverrides = {};
         renderAvailabilityCalendar();
     }
 
@@ -660,6 +753,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Availability Event Listeners
         if (btnManageAvailability) btnManageAvailability.addEventListener('click', openAvailabilityModal);
         if (btnCloseAvailability) btnCloseAvailability.addEventListener('click', closeAvailabilityModal);
+        if (btnCloseDaySlotsModal) btnCloseDaySlotsModal.addEventListener('click', closeDaySlotsModal);
+        if (daySlotsModal) {
+            daySlotsModal.addEventListener('click', (e) => {
+                if (e.target === daySlotsModal) closeDaySlotsModal();
+            });
+        }
+        btnSlotOptions.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const mode = e.currentTarget.dataset.mode;
+                if (mode) selectDaySlotMode(mode);
+            });
+        });
         if (availCalPrevMonth) {
             availCalPrevMonth.addEventListener('click', (e) => {
                 e.stopPropagation();

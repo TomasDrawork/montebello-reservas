@@ -142,7 +142,8 @@ const DEFAULT_AVAILABILITY = {
     id: 'SETTINGS_AVAILABILITY',
     closedWeekdays: [1, 2], // 1 = Lunes, 2 = Martes
     blockedDates: [],       // Array of "YYYY-MM-DD"
-    allowedOverrideDates: [] // Array of "YYYY-MM-DD"
+    allowedOverrideDates: [], // Array of "YYYY-MM-DD"
+    dateSlotOverrides: {}   // Map of "YYYY-MM-DD" -> "BOTH" | "LUNCH_ONLY" | "DINNER_ONLY" | "CLOSED"
 };
 
 async function getAvailabilitySettings() {
@@ -164,7 +165,8 @@ async function getAvailabilitySettings() {
         id: 'SETTINGS_AVAILABILITY',
         closedWeekdays: Array.isArray(settings.closedWeekdays) ? settings.closedWeekdays : [1, 2],
         blockedDates: Array.isArray(settings.blockedDates) ? settings.blockedDates : [],
-        allowedOverrideDates: Array.isArray(settings.allowedOverrideDates) ? settings.allowedOverrideDates : []
+        allowedOverrideDates: Array.isArray(settings.allowedOverrideDates) ? settings.allowedOverrideDates : [],
+        dateSlotOverrides: (settings.dateSlotOverrides && typeof settings.dateSlotOverrides === 'object') ? settings.dateSlotOverrides : {}
     };
 }
 
@@ -174,6 +176,7 @@ async function saveAvailabilitySettings(settings) {
         closedWeekdays: Array.isArray(settings.closedWeekdays) ? settings.closedWeekdays : [1, 2],
         blockedDates: Array.isArray(settings.blockedDates) ? settings.blockedDates : [],
         allowedOverrideDates: Array.isArray(settings.allowedOverrideDates) ? settings.allowedOverrideDates : [],
+        dateSlotOverrides: (settings.dateSlotOverrides && typeof settings.dateSlotOverrides === 'object') ? settings.dateSlotOverrides : {},
         updatedAt: new Date().toISOString()
     };
 
