@@ -29,5 +29,10 @@
     "nodemailer": "^10.0.14",
     "serverless-http": "^4.0.0",
     "uuid": "^14.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.5",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.13.0"
   }
 }

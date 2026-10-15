@@ -114,12 +114,12 @@
     }
 
     function renderDish(item, i) {
-        // Soporte para cepa con color distintivo en vinos
-        const cepaBadge = item.cepa 
-            ? '<span class="cepa-badge ' + (item.tipoCepa || 'default') + '">' + esc(item.cepa) + '</span>' 
+        // Renderiza la cepa debajo del nombre si existe (en minúsculas y sin recuadro)
+        const cepaHtml = item.cepa 
+            ? '<div class="dish-cepa">' + item.cepa.toLowerCase() + '</div>' 
             : '';
 
-        // Construcción segura de la descripción sin backticks anidados
+        // Construcción segura de la descripción
         let descHtml = '';
         if (item.desc) {
             descHtml = '<p class="dish-desc">' + esc(item.desc) + '</p>';
@@ -139,9 +139,10 @@
         return `
         <li class="dish" ${delay(i)}>
           <div class="dish-head">
-            <h3 class="dish-name">${esc(item.nombre)} ${cepaBadge}</h3>
+            <h3 class="dish-name">${esc(item.nombre)}</h3>
             <span class="dish-price">${formatPrice(item.precio)}</span>
           </div>
+          ${cepaHtml}
           ${descHtml}
           ${detailHtml}
         </li>`;
