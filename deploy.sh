@@ -5,7 +5,7 @@ echo "🚀 Iniciando despliegue de Restaurante Montebello Reservas en AWS..."
 
 # 1. Empaquetar backend para AWS Lambda
 echo "📦 Empaquetando backend de reservas para AWS Lambda..."
-zip -q -r terraform/lambda.zip server.js services imagenes package.json node_modules index.html app.js styles.css admin.html admin.js admin.css data
+zip -q -r terraform/lambda.zip server.js services imagenes package.json node_modules index.html app.js styles.css admin.html admin.js admin.css menu.json data
 
 # 2. Aplicar la infraestructura con Terraform
 cd terraform
@@ -22,26 +22,27 @@ ADMIN_PANEL_URL=$(terraform output -raw admin_panel_url)
 
 cd ..
 
-# 4. Subir archivos web estáticos al Bucket S3
-echo "📤 Sincronizando archivos al bucket S3 (${BUCKET_NAME})..."
+# 4. Subir SOLO los archivos web públicos al Bucket S3 (lista blanca)
+#    ⚠️ Nunca subir credenciales, manuales, presupuestos, código backend ni data/.
+#    Para publicar un archivo nuevo, agregarlo explícitamente con --include.
+echo "📤 Sincronizando archivos públicos al bucket S3 (${BUCKET_NAME})..."
 aws s3 sync . s3://${BUCKET_NAME} \
-  --exclude "terraform/*" \
-  --exclude ".git/*" \
-  --exclude "docs/*" \
-  --exclude "deploy.sh" \
-  --exclude "node_modules/*" \
-  --delete
-
-if [ -f "Manual_Club_Montebello.pdf" ]; then
-  echo "📄 Subiendo Manual PDF con política de no-caché..."
-  aws s3 cp Manual_Club_Montebello.pdf s3://${BUCKET_NAME}/Manual_Club_Montebello.pdf \
-    --content-type "application/pdf" \
-    --cache-control "no-cache, no-store, must-revalidate"
-fi
+  --exclude "*" \
+  --include "index.html" \
+  --include "app.js" \
+  --include "styles.css" \
+  --include "carta.html" \
+  --include "carta.js" \
+  --include "carta.css" \
+  --include "menu.json" \
+  --include "admin.html" \
+  --include "admin.js" \
+  --include "admin.css" \
+  --include "imagenes/*"
 
 # 5. Invalidación de caché en CloudFront
 echo "🔄 Invalidando caché de CloudFront (${CLOUDFRONT_ID})..."
-aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*" "/Manual_Club_Montebello.pdf" > /dev/null
+aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*" > /dev/null
 
 echo "--------------------------------------------------------"
 echo "✅ ¡Despliegue en AWS exitoso!"
