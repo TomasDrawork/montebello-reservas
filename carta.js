@@ -163,10 +163,24 @@
             return '<a href="#/' + sec.id + '/' + c.id + '" class="chip' + (isActive ? ' active' : '') + '" id="chip-' + c.id + '"' + (isActive ? ' aria-current="page"' : '') + '>' + esc(c.nombre) + '</a>';
         }).join('');
 
-        const items = visibleItems(cat);
-        const list = items.length
-            ? '<ul class="dish-list">' + items.map(renderDish).join('') + '</ul>'
-            : '<p class="empty">No hay opciones disponibles en este momento.</p>';
+        // Soporte para listas planas (items) o bodegas agrupadas con títulos
+        let list = '';
+        if (cat.bodegas && Array.isArray(cat.bodegas)) {
+            let bodegasHtml = '';
+            cat.bodegas.forEach(bodega => {
+                const bodegaItems = (bodega.items || []).filter(i => i.disponible !== false);
+                if (bodegaItems.length > 0) {
+                    bodegasHtml += `<div class="bodega-group-title" style="margin: 25px 0 12px 0; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 600; color: #D4AF37; text-transform: uppercase; letter-spacing: 1px;">${esc(bodega.nombreBodega)}</div>`;
+                    bodegasHtml += '<ul class="dish-list">' + bodegaItems.map((item, idxItem) => renderDish(item, idxItem)).join('') + '</ul>';
+                }
+            });
+            list = bodegasHtml || '<p class="empty">No hay opciones disponibles en este momento.</p>';
+        } else {
+            const items = visibleItems(cat);
+            list = items.length
+                ? '<ul class="dish-list">' + items.map(renderDish).join('') + '</ul>'
+                : '<p class="empty">No hay opciones disponibles en este momento.</p>';
+        }
 
         const prevLink = prev 
             ? '<a href="#/' + sec.id + '/' + prev.id + '" class="prev" id="pagerPrev"><small>← Anterior</small>' + esc(prev.nombre) + '</a>' 
