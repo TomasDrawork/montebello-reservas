@@ -349,13 +349,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     ${res.customerNotes ? `
                         <div class="res-notes-box">
-                            <strong>Nota Cliente:</strong> \${escapeHtml(res.customerNotes)}
+                            <strong>Nota Cliente:</strong> ${escapeHtml(res.customerNotes)}
                         </div>
                     ` : ''}
 
                     ${res.staffNotes ? `
                         <div class="res-notes-box" style="border-color: #22C55E; background: rgba(34,197,94,0.08);">
-                            <strong>Mensaje Staff:</strong> \${escapeHtml(res.staffNotes)}
+                            <strong>Mensaje Staff:</strong> ${escapeHtml(res.staffNotes)}
                         </div>
                     ` : ''}
                 </div>
