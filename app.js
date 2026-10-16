@@ -69,9 +69,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const dateStr = `${yyyy}-${mm}-${dd}`;
         const dayOfWeek = dateObj.getDay();
 
-        const overrideMode = availabilityConfig.dateSlotOverrides ? availabilityConfig.dateSlotOverrides[dateStr] : null;
-        if (overrideMode === 'CLOSED') return true;
-        if (overrideMode === 'LUNCH_ONLY' || overrideMode === 'DINNER_ONLY' || overrideMode === 'BOTH') return false;
+        const override = availabilityConfig.dateSlotOverrides ? availabilityConfig.dateSlotOverrides[dateStr] : null;
+        
+        if (override) {
+            if (Array.isArray(override)) {
+                return override.length === 0; // Si el arreglo está vacío, está cerrado
+            }
+            if (override === 'CLOSED') return true;
+            return false; // Cualquier otro modo legacy o string válido
+        }
 
         if (availabilityConfig.blockedDates.includes(dateStr)) return true;
         if (availabilityConfig.allowedOverrideDates.includes(dateStr)) return false;
@@ -173,30 +179,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stepNumber < 0 || stepNumber > 5) return;
         state.currentStep = stepNumber;
 
-        // Dynamic Background Transition (Seamless Crossfade)
         updateBackgroundImage(stepNumber);
 
-        // Hide all panes
         Object.values(panes).forEach(pane => pane.classList.remove('active'));
-
-        // Show target pane
         panes[`step${stepNumber}`].classList.add('active');
 
-        // Update progress bar
         const progressMap = { 0: 0, 1: 25, 2: 50, 3: 75, 4: 95, 5: 100 };
         progressBarFill.style.width = `${progressMap[stepNumber]}%`;
 
-        // Footer Back Button state
         if (stepNumber === 0 || stepNumber === 5) {
             btnBackStep.style.visibility = 'hidden';
         } else {
             btnBackStep.style.visibility = 'visible';
         }
 
-        // Auto update pills
         updateSummaryPills();
-
-        // Scroll to top of widget
         document.getElementById('widgetCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
@@ -303,22 +300,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        // First day of current view month
         const firstDayOfMonth = new Date(state.viewYear, state.viewMonth, 1);
         const daysInMonth = new Date(state.viewYear, state.viewMonth + 1, 0).getDate();
 
-        // Get starting day index (0 = Monday in ES calendar)
         let startingDay = firstDayOfMonth.getDay() - 1;
-        if (startingDay < 0) startingDay = 6; // Sunday = 6
+        if (startingDay < 0) startingDay = 6;
 
-        // Empty padding cells
         for (let i = 0; i < startingDay; i++) {
             const emptyCell = document.createElement('div');
             emptyCell.className = 'modal-day-cell disabled';
             modalDaysGrid.appendChild(emptyCell);
         }
 
-        // Days of month
         for (let day = 1; day <= daysInMonth; day++) {
             const cellDate = new Date(state.viewYear, state.viewMonth, day);
             cellDate.setHours(0, 0, 0, 0);
@@ -355,9 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
                d1.getDate() === d2.getDate();
     }
 
-    // --- FIXED RESERVATION SLOTS LOGIC ---
-    // Almuerzo: 13:00 hs (Solo Sábados y Domingos)
-    // Cena: 21:30 hs (Miércoles a Domingos)
+    // --- FIXED RESERVATION SLOTS LOGIC (ACTUALIZADO PARA MÚLTIPLES TURNOS) ---
     function renderTimeSlotsForDate(date) {
         timeSlotsContainer.innerHTML = '';
 
@@ -372,43 +363,58 @@ document.addEventListener('DOMContentLoaded', () => {
         const dateStr = `${yyyy}-${mm}-${dd}`;
         const dayOfWeek = date.getDay();
 
-        const overrideMode = availabilityConfig.dateSlotOverrides ? availabilityConfig.dateSlotOverrides[dateStr] : null;
+        const override = availabilityConfig.dateSlotOverrides ? availabilityConfig.dateSlotOverrides[dateStr] : null;
+
+        let activeSlots = [];
+
+        if (override) {
+            if (Array.isArray(override)) {
+                activeSlots = override; // Lee directamente el arreglo de checkboxes múltiples guardado en el panel
+            } else {
+                if (override === 'BOTH') activeSlots = ['MORNING', 'LUNCH', 'AFTERNOON', 'DINNER'];
+                else if (override === 'MORNING_ONLY') activeSlots = ['MORNING'];
+                else if (override === 'LUNCH_ONLY') activeSlots = ['LUNCH'];
+                else if (override === 'AFTERNOON_ONLY') activeSlots = ['AFTERNOON'];
+                else if (override === 'DINNER_ONLY') activeSlots = ['DINNER'];
+            }
+        } else {
+            if (dayOfWeek === 1 || dayOfWeek === 2) {
+                activeSlots = ['DINNER'];
+            } else if (dayOfWeek >= 3 && dayOfWeek <= 5) {
+                activeSlots = ['AFTERNOON', 'DINNER'];
+            } else {
+                activeSlots = ['MORNING', 'LUNCH', 'AFTERNOON', 'DINNER'];
+            }
+        }
 
         let slots = [];
 
-        if (overrideMode === 'LUNCH_ONLY') {
-            slots = [
-                { title: 'Almuerzo', time: '13:00 hs', icon: '☀️', desc: 'Horario Especial de Almuerzo' }
-            ];
-        } else if (overrideMode === 'DINNER_ONLY') {
-            slots = [
+        if (activeSlots.includes('MORNING')) {
+            slots.push(
+                { title: 'Desayuno / Mañana', time: '09:30 hs', icon: '☕', desc: 'Primer Turno Mañana' },
+                { title: 'Desayuno / Mañana', time: '10:00 hs', icon: '☕', desc: 'Segundo Turno Mañana' }
+            );
+        }
+        if (activeSlots.includes('LUNCH')) {
+            slots.push(
+                { title: 'Almuerzo', time: '13:00 hs', icon: '☀️', desc: 'Turno de Almuerzo' }
+            );
+        }
+        if (activeSlots.includes('AFTERNOON')) {
+            slots.push(
+                { title: 'Tarde / Merienda', time: '17:00 hs', icon: '🌅', desc: 'Turno Tarde' }
+            );
+        }
+        if (activeSlots.includes('DINNER')) {
+            slots.push(
                 { title: 'Cena', time: '21:00 hs', icon: '🍷', desc: 'Primer Turno de Cena' },
                 { title: 'Cena', time: '21:30 hs', icon: '🍷', desc: 'Segundo Turno de Cena' }
-            ];
-        } else if (overrideMode === 'BOTH') {
-            slots = [
-                { title: 'Almuerzo', time: '13:00 hs', icon: '☀️', desc: 'Turno de Almuerzo Habilitado' },
-                { title: 'Cena', time: '21:00 hs', icon: '🍷', desc: 'Primer Turno de Cena' },
-                { title: 'Cena', time: '21:30 hs', icon: '🍷', desc: 'Segundo Turno de Cena' }
-            ];
-        } else {
-            if (dayOfWeek === 1 || dayOfWeek === 2) {
-                slots = [
-                    { title: 'Cena Especial', time: '21:00 hs', icon: '🍷', desc: 'Primer Turno de Cena' },
-                    { title: 'Cena Especial', time: '21:30 hs', icon: '🍷', desc: 'Segundo Turno de Cena' }
-                ];
-            } else if (dayOfWeek >= 3 && dayOfWeek <= 5) {
-                slots = [
-                    { title: 'Cena', time: '21:00 hs', icon: '🍷', desc: 'Primer Turno de Cena' },
-                    { title: 'Cena', time: '21:30 hs', icon: '🍷', desc: 'Segundo Turno de Cena' }
-                ];
-            } else if (dayOfWeek === 6 || dayOfWeek === 0) {
-                slots = [
-                    { title: 'Almuerzo', time: '13:00 hs', icon: '☀️', desc: 'Turno de Almuerzo Habilitado' },
-                    { title: 'Cena', time: '21:00 hs', icon: '🍷', desc: 'Primer Turno de Cena' },
-                    { title: 'Cena', time: '21:30 hs', icon: '🍷', desc: 'Segundo Turno de Cena' }
-                ];
-            }
+            );
+        }
+
+        if (slots.length === 0) {
+            timeSlotsContainer.innerHTML = `<p class="step-subtitle">No hay turnos habilitados para esta fecha.</p>`;
+            return;
         }
 
         slots.forEach(slotObj => {
@@ -469,7 +475,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const dateFormatted = formatDateShort(state.selectedDate);
 
-        // Disable submit button during request
         btnSubmitWhatsApp.disabled = true;
         btnSubmitWhatsApp.innerHTML = `Enviando Solicitud...`;
 
@@ -493,7 +498,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.success && data.reservation) {
                 const res = data.reservation;
-                // Populate final summary card
                 finalSummaryCard.innerHTML = `
                     <div style="text-align: center; margin-bottom: 14px;">
                         <span style="background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.35); color: #FFFFFF; font-family: 'Outfit', sans-serif; font-weight: 700; padding: 6px 16px; border-radius: 20px; font-size: 14px; display: inline-block;">
@@ -528,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ⏳ <strong>Estado: Pendiente de Confirmación</strong>.<br>Te enviaremos una notificación por WhatsApp al celular <strong>${escapeHtml(res.customerPhone)}</strong> en cuanto el maitre apruebe tu mesa.
                     </div>
                     <div style="margin-top: 20px;">
-                        <a href="https://wa.me/5493541760808?text=${encodeURIComponent('Hola Club Montebello, acabo de solicitar la reserva ' + res.id + ' a nombre de ' + res.customerName)}" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: #FFF; text-decoration: none; padding: 14px 20px; border-radius: 12px; font-weight: 600; font-size: 14px; width: 100%; box-shadow: 0 4px 12px rgba(37,211,102,0.3);">
+                        <a href="https://wa.me/5493541760808?text=${encodeURIComponent('Hola Club Montebello, acabo de solicitar la reserva ' + res.id + ' a nombre di ' + res.customerName)}" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: #FFF; text-decoration: none; padding: 14px 20px; border-radius: 12px; font-weight: 600; font-size: 14px; width: 100%; box-shadow: 0 4px 12px rgba(37,211,102,0.3);">
                             💬 Abrir Chat de WhatsApp con Montebello
                         </a>
                     </div>
@@ -561,11 +565,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Single Unified Diners Counter Buttons
         btnDecrementDiners.addEventListener('click', () => setDiners(state.diners - 1));
         btnIncrementDiners.addEventListener('click', () => setDiners(state.diners + 1));
 
-        // Date Carousel Controls
         carouselPrev.addEventListener('click', () => {
             dateCarousel.scrollBy({ left: -220, behavior: 'smooth' });
         });
@@ -573,7 +575,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dateCarousel.scrollBy({ left: 220, behavior: 'smooth' });
         });
 
-        // Custom Modal Calendar Events
         btnOpenCalendar.addEventListener('click', openCalendarModal);
         btnCloseModal.addEventListener('click', closeCalendarModal);
         
@@ -602,10 +603,8 @@ document.addEventListener('DOMContentLoaded', () => {
             renderModalCalendar();
         });
 
-        // Submit Form
         btnSubmitWhatsApp.addEventListener('click', handleReservationSubmit);
 
-        // Rooftop Location Notice Modal
         const rooftopModal = document.getElementById('rooftopModal');
         const btnCloseRooftopModal = document.getElementById('btnCloseRooftopModal');
         const btnCloseRooftopTop = document.getElementById('btnCloseRooftopTop');
@@ -642,7 +641,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Restart
         btnRestart.addEventListener('click', () => {
             contactForm.reset();
             setDiners(2);
@@ -654,6 +652,5 @@ document.addEventListener('DOMContentLoaded', () => {
         setDiners(2);
     }
 
-    // Start App
     init();
 });

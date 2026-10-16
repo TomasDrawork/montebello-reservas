@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const daySlotsModal = document.getElementById('daySlotsModal');
     const btnCloseDaySlotsModal = document.getElementById('btnCloseDaySlotsModal');
     const daySlotsModalDateTitle = document.getElementById('daySlotsModalDateTitle');
-    const btnSlotOptions = document.querySelectorAll('.btn-slot-option');
     let activeDaySlotsDateStr = null;
 
     let availabilityConfig = {
@@ -113,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showDashboard();
             fetchReservations();
             fetchAvailabilitySettings();
-            // Start polling every 10 seconds for live updates
             setInterval(fetchReservations, 10000);
         } else {
             showLogin();
@@ -149,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function setDateFilter(dateObj) {
         selectedDateFilter = dateObj;
         
-        // Update quick pills UI
         [btnFilterAllDates, btnFilterToday, btnFilterTomorrow].forEach(b => b.classList.remove('active'));
 
         if (!dateObj) {
@@ -201,18 +198,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function getFilteredReservations() {
         let filtered = reservationsData;
 
-        // Filter by Date
         if (selectedDateFilter) {
             const dateShortStr = formatDateShort(selectedDateFilter).toLowerCase();
             filtered = filtered.filter(r => r.dateStr && r.dateStr.toLowerCase().includes(dateShortStr));
         }
 
-        // Filter by Tab Status
         if (currentFilterStatus !== 'ALL') {
             filtered = filtered.filter(r => r.status === currentFilterStatus);
         }
 
-        // Filter by Search Query
         if (searchQuery) {
             const q = searchQuery.toLowerCase();
             filtered = filtered.filter(r => 
@@ -355,13 +349,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     ${res.customerNotes ? `
                         <div class="res-notes-box">
-                            <strong>Nota Cliente:</strong> ${escapeHtml(res.customerNotes)}
+                            <strong>Nota Cliente:</strong> \${escapeHtml(res.customerNotes)}
                         </div>
                     ` : ''}
 
                     ${res.staffNotes ? `
                         <div class="res-notes-box" style="border-color: #22C55E; background: rgba(34,197,94,0.08);">
-                            <strong>Mensaje Staff:</strong> ${escapeHtml(res.staffNotes)}
+                            <strong>Mensaje Staff:</strong> \${escapeHtml(res.staffNotes)}
                         </div>
                     ` : ''}
                 </div>
@@ -441,31 +435,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         adminCalDaysGrid.innerHTML = '';
 
-        // Empty cells before 1st day of month
         for (let i = 0; i < firstDay; i++) {
             const emptyCell = document.createElement('div');
             emptyCell.className = 'admin-day-cell empty';
             adminCalDaysGrid.appendChild(emptyCell);
         }
 
-        // Day cells
         for (let day = 1; day <= daysInMonth; day++) {
             const cell = document.createElement('div');
             cell.className = 'admin-day-cell';
 
             const dateObj = new Date(adminCalYear, adminCalMonth, day);
 
-            // Check if today
             if (dateObj.toDateString() === today.toDateString()) {
                 cell.classList.add('today');
             }
 
-            // Check if selected
             if (selectedDateFilter && dateObj.toDateString() === selectedDateFilter.toDateString()) {
                 cell.classList.add('selected');
             }
 
-            // Count reservations on this date
             const dateShortStr = formatDateShort(dateObj).toLowerCase();
             const resCount = reservationsData.filter(r => r.dateStr && r.dateStr.toLowerCase().includes(dateShortStr)).length;
 
@@ -522,19 +511,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${year}-${mm}-${dd}`;
     }
 
-    function isDateBlockedInConfig(dateObj) {
-        const dateStr = getFormattedDateStr(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
-        const dayOfWeek = dateObj.getDay();
-
-        if (availabilityConfig.blockedDates.includes(dateStr)) return true;
-        if (availabilityConfig.allowedOverrideDates.includes(dateStr)) return false;
-        if (availabilityConfig.closedWeekdays.includes(dayOfWeek)) return true;
-        return false;
-    }
-
     function getDateSlotMode(dateObj, dateStr) {
         if (availabilityConfig.dateSlotOverrides && availabilityConfig.dateSlotOverrides[dateStr]) {
-            return availabilityConfig.dateSlotOverrides[dateStr];
+            const val = availabilityConfig.dateSlotOverrides[dateStr];
+            if (Array.isArray(val)) {
+                if (val.length === 0) return 'CLOSED';
+                if (val.length === 4) return 'BOTH';
+                return 'CUSTOM';
+            }
+            return val;
         }
         if (availabilityConfig.blockedDates && availabilityConfig.blockedDates.includes(dateStr)) {
             return 'CLOSED';
@@ -592,6 +577,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (mode === 'DINNER_ONLY') {
                 cssClass = 'is-dinner';
                 labelText = '🍷 Cena';
+            } else if (mode === 'CUSTOM') {
+                cssClass = 'is-both';
+                labelText = '⚙️ Varios Turnos';
             } else if (mode === 'BOTH') {
                 cssClass = 'is-both';
                 labelText = '✨ Ambos';
@@ -624,26 +612,46 @@ document.addEventListener('DOMContentLoaded', () => {
             daySlotsModalDateTitle.textContent = formattedTitle;
         }
 
-        const currentMode = getDateSlotMode(dateObj, dateStr);
-        btnSlotOptions.forEach(btn => {
-            if (btn.dataset.mode === currentMode) {
-                btn.style.outline = '2px solid #FFFFFF';
-                btn.style.boxShadow = '0 0 12px rgba(255, 255, 255, 0.4)';
+        let currentSlots = [];
+        if (availabilityConfig.dateSlotOverrides && availabilityConfig.dateSlotOverrides[dateStr]) {
+            const val = availabilityConfig.dateSlotOverrides[dateStr];
+            if (Array.isArray(val)) {
+                currentSlots = val;
             } else {
-                btn.style.outline = 'none';
-                btn.style.boxShadow = 'none';
+                if (val === 'BOTH') currentSlots = ['MORNING', 'LUNCH', 'AFTERNOON', 'DINNER'];
+                else if (val === 'MORNING_ONLY') currentSlots = ['MORNING'];
+                else if (val === 'LUNCH_ONLY') currentSlots = ['LUNCH'];
+                else if (val === 'AFTERNOON_ONLY') currentSlots = ['AFTERNOON'];
+                else if (val === 'DINNER_ONLY') currentSlots = ['DINNER'];
+                else currentSlots = [];
             }
+        } else {
+            const dayOfWeek = dateObj.getDay();
+            if (dayOfWeek === 1 || dayOfWeek === 2) currentSlots = ['DINNER'];
+            else if (dayOfWeek >= 3 && dayOfWeek <= 5) currentSlots = ['AFTERNOON', 'DINNER'];
+            else currentSlots = ['MORNING', 'LUNCH', 'AFTERNOON', 'DINNER'];
+        }
+
+        const checkboxes = daySlotsModal.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(chk => {
+            chk.checked = currentSlots.includes(chk.dataset.slot);
         });
 
         if (daySlotsModal) daySlotsModal.classList.add('active');
     }
 
     function closeDaySlotsModal() {
-        if (daySlotsModal) daySlotsModal.classList.remove('active');
-    }
+        if (!daySlotsModal || !activeDaySlotsDateStr) {
+            if (daySlotsModal) daySlotsModal.classList.remove('active');
+            return;
+        }
 
-    function selectDaySlotMode(mode) {
-        if (!activeDaySlotsDateStr) return;
+        const checkboxes = daySlotsModal.querySelectorAll('input[type="checkbox"]');
+        const selectedSlots = [];
+        checkboxes.forEach(chk => {
+            if (chk.checked) selectedSlots.push(chk.dataset.slot);
+        });
+
         const parts = activeDaySlotsDateStr.split('-');
         const cellDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
         const dayOfWeek = cellDate.getDay();
@@ -651,9 +659,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!availabilityConfig.dateSlotOverrides) {
             availabilityConfig.dateSlotOverrides = {};
         }
-        availabilityConfig.dateSlotOverrides[activeDaySlotsDateStr] = mode;
 
-        if (mode === 'CLOSED') {
+        availabilityConfig.dateSlotOverrides[activeDaySlotsDateStr] = selectedSlots;
+
+        if (selectedSlots.length === 0) {
             availabilityConfig.allowedOverrideDates = (availabilityConfig.allowedOverrideDates || []).filter(d => d !== activeDaySlotsDateStr);
             if (!availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
                 if (!(availabilityConfig.blockedDates || []).includes(activeDaySlotsDateStr)) {
@@ -669,7 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        closeDaySlotsModal();
+        daySlotsModal.classList.remove('active');
         renderAvailabilityCalendar();
     }
 
@@ -682,7 +691,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dateStr = getFormattedDateStr(availViewYear, availViewMonth, day);
             const dayOfWeek = cellDate.getDay();
 
-            availabilityConfig.dateSlotOverrides[dateStr] = 'CLOSED';
+            availabilityConfig.dateSlotOverrides[dateStr] = [];
 
             availabilityConfig.allowedOverrideDates = (availabilityConfig.allowedOverrideDates || []).filter(d => d !== dateStr);
             if (!availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
@@ -703,7 +712,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dateStr = getFormattedDateStr(availViewYear, availViewMonth, day);
             const dayOfWeek = cellDate.getDay();
 
-            availabilityConfig.dateSlotOverrides[dateStr] = 'BOTH';
+            availabilityConfig.dateSlotOverrides[dateStr] = ['MORNING', 'LUNCH', 'AFTERNOON', 'DINNER'];
 
             availabilityConfig.blockedDates = (availabilityConfig.blockedDates || []).filter(d => d !== dateStr);
             if (availabilityConfig.closedWeekdays.includes(dayOfWeek)) {
@@ -750,21 +759,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- EVENT BINDINGS ---
     function bindEvents() {
-        // Availability Event Listeners
         if (btnManageAvailability) btnManageAvailability.addEventListener('click', openAvailabilityModal);
         if (btnCloseAvailability) btnCloseAvailability.addEventListener('click', closeAvailabilityModal);
         if (btnCloseDaySlotsModal) btnCloseDaySlotsModal.addEventListener('click', closeDaySlotsModal);
+        
         if (daySlotsModal) {
             daySlotsModal.addEventListener('click', (e) => {
                 if (e.target === daySlotsModal) closeDaySlotsModal();
             });
         }
-        btnSlotOptions.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const mode = e.currentTarget.dataset.mode;
-                if (mode) selectDaySlotMode(mode);
-            });
-        });
+    
         if (availCalPrevMonth) {
             availCalPrevMonth.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -792,7 +796,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnResetDefaults) btnResetDefaults.addEventListener('click', resetAvailabilityDefaults);
         if (btnSaveAvailability) btnSaveAvailability.addEventListener('click', saveAvailabilitySettings);
 
-        // Login Form
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const password = adminPassword.value.trim();
@@ -820,29 +823,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Logout
         btnLogout.addEventListener('click', () => {
             sessionStorage.removeItem('montebello_admin_token');
             authToken = null;
             showLogin();
         });
 
-        // Refresh
         btnRefresh.addEventListener('click', fetchReservations);
 
-        // Search Input
         searchInput.addEventListener('input', (e) => {
             searchQuery = e.target.value.trim();
             renderReservations();
         });
 
-        // Calendar Controls
         btnFilterAllDates.addEventListener('click', () => setDateFilter(null));
-        
-        btnFilterToday.addEventListener('click', () => {
-            setDateFilter(new Date());
-        });
-
+        btnFilterToday.addEventListener('click', () => setDateFilter(new Date()));
         btnFilterTomorrow.addEventListener('click', () => {
             const tom = new Date();
             tom.setDate(tom.getDate() + 1);
@@ -861,7 +856,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setDateFilter(base);
         });
 
-        // Admin Calendar Modal Trigger & Events
         if (datePickerWrapper) {
             datePickerWrapper.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -920,7 +914,6 @@ document.addEventListener('DOMContentLoaded', () => {
             closeAdminCalendarModal();
         });
 
-        // Tabs
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 tabBtns.forEach(b => b.classList.remove('active'));
@@ -930,25 +923,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Approve Modal Form Submit
         approveForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = approveResId.value;
             const tableName = approveTableName.value.trim();
             const staffNotes = approveStaffNotes.value.trim();
 
-            // Pre-open window synchronously to prevent iOS/Safari popup blockers
             const waWin = window.open('', '_blank');
 
             try {
                 const res = await fetch(`/api/admin/reservations/${id}/status`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        status: 'CONFIRMADA',
-                        tableName,
-                        staffNotes
-                    })
+                    body: JSON.stringify({ status: 'CONFIRMADA', tableName, staffNotes })
                 });
 
                 const data = await res.json();
@@ -956,11 +943,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     closeApproveModal();
                     fetchReservations();
                     if (data.waLink) {
-                        if (waWin && !waWin.closed) {
-                            waWin.location.href = data.waLink;
-                        } else {
-                            window.location.href = data.waLink;
-                        }
+                        if (waWin && !waWin.closed) waWin.location.href = data.waLink;
+                        else window.location.href = data.waLink;
                     } else if (waWin && !waWin.closed) {
                         waWin.close();
                     }
@@ -974,23 +958,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Reject Modal Form Submit
         rejectForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = rejectResId.value;
             const staffNotes = rejectReason.value.trim();
 
-            // Pre-open window synchronously to prevent iOS/Safari popup blockers
             const waWin = window.open('', '_blank');
 
             try {
                 const res = await fetch(`/api/admin/reservations/${id}/status`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        status: 'RECHAZADA',
-                        staffNotes
-                    })
+                    body: JSON.stringify({ status: 'RECHAZADA', staffNotes })
                 });
 
                 const data = await res.json();
@@ -998,11 +977,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     closeRejectModal();
                     fetchReservations();
                     if (data.waLink) {
-                        if (waWin && !waWin.closed) {
-                            waWin.location.href = data.waLink;
-                        } else {
-                            window.location.href = data.waLink;
-                        }
+                        if (waWin && !waWin.closed) waWin.location.href = data.waLink;
+                        else window.location.href = data.waLink;
                     } else if (waWin && !waWin.closed) {
                         waWin.close();
                     }
@@ -1016,16 +992,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Delete Modal Form Submit
         deleteForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = deleteResId.value;
 
             try {
-                const res = await fetch(`/api/admin/reservations/${id}`, {
-                    method: 'DELETE'
-                });
-
+                const res = await fetch(`/api/admin/reservations/${id}`, { method: 'DELETE' });
                 const data = await res.json();
                 if (data.success) {
                     closeDeleteModal();
@@ -1038,13 +1010,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Modal Close Buttons
         btnCloseApproveModal.addEventListener('click', closeApproveModal);
         btnCancelApprove.addEventListener('click', closeApproveModal);
-
         btnCloseRejectModal.addEventListener('click', closeRejectModal);
         btnCancelReject.addEventListener('click', closeRejectModal);
-
         btnCloseDeleteModal.addEventListener('click', closeDeleteModal);
         btnCancelDelete.addEventListener('click', closeDeleteModal);
     }

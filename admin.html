@@ -309,33 +309,33 @@
         </div>
     </div>
 
-    <!-- Action Modal: Day Slots Selector -->
+   <!-- Action Modal: Day Slots Selector (Multi-select Checkboxes) -->
     <div class="action-modal" id="daySlotsModal" style="z-index: 10050;">
-        <div class="modal-content" style="max-width: 380px; text-align: center; background: rgba(16, 16, 16, 0.96); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 16px; padding: 24px;">
+        <div class="modal-content" style="max-width: 400px; text-align: center; background: rgba(16, 16, 16, 0.96); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 16px; padding: 24px;">
             <button class="modal-close" id="btnCloseDaySlotsModal">&times;</button>
             <h3 class="modal-title" style="color: #F59E0B; font-size: 18px; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <span>📅</span> Configurar Turnos
+                <span>📅</span> Configurar Turnos del Día
             </h3>
-            <p class="modal-subtitle" id="daySlotsModalDateTitle" style="color: #FFFFFF; font-weight: 600; font-size: 14px; margin-bottom: 18px;">Viernes 16 de Octubre</p>
+            <p class="modal-subtitle" id="daySlotsModalDateTitle" style="color: #FFFFFF; font-weight: 600; font-size: 14px; margin-bottom: 18px;"></p>
 
-            <div class="day-slot-options" style="display: flex; flex-direction: column; gap: 10px;">
-                <button type="button" class="btn-slot-option" data-mode="BOTH" style="background: rgba(16, 185, 129, 0.15); border: 1.5px solid #10B981; color: #FFFFFF; padding: 13px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;">
-                    <span>✨ Ambos Turnos (Almuerzo y Cena)</span>
-                    <span style="font-size: 11px; opacity: 0.85; background: rgba(16,185,129,0.3); padding: 3px 8px; border-radius: 8px;">13:00 / 21:00 / 21:30 hs</span>
-                </button>
-                <button type="button" class="btn-slot-option" data-mode="LUNCH_ONLY" style="background: rgba(245, 158, 11, 0.15); border: 1.5px solid #F59E0B; color: #FFFFFF; padding: 13px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;">
-                    <span>☀️ Solo Almuerzo (Mediodía)</span>
-                    <span style="font-size: 11px; opacity: 0.85; background: rgba(245,158,11,0.3); padding: 3px 8px; border-radius: 8px;">13:00 hs</span>
-                </button>
-                <button type="button" class="btn-slot-option" data-mode="DINNER_ONLY" style="background: rgba(129, 140, 248, 0.15); border: 1.5px solid #818CF8; color: #FFFFFF; padding: 13px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;">
-                    <span>🍷 Solo Cena (Noche)</span>
-                    <span style="font-size: 11px; opacity: 0.85; background: rgba(129,140,248,0.3); padding: 3px 8px; border-radius: 8px;">21:00 / 21:30 hs</span>
-                </button>
-                <button type="button" class="btn-slot-option" data-mode="CLOSED" style="background: rgba(239, 68, 68, 0.15); border: 1.5px solid #EF4444; color: #EF4444; padding: 13px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;">
-                    <span>🔴 Cerrado / Bloqueado</span>
-                    <span style="font-size: 11px; opacity: 0.85; background: rgba(239,68,68,0.3); padding: 3px 8px; border-radius: 8px;">Sin turnos</span>
-                </button>
+            <div class="day-slot-options" style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
+                <label class="slot-checkbox-label" style="background: rgba(234, 179, 8, 0.12); border: 1.5px solid #EAB308; color: #FFFFFF; padding: 12px 14px; border-radius: 12px; font-weight: 600; font-size: 13.5px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                    <span style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" data-slot="MORNING" style="width: 18px; height: 18px; accent-color: #EAB308;"> ☕ Mañana (09:30 / 10:00)</span>
+                </label>
+                <label class="slot-checkbox-label" style="background: rgba(245, 158, 11, 0.12); border: 1.5px solid #F59E0B; color: #FFFFFF; padding: 12px 14px; border-radius: 12px; font-weight: 600; font-size: 13.5px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                    <span style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" data-slot="LUNCH" style="width: 18px; height: 18px; accent-color: #F59E0B;"> ☀️ Almuerzo (13:00)</span>
+                </label>
+                <label class="slot-checkbox-label" style="background: rgba(244, 63, 94, 0.12); border: 1.5px solid #F43F5E; color: #FFFFFF; padding: 12px 14px; border-radius: 12px; font-weight: 600; font-size: 13.5px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                    <span style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" data-slot="AFTERNOON" style="width: 18px; height: 18px; accent-color: #F43F5E;"> 🌅 Tarde / Merienda (17:00)</span>
+                </label>
+                <label class="slot-checkbox-label" style="background: rgba(129, 140, 248, 0.12); border: 1.5px solid #818CF8; color: #FFFFFF; padding: 12px 14px; border-radius: 12px; font-weight: 600; font-size: 13.5px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                    <span style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" data-slot="DINNER" style="width: 18px; height: 18px; accent-color: #818CF8;"> 🍷 Cena (21:00 / 21:30)</span>
+                </label>
             </div>
+            
+            <p style="margin-top: 16px; font-size: 12px; color: #9CA3AF; text-align: center;">
+                💡 Los cambios se aplican al cerrar este recuadro y guardar con el botón general del panel.
+            </p>
         </div>
     </div>
 
