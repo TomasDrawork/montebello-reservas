@@ -3,6 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- STATE ---
     let reservationsData = [];
     let currentFilterStatus = 'ALL';
+    let currentFilterShift = 'ALL';
+
+    // Detecta el turno de una reserva a partir del texto de timeSlot (ej: "Almuerzo (13:00 hs)")
+    function getShiftKey(timeSlot) {
+        const t = (timeSlot || '').toLowerCase();
+        if (/desayuno|mañana|09:30|10:00/.test(t)) return 'MORNING';
+        if (/almuerzo|13:00/.test(t)) return 'LUNCH';
+        if (/merienda|tarde|17:00/.test(t)) return 'AFTERNOON';
+        if (/cena|21:00|21:30/.test(t)) return 'DINNER';
+        return 'OTHER';
+    }
     let selectedDateFilter = null; // null = All Dates, Date object = specific day
     let searchQuery = '';
     let authToken = sessionStorage.getItem('montebello_admin_token');
@@ -49,7 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const reservationsGrid = document.getElementById('reservationsGrid');
     const emptyState = document.getElementById('emptyState');
     const searchInput = document.getElementById('searchInput');
-    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabBtns = document.querySelectorAll('.tab-btn[data-status]');
+    const shiftBtns = document.querySelectorAll('.tab-btn[data-shift]');
 
     // Approve Modal
     const approveModal = document.getElementById('approveModal');
@@ -89,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnBlockCurrentMonth = document.getElementById('btnBlockCurrentMonth');
     const btnOpenCurrentMonth = document.getElementById('btnOpenCurrentMonth');
     const btnResetDefaults = document.getElementById('btnResetDefaults');
-    const btnSaveAvailability = document.getElementById('btnSaveAvailability');
 
     // Day Slots Modal Elements
     const daySlotsModal = document.getElementById('daySlotsModal');
@@ -205,6 +216,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (currentFilterStatus !== 'ALL') {
             filtered = filtered.filter(r => r.status === currentFilterStatus);
+        }
+
+        if (currentFilterShift !== 'ALL') {
+            filtered = filtered.filter(r => getShiftKey(r.timeSlot) === currentFilterShift);
         }
 
         if (searchQuery) {
@@ -516,6 +531,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const val = availabilityConfig.dateSlotOverrides[dateStr];
             if (Array.isArray(val)) {
                 if (val.length === 0) return 'CLOSED';
+                if (val.length === 1 && val[0] === 'DINNER') return 'DINNER_ONLY';
+                if (val.length === 1 && val[0] === 'LUNCH') return 'LUNCH_ONLY';
                 if (val.length === 4) return 'BOTH';
                 return 'CUSTOM';
             }
@@ -566,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const mode = getDateSlotMode(cellDate, dateStr);
 
             let cssClass = 'is-both';
-            let labelText = '✨ Ambos';
+            let labelText = '✨ Mixto';
 
             if (mode === 'CLOSED') {
                 cssClass = 'is-blocked';
@@ -579,10 +596,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 labelText = '🍷 Cena';
             } else if (mode === 'CUSTOM') {
                 cssClass = 'is-both';
-                labelText = '⚙️ Varios Turnos';
+                labelText = '✨ Mixto';
             } else if (mode === 'BOTH') {
                 cssClass = 'is-both';
-                labelText = '✨ Ambos';
+                labelText = '✨ Mixto';
             }
 
             const cell = document.createElement('div');
@@ -626,10 +643,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 else currentSlots = [];
             }
         } else {
+            // Por defecto: Lun/Mar cerrado, Mié-Vie solo cena, Sáb/Dom almuerzo y cena
             const dayOfWeek = dateObj.getDay();
-            if (dayOfWeek === 1 || dayOfWeek === 2) currentSlots = ['DINNER'];
-            else if (dayOfWeek >= 3 && dayOfWeek <= 5) currentSlots = ['AFTERNOON', 'DINNER'];
-            else currentSlots = ['MORNING', 'LUNCH', 'AFTERNOON', 'DINNER'];
+            if (dayOfWeek === 1 || dayOfWeek === 2) currentSlots = [];
+            else if (dayOfWeek >= 3 && dayOfWeek <= 5) currentSlots = ['DINNER'];
+            else currentSlots = ['LUNCH', 'DINNER'];
         }
 
         const checkboxes = daySlotsModal.querySelectorAll('input[type="checkbox"]');
@@ -640,7 +658,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (daySlotsModal) daySlotsModal.classList.add('active');
     }
 
-    function closeDaySlotsModal() {
+    // Cerrar sin aplicar cambios (X, Cancelar o tocar fuera)
+    function cancelDaySlotsModal() {
+        if (daySlotsModal) daySlotsModal.classList.remove('active');
+        activeDaySlotsDateStr = null;
+    }
+
+    // Aplicar los turnos marcados y guardar inmediatamente en el servidor
+    async function closeDaySlotsModal() {
         if (!daySlotsModal || !activeDaySlotsDateStr) {
             if (daySlotsModal) daySlotsModal.classList.remove('active');
             return;
@@ -679,10 +704,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         daySlotsModal.classList.remove('active');
+        activeDaySlotsDateStr = null;
         renderAvailabilityCalendar();
+        await saveAvailabilitySettings();
     }
 
-    function blockCurrentViewMonth() {
+    async function blockCurrentViewMonth() {
+        if (!confirm('¿Bloquear TODOS los días de este mes?')) return;
         const daysInMonth = new Date(availViewYear, availViewMonth + 1, 0).getDate();
         if (!availabilityConfig.dateSlotOverrides) availabilityConfig.dateSlotOverrides = {};
 
@@ -701,9 +729,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         renderAvailabilityCalendar();
+        await saveAvailabilitySettings();
     }
 
-    function openCurrentViewMonth() {
+    async function openCurrentViewMonth() {
+        if (!confirm('¿Abrir TODOS los días de este mes con todos los turnos?')) return;
         const daysInMonth = new Date(availViewYear, availViewMonth + 1, 0).getDate();
         if (!availabilityConfig.dateSlotOverrides) availabilityConfig.dateSlotOverrides = {};
 
@@ -722,18 +752,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         renderAvailabilityCalendar();
+        await saveAvailabilitySettings();
     }
 
-    function resetAvailabilityDefaults() {
+    async function resetAvailabilityDefaults() {
+        if (!confirm('¿Restablecer la disponibilidad predeterminada? Se borrarán todos los cambios manuales.')) return;
         availabilityConfig.blockedDates = [];
         availabilityConfig.allowedOverrideDates = [];
         availabilityConfig.dateSlotOverrides = {};
         renderAvailabilityCalendar();
+        await saveAvailabilitySettings();
     }
 
+    // Guarda la disponibilidad en el servidor y muestra el estado en el pie del modal
     async function saveAvailabilitySettings() {
-        btnSaveAvailability.disabled = true;
-        btnSaveAvailability.textContent = 'Guardando...';
+        const statusEl = document.getElementById('availSaveStatus');
+        const setStatus = (text, color) => {
+            if (statusEl) { statusEl.textContent = text; statusEl.style.color = color; }
+        };
+        setStatus('⏳ Guardando...', '#F59E0B');
 
         try {
             const res = await fetch('/api/admin/availability', {
@@ -744,16 +781,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await res.json();
             if (data.success) {
-                alert('✅ Cambios de disponibilidad guardados correctamente.');
-                closeAvailabilityModal();
+                setStatus('✅ Guardado', '#34D399');
+                setTimeout(() => setStatus('💾 Los cambios se guardan automáticamente.', '#9CA3AF'), 2500);
             } else {
+                setStatus('❌ Error al guardar', '#F87171');
                 alert(data.message || 'Error guardando disponibilidad.');
             }
         } catch (err) {
-            alert('Error de conexión.');
-        } finally {
-            btnSaveAvailability.disabled = false;
-            btnSaveAvailability.textContent = '💾 GUARDAR CAMBIOS DE DISPONIBILIDAD';
+            setStatus('❌ Error de conexión', '#F87171');
+            alert('Error de conexión. Los cambios no se guardaron.');
         }
     }
 
@@ -761,11 +797,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function bindEvents() {
         if (btnManageAvailability) btnManageAvailability.addEventListener('click', openAvailabilityModal);
         if (btnCloseAvailability) btnCloseAvailability.addEventListener('click', closeAvailabilityModal);
-        if (btnCloseDaySlotsModal) btnCloseDaySlotsModal.addEventListener('click', closeDaySlotsModal);
+        if (btnCloseDaySlotsModal) btnCloseDaySlotsModal.addEventListener('click', cancelDaySlotsModal);
+        const btnApplyDaySlots = document.getElementById('btnApplyDaySlots');
+        const btnCancelDaySlots = document.getElementById('btnCancelDaySlots');
+        if (btnApplyDaySlots) btnApplyDaySlots.addEventListener('click', closeDaySlotsModal);
+        if (btnCancelDaySlots) btnCancelDaySlots.addEventListener('click', cancelDaySlotsModal);
         
         if (daySlotsModal) {
             daySlotsModal.addEventListener('click', (e) => {
-                if (e.target === daySlotsModal) closeDaySlotsModal();
+                if (e.target === daySlotsModal) cancelDaySlotsModal();
             });
         }
     
@@ -794,7 +834,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnBlockCurrentMonth) btnBlockCurrentMonth.addEventListener('click', blockCurrentViewMonth);
         if (btnOpenCurrentMonth) btnOpenCurrentMonth.addEventListener('click', openCurrentViewMonth);
         if (btnResetDefaults) btnResetDefaults.addEventListener('click', resetAvailabilityDefaults);
-        if (btnSaveAvailability) btnSaveAvailability.addEventListener('click', saveAvailabilitySettings);
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -919,6 +958,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 tabBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentFilterStatus = btn.dataset.status;
+                renderReservations();
+            });
+        });
+
+        shiftBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                shiftBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilterShift = btn.dataset.shift;
                 renderReservations();
             });
         });

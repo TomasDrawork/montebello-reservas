@@ -378,12 +378,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 else if (override === 'DINNER_ONLY') activeSlots = ['DINNER'];
             }
         } else {
+            // Por defecto: Lun/Mar cerrado, Mié-Vie solo cena, Sáb/Dom almuerzo y cena
             if (dayOfWeek === 1 || dayOfWeek === 2) {
-                activeSlots = ['DINNER'];
+                activeSlots = [];
             } else if (dayOfWeek >= 3 && dayOfWeek <= 5) {
-                activeSlots = ['AFTERNOON', 'DINNER'];
+                activeSlots = ['DINNER'];
             } else {
-                activeSlots = ['MORNING', 'LUNCH', 'AFTERNOON', 'DINNER'];
+                activeSlots = ['LUNCH', 'DINNER'];
             }
         }
 
@@ -638,6 +639,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rooftopModal) {
             rooftopModal.addEventListener('click', (e) => {
                 if (e.target === rooftopModal) window.closeRooftopNotice();
+            });
+        }
+
+        const balconyModal = document.getElementById('balconyModal');
+        const closeBalconyNotice = () => balconyModal && balconyModal.classList.remove('active');
+        document.addEventListener('change', (e) => {
+            if (e.target && e.target.name === 'locationPref' && e.target.value === 'Balcón' && balconyModal) {
+                balconyModal.classList.add('active');
+            }
+        });
+        ['btnCloseBalconyModal', 'btnCloseBalconyTop'].forEach(id => {
+            const b = document.getElementById(id);
+            if (b) b.addEventListener('click', closeBalconyNotice);
+        });
+        if (balconyModal) {
+            balconyModal.addEventListener('click', (e) => {
+                if (e.target === balconyModal) closeBalconyNotice();
             });
         }
 
