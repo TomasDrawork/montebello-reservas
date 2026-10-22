@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Editor de Carta | Club Montebello</title>
+    <meta name="description" content="Editor interno de la carta digital de Club Montebello.">
+    <link rel="icon" type="image/png" href="imagenes/official-logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="editor-carta.css?v=1">
+</head>
+<body>
+    <!-- Login -->
+    <div class="login-screen" id="loginScreen" hidden>
+        <form class="login-card" id="loginForm">
+            <span class="badge">STAFF ONLY</span>
+            <h1 class="login-title">Club Montebello</h1>
+            <p class="login-sub">Editor de Carta</p>
+            <label for="loginPassword">Contraseña de acceso</label>
+            <input type="password" id="loginPassword" placeholder="Ingresá la clave..." required autocomplete="current-password">
+            <button type="submit" class="btn btn-primary" id="btnLogin">Ingresar</button>
+            <p class="login-error" id="loginError" role="alert"></p>
+            <p class="login-foot">Misma contraseña que el panel de reservas</p>
+        </form>
+    </div>
+
+    <!-- Editor -->
+    <div class="app" id="app" hidden>
+        <header class="topbar">
+            <div class="brand">
+                <span class="brand-tag">EDITOR DE CARTA</span>
+                <h1 class="brand-title">Club Montebello</h1>
+            </div>
+            <div class="top-actions">
+                <a class="btn btn-ghost" id="linkVerCarta" href="/carta.html" target="_blank" rel="noopener">👁 Ver carta</a>
+                <a class="btn btn-ghost" id="linkPanel" href="/admin.html">📅 Panel de reservas</a>
+                <button class="btn btn-danger-ghost" id="btnLogout" type="button">Salir</button>
+            </div>
+        </header>
+
+        <nav class="section-tabs" id="sectionTabs" aria-label="Secciones de la carta"></nav>
+
+        <div class="layout">
+            <aside class="cat-panel">
+                <div class="panel-head">
+                    <h2>Categorías</h2>
+                    <button class="btn btn-small" id="btnAddCategory" type="button">+ Nueva</button>
+                </div>
+                <ul class="cat-list" id="catList"></ul>
+            </aside>
+
+            <main class="editor" id="editor" aria-live="polite"></main>
+        </div>
+
+        <!-- Barra de guardado -->
+        <div class="save-bar" id="saveBar">
+            <span class="save-status" id="saveStatus">Sin cambios</span>
+            <button class="btn btn-ghost" id="btnDiscard" type="button" disabled>Descartar</button>
+            <button class="btn btn-primary" id="btnSave" type="button" disabled>💾 Guardar cambios</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <script src="editor-carta.js?v=1"></script>
+</body>
+</html>

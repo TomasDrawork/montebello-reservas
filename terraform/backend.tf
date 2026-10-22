@@ -26,6 +26,29 @@ resource "aws_iam_role_policy_attachment" "lambda_dynamodb" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
 }
 
+# Permiso para que la Lambda lea/guarde la carta editable (solo carta-data/ del bucket)
+resource "aws_iam_role_policy" "lambda_menu_s3" {
+  name = "montebello_lambda_menu_s3"
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
+        Resource = "${aws_s3_bucket.frontend.arn}/carta-data/*"
+      },
+      {
+        Effect    = "Allow"
+        Action    = ["s3:ListBucket"]
+        Resource  = aws_s3_bucket.frontend.arn
+        Condition = { StringLike = { "s3:prefix" = ["carta-data/*"] } }
+      }
+    ]
+  })
+}
+
 # AWS DynamoDB Table for Permanent Reservation Storage
 resource "aws_dynamodb_table" "reservations_table" {
   name         = "montebello_reservations"
@@ -58,6 +81,9 @@ resource "aws_lambda_function" "api_lambda" {
     variables = {
       NODE_ENV       = "production"
       DYNAMODB_TABLE = aws_dynamodb_table.reservations_table.name
+      MENU_BUCKET    = aws_s3_bucket.frontend.id
+      ADMIN_PASSWORD = var.admin_password
+      JWT_SECRET     = var.jwt_secret
     }
   }
 }

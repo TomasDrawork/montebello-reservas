@@ -1,0 +1,1996 @@
+{
+  "actualizado": "2026-10-22",
+  "secciones": [
+    {
+      "id": "comidas",
+      "nombre": "Comidas",
+      "categorias": [
+        {
+          "id": "entradas",
+          "nombre": "Entradas",
+          "items": [
+            {
+              "nombre": "Empanada criolla",
+              "desc": "Empanada casera de carne, al horno, con un toque de picante. Clásico bien argentino.",
+              "precio": 4500
+            },
+            {
+              "nombre": "Molleja a los cuatro quesos",
+              "desc": "Mollejas blanqueadas, cortadas en láminas y doradas en manteca, en salsa cremosa de cuatro quesos.",
+              "precio": 20000
+            },
+            {
+              "nombre": "Rabas",
+              "desc": "Rabas crocantes rebozadas en panko, con aderezo de la casa. Ideal para compartir y perfectas para abrir el momento.",
+              "precio": 20000
+            },
+            {
+              "nombre": "Pulpo a la gallega",
+              "desc": "Pulpo, papas laminadas, aceite de oliva, pimentón y perejil.",
+              "precio": 18000
+            },
+            {
+              "nombre": "Ceviche",
+              "desc": "Pangasius marinado en jugo de limón, con cebolla morada, palta en cubos, aceite de oliva y pimienta.",
+              "precio": 20000
+            },
+            {
+              "nombre": "Provoleta clásica con tomate confitado",
+              "desc": "Provoleta a la parrilla con tomate cherry confitado al aceite de oliva, rúcula y mix de semillas.",
+              "precio": 18000
+            }
+          ]
+        },
+        {
+          "id": "platos-montebello",
+          "nombre": "Platos Montebello",
+          "items": [
+            {
+              "nombre": "Lomo al champignon",
+              "desc": "Lomo suavemente ahumado, crema de champignones y papas de doble cocción. Plato de elaboración cuidada.",
+              "precio": 36000
+            },
+            {
+              "nombre": "Salmón Montebello",
+              "desc": "Salmón rosado a la mostaza ahumada con costra de pistacho, acompañado con puré de papas.",
+              "precio": 45000
+            },
+            {
+              "nombre": "Salmón rosado",
+              "desc": "Salmón rosado en reducción de naranja y puré de papas (opción de cremoso).",
+              "precio": 40000
+            },
+            {
+              "nombre": "Pulpo Montebello",
+              "desc": "Pulpo al grill, acompañado de cremoso de papas y papas españolas con aceite de oliva.",
+              "precio": 45000
+            },
+            {
+              "nombre": "Trucha",
+              "desc": "Trucha salmonada al vino blanco, alcaparras, cremoso de calabazas y gírgolas.",
+              "precio": 32000
+            },
+            {
+              "nombre": "Matambre de cerdo a la pizza",
+              "desc": "Porción de matambre de cerdo a la pizza acompañado con papas noisette (opción al limón).",
+              "precio": 35000
+            },
+            {
+              "nombre": "Risotto de mar",
+              "desc": "Arroz cremoso cocido en caldo de verduras y vino blanco, acompañado de tentáculos de calamar, langostinos salteados y mejillones. Finalizado con manteca, queso parmesano y un sutil toque de salsa de soja que realza los sabores de mar.",
+              "precio": 35000
+            },
+            {
+              "nombre": "Risotto dorado & bondiola",
+              "desc": "Cremoso risotto al azafrán, perfumado con vino blanco y acompañado de tierna bondiola de cerdo braseada, finalizado con manteca y queso parmesano.",
+              "precio": 29000
+            },
+            {
+              "nombre": "Milanesa con cheddar y panceta",
+              "desc": "Milanesa de ternera con cheddar y crocantes de panceta, acompañada con papas bastón.",
+              "precio": 25000
+            },
+            {
+              "nombre": "Milanesa Montebello",
+              "desc": "Milanesa de ternera con queso mozzarella, cebollas caramelizadas y champignones, acompañada con papas bastón.",
+              "precio": 28000
+            }
+          ]
+        },
+        {
+          "id": "carnes",
+          "nombre": "Carnes",
+          "items": [
+            {
+              "nombre": "Bife de chorizo a la leña",
+              "desc": "Bife de chorizo a la parrilla (350 g), con rúcula fresca, tomates confitados y papas parmentier de doble cocción. Plato de cocción lenta a las brasas.",
+              "precio": 39900
+            },
+            {
+              "nombre": "Entraña Montebello",
+              "desc": "Entraña al fuego con vegetales asados (pimiento rojo, amarillo y verde, cebolla morada, berenjena y zapallito zucchini) y huevo frito.",
+              "precio": 37000
+            },
+            {
+              "nombre": "Entraña al malbec",
+              "desc": "Entraña con reducción de malbec y cremoso de calabaza.",
+              "precio": 42000
+            },
+            {
+              "nombre": "Pechuga a la leña",
+              "desc": "Pechuga grillada a las brasas, de cocción cuidada. Elaborada al momento.",
+              "precio": 18000
+            },
+            {
+              "nombre": "Bife de chorizo Tabasco",
+              "desc": "Bife de chorizo a la parrilla (350 g), con terminación en Tabasco, acompañado con papas españolas a las finas hierbas.",
+              "precio": 45000
+            },
+            {
+              "nombre": "Suprema con guarnición",
+              "desc": "Suprema de pollo dorada y tierna, acompañada de guarnición a elección.",
+              "precio": 24000
+            }
+          ]
+        },
+        {
+          "id": "pastas-caseras",
+          "nombre": "Pastas Caseras",
+          "items": [
+            {
+              "nombre": "Sorrentinos de osobuco",
+              "desc": "Sorrentinos rellenos de osobuco, crema de hongos y panceta crocante. Plato intenso y reconfortante.",
+              "precio": 30000
+            },
+            {
+              "nombre": "Ñoquis Montebello",
+              "desc": "Ñoquis livianos de papa con bolognesa italiana de receta tradicional, sabrosa y reconfortante.",
+              "precio": 26000
+            },
+            {
+              "nombre": "Tallarines con frutos de mar",
+              "desc": "Tallarines caseros con mejillones, crema, langostinos, tentáculos de calamar y un delicado toque de vodka. Sabores de mar, suaves y envolventes.",
+              "precio": 30000
+            },
+            {
+              "nombre": "Tallarines con salsa a elección",
+              "desc": "Tallarines caseros con salsa a elección: fileto, crema o bolognesa.",
+              "precio": 25000
+            },
+            {
+              "nombre": "Sorrentinos patagónicos de cordero",
+              "desc": "Sorrentinos de cordero con salsa caprese: cebolla morada, tomate concassé, crema y albahaca fresca.",
+              "precio": 30000
+            },
+            {
+              "nombre": "Sorrentinos de calabaza",
+              "desc": "Sorrentinos de calabaza y mozzarella acompañados de una crema pisto de berenjena (pimientos, cebolla y berenjenas salteadas).",
+              "precio": 29000
+            }
+          ]
+        },
+        {
+          "id": "guarniciones",
+          "nombre": "Guarniciones",
+          "items": [
+            {
+              "nombre": "Papas al parmesano",
+              "desc": "Papas bastón, gratinadas con queso parmesano. El acompañamiento ideal para la parrilla.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Papas con cheddar",
+              "desc": "Porción de papas bastón, con salsa de cheddar.",
+              "precio": 12900
+            },
+            {
+              "nombre": "Ensalada Montebello",
+              "desc": "Rúcula fresca, tomates cherry, queso parmesano, aceitunas y alcaparras. Opción fresca y liviana. Ideal para acompañar carnes a la parrilla.",
+              "precio": 18000
+            },
+            {
+              "nombre": "Ensalada de la huerta",
+              "desc": "Lechuga fresca, tomate, zanahoria rallada, huevo y cebolla morada. Clásica, fresca y liviana.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Ensalada fresh",
+              "desc": "Rúcula, cherry, cebolla morada, naranja avivada y semillas tostadas. Ligera y refrescante.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Ensalada César",
+              "desc": "Mix de hojas verdes, hebras de queso, pollo a la plancha, crutones y aderezo César.",
+              "precio": 18000
+            }
+          ]
+        },
+        {
+          "id": "menu-infantil",
+          "nombre": "Menú Infantil",
+          "items": [
+            {
+              "nombre": "Suprema con papas",
+              "desc": "Suprema de pollo con papas fritas y bebida. Porción pensada para los más chicos.",
+              "precio": 22000
+            },
+            {
+              "nombre": "Ñoquis",
+              "desc": "Ñoquis con salsa a elección y bebida. Porción pensada para los más chicos.",
+              "precio": 19000
+            }
+          ]
+        },
+        {
+          "id": "nuestros-postres",
+          "nombre": "Nuestros Postres",
+          "items": [
+            {
+              "nombre": "Trilogía Montebello",
+              "detalle": [
+                {
+                  "nombre": "Shot de mousse de chocolate",
+                  "desc": "Base de brownie, mousse de chocolate y chocolate en rama."
+                },
+                {
+                  "nombre": "Cheesecake de pistacho",
+                  "desc": "Galletas trituradas, cremoso de pistacho y reducción de frutos rojos."
+                },
+                {
+                  "nombre": "Key lime pie",
+                  "desc": "Cremoso suave de leche condensada, jugo de limas y galletas trituradas."
+                }
+              ],
+              "precio": 10000
+            },
+            {
+              "nombre": "Flan casero",
+              "desc": "Nuestro flan casero, con dulce de leche o crema. Un clásico de siempre.",
+              "precio": 9000
+            },
+            {
+              "nombre": "Brownie de chocolate negro con bocha de crema americana",
+              "desc": "Clásico brownie tibio con una bocha de helado de crema americana. Ideal para acompañar un café o para deleitarse después de un plato principal.",
+              "precio": 11500
+            },
+            {
+              "nombre": "Ensalada de frutas",
+              "desc": "Una opción fresca y liviana, preparada en el momento con frutas de estación.",
+              "precio": 8500
+            },
+            {
+              "nombre": "Macedonia",
+              "desc": "Una combinación fresca y liviana de frutas de estación, preparada en el momento, con una bocha de helado.",
+              "precio": 11000
+            },
+            {
+              "nombre": "Baileys con helado",
+              "desc": "Un postre cremoso y adulto: helado de crema americana con Baileys y salsa de chocolate. Ideal para cerrar la experiencia.",
+              "precio": 14000
+            },
+            {
+              "nombre": "Panqueque con dulce de leche y helado",
+              "precio": 9500
+            }
+          ]
+        },
+        {
+          "id": "tortas-y-helados",
+          "nombre": "Tortas & Helados",
+          "items": [
+            {
+              "nombre": "Cheesecake de frutos rojos",
+              "desc": "Un postre equilibrado y delicado: base húmeda de chocolate blanco, crema de queso con vainilla y frutos rojos.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Torta doble mousse",
+              "desc": "Para los amantes del chocolate. Un postre intenso y cremoso: base de brownie, mousse de chocolate semiamargo y blanco, con crema chantilly.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Torta Red Velvet",
+              "desc": "Bizcochuelo húmedo sabor cacao de color rojo intenso, relleno y cobertura de frosting de queso crema (crema dulce y queso crema).",
+              "precio": 12000
+            },
+            {
+              "nombre": "Torta Marquise",
+              "desc": "Brownie, dulce de leche, crema chantilly y chocolate rallado.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Torta Selva Negra",
+              "desc": "Torta de bizcochuelo de chocolate húmedo con crema chantilly y cerezas.",
+              "precio": 10000
+            },
+            {
+              "nombre": "Bocha de americana",
+              "desc": "Bocha de helado de crema americana.",
+              "precio": 6000
+            },
+            {
+              "nombre": "Bocha de chocolate",
+              "desc": "Bocha de helado de chocolate.",
+              "precio": 6000
+            },
+            {
+              "nombre": "Bocha de dulce de leche",
+              "desc": "Bocha de helado de dulce de leche.",
+              "precio": 6000
+            },
+            {
+              "nombre": "Bocha de limón",
+              "desc": "Bocha de helado de limón.",
+              "precio": 6000
+            }
+          ]
+        },
+        {
+          "id": "loco",
+          "nombre": "Loco",
+          "items": [
+            {
+              "nombre": "pepe",
+              "desc": "rico",
+              "precio": 2222
+            },
+            {
+              "nombre": "alo",
+              "desc": "sisi",
+              "precio": 3333
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bebidas",
+      "nombre": "Bebidas",
+      "categorias": [
+        {
+          "id": "aperitivos",
+          "nombre": "Aperitivos",
+          "items": [
+            {
+              "nombre": "Aperol Spritz",
+              "desc": "Aperol, espumante, soda y rodaja de naranja. Refrescante y ligero.",
+              "precio": 10000
+            },
+            {
+              "nombre": "Aperol Spritz Ghiacciato",
+              "desc": "Una versión fresca y vibrante del clásico: Aperol, espumante y jugo de naranja natural, servido bien frío con hielo. Ideal para disfrutar el atardecer.",
+              "precio": 10500
+            },
+            {
+              "nombre": "Campari con Tónica",
+              "desc": "Un clásico italiano, fresco y equilibrado. Campari, tónica bien fría, hielo y un toque cítrico.",
+              "precio": 10000
+            },
+            {
+              "nombre": "Martini Orange",
+              "desc": "Aperitivo clásico y aromático. Vermuth Martini Rosso con soda bien fría y rodaja de naranja.",
+              "precio": 9000
+            },
+            {
+              "nombre": "Martini Originale",
+              "desc": "Aperitivo clásico y elegante. Vermuth Martini Rosso con soda bien fría, hielo y aceituna.",
+              "precio": 9000
+            },
+            {
+              "nombre": "Martini con Pomelo",
+              "desc": "Aperitivo fresco y vibrante. Martini Rosso con pomelo natural exprimido y soda bien fría.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Martini Cup",
+              "desc": "Aperitivo fresco y moderno. Martini blanco y gin con lima-limón, notas herbales y pepino fresco.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Cynar Julep",
+              "desc": "Fresco y herbal. Cynar, pomelo exprimido, menta fresca y limón, suavemente endulzado y servido con hielo.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Fernet con Coca",
+              "desc": "Clásico argentino por excelencia. Fernet Branca, Coca-Cola bien fría y hielo, en su punto justo.",
+              "precio": 9900
+            },
+            {
+              "nombre": "Gancia con Sprite",
+              "desc": "Aperitivo clásico y liviano. Gancia con Sprite bien fría y hielo, fresco y equilibrado.",
+              "precio": 8500
+            },
+            {
+              "nombre": "Mito",
+              "desc": "Aperitivo de carácter. Punt e Mes y Campari, intenso, equilibrado y clásico.",
+              "precio": 9000
+            },
+            {
+              "nombre": "Punt e Mes Tonic",
+              "desc": "Intenso y amargo. Punt e Mes con tónica bien fría, de perfil clásico y elegante.",
+              "precio": 9000
+            }
+          ]
+        },
+        {
+          "id": "vinos",
+          "nombre": "Vinos",
+          "bodegas": [
+            {
+              "nombreBodega": "Anaia",
+              "items": [
+                {
+                  "nombre": "ANAIA",
+                  "cepa": "Cabernet Sauvignon",
+                  "tipoCepa": "cabernet-sauvignon",
+                  "precio": 49000
+                },
+                {
+                  "nombre": "ANAIA",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 49000
+                },
+                {
+                  "nombre": "ANAIA TINTO AGRELO",
+                  "cepa": "Blend",
+                  "tipoCepa": "blend",
+                  "precio": 41500
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Andeluna",
+              "items": [
+                {
+                  "nombre": "ALTITUD",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 37500
+                },
+                {
+                  "nombre": "PARTIDA ESPECIAL",
+                  "cepa": "Blanc de Franc",
+                  "tipoCepa": "blanco",
+                  "precio": 70500
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Catena Zapata",
+              "items": [
+                {
+                  "nombre": "ANGELICA ZAPATA",
+                  "cepa": "Chardonnay",
+                  "tipoCepa": "chardonnay",
+                  "precio": 60000
+                },
+                {
+                  "nombre": "ANGELICA ZAPATA",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 60000
+                },
+                {
+                  "nombre": "DV CATENA",
+                  "cepa": "Cabernet-Cabernet",
+                  "tipoCepa": "cabernet",
+                  "precio": 55000
+                },
+                {
+                  "nombre": "SAINT FELICIEN",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 35000
+                },
+                {
+                  "nombre": "SAINT FELICIEN",
+                  "cepa": "Pinot Noir",
+                  "tipoCepa": "pinot-noir",
+                  "precio": 35000
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Doña Paula",
+              "items": [
+                {
+                  "nombre": "DOÑA PAULA ESTATE",
+                  "cepa": "Riesling",
+                  "tipoCepa": "riesling",
+                  "precio": 24500
+                }
+              ]
+            },
+            {
+              "nombreBodega": "El Enemigo",
+              "items": [
+                {
+                  "nombre": "EL ENEMIGO",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 58000
+                },
+                {
+                  "nombre": "EL GRAN ENEMIGO",
+                  "cepa": "Blend",
+                  "tipoCepa": "blend",
+                  "precio": 90000
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Fabre Montmayou",
+              "items": [
+                {
+                  "nombre": "FABRE MONTMAYOU",
+                  "cepa": "Gran Vin",
+                  "tipoCepa": "blend",
+                  "precio": 79000
+                },
+                {
+                  "nombre": "FABRE MONTMAYOU TERRUÑO",
+                  "cepa": "Cabernet Franc",
+                  "tipoCepa": "cabernet-franc",
+                  "precio": 26900
+                },
+                {
+                  "nombre": "FABRE MONTMAYOU TERRUÑO",
+                  "cepa": "Cabernet Sauvignon",
+                  "tipoCepa": "cabernet-sauvignon",
+                  "precio": 27900
+                },
+                {
+                  "nombre": "FABRE MONTMAYOU TERRUÑO",
+                  "cepa": "Chardonnay",
+                  "tipoCepa": "chardonnay",
+                  "precio": 27900
+                },
+                {
+                  "nombre": "FABRE MONTMAYOU TERRUÑO",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 26900
+                },
+                {
+                  "nombre": "FABRE MONTMAYOU TERRUÑO",
+                  "cepa": "Merlot",
+                  "tipoCepa": "merlot",
+                  "precio": 27900
+                },
+                {
+                  "nombre": "HJ FABRE MONTMAYOU",
+                  "cepa": "Assemblage Malbec - Cabernet Franc",
+                  "tipoCepa": "blend",
+                  "precio": 20000
+                },
+                {
+                  "nombre": "HJ FABRE MONTMAYOU",
+                  "cepa": "Assemblage Malbec Merlot",
+                  "tipoCepa": "blend",
+                  "precio": 20500
+                },
+                {
+                  "nombre": "HJ FABRE MONTMAYOU",
+                  "cepa": "Assemblage Malbec Petit Verdot",
+                  "tipoCepa": "blend",
+                  "precio": 20500
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Familia Falasco",
+              "items": [
+                {
+                  "nombre": "ANTONIETA",
+                  "cepa": "Rosé de Pinot Noir",
+                  "tipoCepa": "rose",
+                  "precio": 27500
+                },
+                {
+                  "nombre": "CHATEAU SUBSONICO",
+                  "cepa": "Mix Bi Varietal",
+                  "tipoCepa": "blend",
+                  "precio": 37500
+                },
+                {
+                  "nombre": "CHATEAU SUBSONICO",
+                  "cepa": "Pedro Giménez",
+                  "tipoCepa": "blanco",
+                  "precio": 37500
+                },
+                {
+                  "nombre": "CHATEAU SUBSONICO",
+                  "cepa": "Single Vineyard Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 35600
+                },
+                {
+                  "nombre": "FAUSTO",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 48000
+                },
+                {
+                  "nombre": "FERUS",
+                  "cepa": "Blanc de Blancs",
+                  "tipoCepa": "blanco",
+                  "precio": 37000
+                },
+                {
+                  "nombre": "FERUS",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 37000
+                },
+                {
+                  "nombre": "HERMANDAD",
+                  "cepa": "Blend",
+                  "tipoCepa": "blend",
+                  "precio": 73500
+                },
+                {
+                  "nombre": "HERMANDAD",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 73500
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Familia Zuccardi",
+              "items": [
+                {
+                  "nombre": "LATA SANTA JULIA",
+                  "cepa": "Chenin Dulce",
+                  "tipoCepa": "chenin",
+                  "precio": 14000
+                },
+                {
+                  "nombre": "MALAMADO",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 40000
+                },
+                {
+                  "nombre": "MALAMADO",
+                  "cepa": "Viognier",
+                  "tipoCepa": "viognier",
+                  "precio": 32000
+                },
+                {
+                  "nombre": "SANTA JULIA",
+                  "cepa": "Chenin",
+                  "tipoCepa": "chenin",
+                  "precio": 22000
+                },
+                {
+                  "nombre": "ZUCCARDI POLIGONOS",
+                  "cepa": "Paraje Altamira Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 45000
+                },
+                {
+                  "nombre": "ZUCCARDI POLIGONOS",
+                  "cepa": "San Pablo Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 45000
+                },
+                {
+                  "nombre": "ZUCCARDI SERIE A",
+                  "cepa": "Cabernet Sauvignon",
+                  "tipoCepa": "cabernet-sauvignon",
+                  "precio": 28000
+                },
+                {
+                  "nombre": "ZUCCARDI SERIE A",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 28000
+                },
+                {
+                  "nombre": "ZUCCARDI SERIE A",
+                  "cepa": "Torrontés",
+                  "tipoCepa": "torrontes",
+                  "precio": 28000
+                },
+                {
+                  "nombre": "ZUCCARDI SERIE Q",
+                  "cepa": "Cabernet Franc",
+                  "tipoCepa": "cabernet-franc",
+                  "precio": 35000
+                },
+                {
+                  "nombre": "ZUCCARDI SERIE Q",
+                  "cepa": "Chardonnay",
+                  "tipoCepa": "chardonnay",
+                  "precio": 35000
+                },
+                {
+                  "nombre": "ZUCCARDI SERIE Q",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 35000
+                },
+                {
+                  "nombre": "ZUCCARDI SERIE Q",
+                  "cepa": "Tempranillo",
+                  "tipoCepa": "tempranillo",
+                  "precio": 35000
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Freixenet",
+              "items": [
+                {
+                  "nombre": "FREIXENET",
+                  "cepa": "Cabernet Sauvignon",
+                  "tipoCepa": "cabernet-sauvignon",
+                  "precio": 45000
+                },
+                {
+                  "nombre": "FREIXENET",
+                  "cepa": "Sauvignon Blanc",
+                  "tipoCepa": "sauvignon-blanc",
+                  "precio": 45000
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Luigi Bosca",
+              "items": [
+                {
+                  "nombre": "FINCA LA LINDA",
+                  "cepa": "Varietal",
+                  "tipoCepa": "varietal",
+                  "precio": 21900
+                },
+                {
+                  "nombre": "LA LINDA",
+                  "cepa": "Red Blend",
+                  "tipoCepa": "blend",
+                  "precio": 24000
+                },
+                {
+                  "nombre": "LUIGI BOSCA",
+                  "cepa": "Cabernet Sauvignon",
+                  "tipoCepa": "cabernet-sauvignon",
+                  "precio": 32000
+                },
+                {
+                  "nombre": "LUIGI BOSCA DE SANGRE",
+                  "cepa": "Cabernet Franc",
+                  "tipoCepa": "cabernet-franc",
+                  "precio": 45000
+                },
+                {
+                  "nombre": "LUIGI BOSCA DE SANGRE",
+                  "cepa": "White Blend",
+                  "tipoCepa": "blanco",
+                  "precio": 42000
+                },
+                {
+                  "nombre": "LUIGI BOSCA",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 31900
+                },
+                {
+                  "nombre": "LUIGI BOSCA",
+                  "cepa": "Rosé",
+                  "tipoCepa": "rose",
+                  "precio": 32000
+                },
+                {
+                  "nombre": "LUIGI BOSCA",
+                  "cepa": "Sauvignon Blanc",
+                  "tipoCepa": "sauvignon-blanc",
+                  "precio": 32000
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Navarro Correa",
+              "items": [
+                {
+                  "nombre": "NAVARRO CORREA",
+                  "cepa": "Rosé",
+                  "tipoCepa": "rose",
+                  "precio": 32500
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Norton",
+              "items": [
+                {
+                  "nombre": "NORTON ALTURA",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 35500
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Penedo Borges",
+              "items": [
+                {
+                  "nombre": "PENEDO BORGES PRISMA",
+                  "cepa": "Gran Blend",
+                  "tipoCepa": "blend",
+                  "precio": 65000
+                },
+                {
+                  "nombre": "PENEDO BORGES PRISMA",
+                  "cepa": "Gran Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 62500
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Rutini Wines",
+              "items": [
+                {
+                  "nombre": "RUTINI",
+                  "cepa": "Cabernet Malbec",
+                  "tipoCepa": "blend",
+                  "precio": 40000
+                },
+                {
+                  "nombre": "RUTINI",
+                  "cepa": "Cabernet Sauv Syrah",
+                  "tipoCepa": "blend",
+                  "precio": 38000
+                },
+                {
+                  "nombre": "RUTINI",
+                  "cepa": "Chardonnay",
+                  "tipoCepa": "chardonnay",
+                  "precio": 55000
+                },
+                {
+                  "nombre": "TRUMPETER",
+                  "cepa": "Reserva Chardonnay",
+                  "tipoCepa": "chardonnay",
+                  "precio": 30000
+                },
+                {
+                  "nombre": "TRUMPETER",
+                  "cepa": "Reserva Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 32000
+                },
+                {
+                  "nombre": "TRUMPETER",
+                  "cepa": "Reserva Pinot Noir",
+                  "tipoCepa": "pinot-noir",
+                  "precio": 32000
+                },
+                {
+                  "nombre": "TRUMPETER",
+                  "cepa": "Reserva Rosé",
+                  "tipoCepa": "rose",
+                  "precio": 30000
+                },
+                {
+                  "nombre": "TRUMPETER",
+                  "cepa": "Varietal Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 28000
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Salentein",
+              "items": [
+                {
+                  "nombre": "KILLKA",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 19000
+                },
+                {
+                  "nombre": "NUMINA",
+                  "cepa": "Cabernet Sauvignon",
+                  "tipoCepa": "cabernet-sauvignon",
+                  "precio": 35000
+                },
+                {
+                  "nombre": "NUMINA",
+                  "cepa": "Chardonnay",
+                  "tipoCepa": "chardonnay",
+                  "precio": 35000
+                },
+                {
+                  "nombre": "NUMINA",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 35000
+                },
+                {
+                  "nombre": "NUMINA",
+                  "cepa": "Pinot Noir",
+                  "tipoCepa": "pinot-noir",
+                  "precio": 35000
+                },
+                {
+                  "nombre": "SALENTEIN RESERVA",
+                  "cepa": "Chardonnay",
+                  "tipoCepa": "chardonnay",
+                  "precio": 25000
+                },
+                {
+                  "nombre": "SALENTEIN RESERVA",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 22900
+                },
+                {
+                  "nombre": "SALENTEIN RESERVA",
+                  "cepa": "Malbec 375ML",
+                  "tipoCepa": "malbec",
+                  "precio": 13500
+                },
+                {
+                  "nombre": "SALENTEIN RESERVA",
+                  "cepa": "Rosado",
+                  "tipoCepa": "rose",
+                  "precio": 25000
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Trapiche",
+              "items": [
+                {
+                  "nombre": "TRAPICHE GRAN MEDALLA",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 70500
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Viña Cobos",
+              "items": [
+                {
+                  "nombre": "VIÑA COBOS",
+                  "cepa": "Cocodrilo Corte",
+                  "tipoCepa": "blend",
+                  "precio": 99000
+                },
+                {
+                  "nombre": "VIÑA COBOS FELINO",
+                  "cepa": "Cabernet Sauvignon",
+                  "tipoCepa": "cabernet-sauvignon",
+                  "precio": 56000
+                },
+                {
+                  "nombre": "VIÑA COBOS FELINO",
+                  "cepa": "Chardonnay",
+                  "tipoCepa": "chardonnay",
+                  "precio": 56000
+                },
+                {
+                  "nombre": "VIÑA COBOS FELINO",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 56000
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Viña Las Perdices",
+              "items": [
+                {
+                  "nombre": "ALA COLORADA",
+                  "cepa": "Cabernet Franc",
+                  "tipoCepa": "cabernet-franc",
+                  "precio": 38000
+                },
+                {
+                  "nombre": "ALA COLORADA",
+                  "cepa": "Petit Verdot",
+                  "tipoCepa": "petit-verdot",
+                  "precio": 38000
+                },
+                {
+                  "nombre": "CASA BLANCA",
+                  "cepa": "Sauvignon Blanc",
+                  "tipoCepa": "sauvignon-blanc",
+                  "precio": 38000
+                },
+                {
+                  "nombre": "EXPLORACION",
+                  "cepa": "Chacayes Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 57000
+                },
+                {
+                  "nombre": "LAS PERDICES EXPLORACION",
+                  "cepa": "Malbec Rosé",
+                  "tipoCepa": "rose",
+                  "precio": 35000
+                },
+                {
+                  "nombre": "LAS PERDICES EXPLORACION",
+                  "cepa": "Riesling",
+                  "tipoCepa": "riesling",
+                  "precio": 38000
+                },
+                {
+                  "nombre": "LAS PERDICES MET. TRADICIONAL",
+                  "cepa": "Brut Nature",
+                  "tipoCepa": "espumante",
+                  "precio": 32000
+                },
+                {
+                  "nombre": "LAS PERDICES",
+                  "cepa": "Pinot Grigio",
+                  "tipoCepa": "pinot-grigio",
+                  "precio": 20000
+                },
+                {
+                  "nombre": "PARTRIDGE",
+                  "cepa": "Blanco Dulce",
+                  "tipoCepa": "blanco",
+                  "precio": 20000
+                },
+                {
+                  "nombre": "PARTRIDGE",
+                  "cepa": "Chardonnay",
+                  "tipoCepa": "chardonnay",
+                  "precio": 20000
+                },
+                {
+                  "nombre": "PARTRIDGE",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 20000
+                },
+                {
+                  "nombre": "PARTRIDGE",
+                  "cepa": "Rosado",
+                  "tipoCepa": "rose",
+                  "precio": 20000
+                }
+              ]
+            },
+            {
+              "nombreBodega": "Vistalba",
+              "items": [
+                {
+                  "nombre": "GRAN TOMERO SINGLE VINEYARD",
+                  "cepa": "Malbec",
+                  "tipoCepa": "malbec",
+                  "precio": 40000
+                },
+                {
+                  "nombre": "GRAN TOMERO SINGLE VINEYARD",
+                  "cepa": "Merlot",
+                  "tipoCepa": "merlot",
+                  "precio": 40000
+                },
+                {
+                  "nombre": "GRAN TOMERO SINGLE VINEYARD",
+                  "cepa": "Petit Verdot",
+                  "tipoCepa": "petit-verdot",
+                  "precio": 40000
+                },
+                {
+                  "nombre": "GRAN TOMERO SINGLE VINEYARD",
+                  "cepa": "Pinot Noir",
+                  "tipoCepa": "pinot-noir",
+                  "precio": 40000
+                },
+                {
+                  "nombre": "GRAN TOMERO SINGLE VINEYARD",
+                  "cepa": "Sémillon",
+                  "tipoCepa": "semillon",
+                  "precio": 40000
+                },
+                {
+                  "nombre": "GRAN TOMERO SINGLE VINEYARD",
+                  "cepa": "Syrah",
+                  "tipoCepa": "syrah",
+                  "precio": 40000
+                },
+                {
+                  "nombre": "TOMERO",
+                  "cepa": "Cabernet Franc",
+                  "tipoCepa": "cabernet-franc",
+                  "precio": 25000
+                },
+                {
+                  "nombre": "TOMERO",
+                  "cepa": "Cabernet Sauvignon",
+                  "tipoCepa": "cabernet-sauvignon",
+                  "precio": 25000
+                },
+                {
+                  "nombre": "TOMERO",
+                  "cepa": "Chardonnay",
+                  "tipoCepa": "chardonnay",
+                  "precio": 25000
+                },
+                {
+                  "nombre": "TOMERO",
+                  "cepa": "Malbec 375 ML",
+                  "tipoCepa": "malbec",
+                  "precio": 12000
+                },
+                {
+                  "nombre": "TOMERO",
+                  "cepa": "Rose Pinot Noir",
+                  "tipoCepa": "rose",
+                  "precio": 25000
+                },
+                {
+                  "nombre": "TOMERO",
+                  "cepa": "Sauvignon Blanc",
+                  "tipoCepa": "sauvignon-blanc",
+                  "precio": 25000
+                },
+                {
+                  "nombre": "VISTALBA",
+                  "cepa": "Corte A",
+                  "tipoCepa": "blend",
+                  "precio": 119000
+                },
+                {
+                  "nombre": "VISTALBA",
+                  "cepa": "Corte B",
+                  "tipoCepa": "blend",
+                  "precio": 59000
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "champagne-y-espumantes",
+          "nombre": "Champagne & Espumantes",
+          "items": [
+            {
+              "nombre": "Copa de Vino Tinto",
+              "desc": "Copa de vino tinto, bodega Las Perdices tinto malbec",
+              "precio": 6500
+            },
+            {
+              "nombre": "Copa de Vino Blanco",
+              "desc": "Copa de vino blanco, bodega Las Perdices chardonnay",
+              "precio": 6500
+            },
+            {
+              "nombre": "Freixent 0.0",
+              "precio": 15000
+            },
+            {
+              "nombre": "Progenie Extra Brut Rose",
+              "precio": 22000
+            },
+            {
+              "nombre": "Mumm Brute Nature",
+              "precio": 26000
+            },
+            {
+              "nombre": "Las Perdices Met. Tradicional Extra Brutt",
+              "precio": 32000
+            },
+            {
+              "nombre": "Salentein Extra Brut",
+              "precio": 33000
+            },
+            {
+              "nombre": "Salentein Brut Nature",
+              "precio": 35000
+            },
+            {
+              "nombre": "Freixenet Brut Royal",
+              "precio": 35000
+            },
+            {
+              "nombre": "Freixenet Cordon Negro",
+              "precio": 35000
+            },
+            {
+              "nombre": "Chandon Extra Brut",
+              "precio": 38000
+            },
+            {
+              "nombre": "Chandon Delice",
+              "precio": 38000
+            },
+            {
+              "nombre": "Progenie Brut Nature",
+              "precio": 38000
+            },
+            {
+              "nombre": "Baron B Extra Brut",
+              "precio": 80000
+            },
+            {
+              "nombre": "Baron B Brut Nature",
+              "precio": 85000
+            },
+            {
+              "nombre": "Freixenet Segura Viuda Reserva",
+              "precio": 120000
+            },
+            {
+              "nombre": "Veuve Clicquot Brut",
+              "precio": 320000
+            }
+          ]
+        },
+        {
+          "id": "cervezas",
+          "nombre": "Cervezas",
+          "items": [
+            {
+              "nombre": "Stella Artois Rubia 330",
+              "desc": "Sabor suave, refrescante y ligero. Fresca y equilibrada, con suave amargor y final limpio. Ideal con mariscos, fiambres y platos livianos. 473 ML",
+              "precio": 7500
+            },
+            {
+              "nombre": "Lata Stella Artois Negra",
+              "desc": "Black lager suave y equilibrada, con notas de caramelo y un sutil toque tostado. Ideal con carnes a la parrilla, quesos curados o postres de chocolate. 473 ML",
+              "precio": 7500
+            },
+            {
+              "nombre": "Lata Michelob Rubia Sin Gluten",
+              "precio": 8000
+            },
+            {
+              "nombre": "Patagonia Amber Lata",
+              "desc": "Patagonia amber lager 473 ML",
+              "precio": 9000
+            },
+            {
+              "nombre": "Patagonia 24.7 Lata",
+              "desc": "IPA. Lata 473 ML",
+              "precio": 9000
+            },
+            {
+              "nombre": "Budweiser Lata",
+              "precio": 7000
+            },
+            {
+              "nombre": "Corona 330cc",
+              "desc": "Lager mexicana liviana y muy refrescante, de sabor suave y bajo amargor. Ideal para climas cálidos. Marida perfecto con pescados, mariscos, ensaladas y platos livianos.",
+              "precio": 8000
+            },
+            {
+              "nombre": "Corona 710cc",
+              "desc": "Lager mexicana liviana y muy refrescante, de sabor suave y bajo amargor. Ideal para climas cálidos. Marida perfecto con pescados, mariscos, ensaladas y platos livianos",
+              "precio": 14000
+            },
+            {
+              "nombre": "Patagonia Lager del Sur",
+              "desc": "Inspirada en la pureza del sur, es nuestra variedad más liviana y fácil de tomar. Una cerveza color dorado brillante, con un amargor sutil y balanceado. Ideal para quienes buscan frescura total.",
+              "precio": 15000
+            },
+            {
+              "nombre": "Patagonia Amber Lagger 730",
+              "desc": "Cerveza roja equilibrada, con notas suaves de caramelo y leve tostado, muy fácil de tomar. Ideal con carnes grilladas, hamburguesas y pastas especiadas. 730 ML",
+              "precio": 14000
+            },
+            {
+              "nombre": "Patagonia 24.7 Session IPA",
+              "desc": "Cerveza liviana y súper refrescante, con notas frutales y cítricas, toque de saúco y amargor equilibrado. Ideal para pescados, ensaladas frescas y platos livianos. 730 ML",
+              "precio": 15000
+            },
+            {
+              "nombre": "Patagonia Vera IPA",
+              "desc": "Es una cerveza de estilo New England IPA (NEIPA) que se destaca por su perfil sumamente frutal y un bajo amargor, alejándose de las IPAs tradicionales más amargas. Ideal para: comida asiática, ensaladas agridulces o frutas, ceviches o risottos perfumados.",
+              "precio": 13500
+            }
+          ]
+        },
+        {
+          "id": "tragos-y-cocteles",
+          "nombre": "Tragos & Cócteles",
+          "items": [
+            {
+              "nombre": "Branca Smash",
+              "desc": "Intenso y refrescante. Fernet Branca, ananá natural, almíbar y jugo de limón, suavemente endulzado y servido bien frío.",
+              "precio": 10000
+            },
+            {
+              "nombre": "Caipi Jager",
+              "desc": "Cóctel fresco y aromático. Jägermeister con lima fresca, azúcar y soda bien fría.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Caipi Malibu",
+              "desc": "Cóctel fresco y tropical. Ron de coco Malibu con lima fresca, azúcar y soda bien fría.",
+              "precio": 10000
+            },
+            {
+              "nombre": "Caipirinha",
+              "desc": "Clásico brasileño. Cachaça con lima fresca, azúcar y soda bien fría y equilibrada.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Caipiroska de Frutos Rojos",
+              "desc": "Cóctel fresco y vibrante. Smirnoff berry con frutos rojos, lima fresca, azúcar y soda bien fría.",
+              "precio": 10000
+            },
+            {
+              "nombre": "Caipirinha de Frutos Rojos",
+              "desc": "Clásico tropical con un giro frutal. Cachaça con frutos rojos, lima fresca, azúcar y soda bien fría.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Caipiroska",
+              "desc": "Refrescante y cítrica. Vodka Smirnoff, lima fresca y azúcar, con un toque de soda bien fría.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Caipiroska con Absolut",
+              "desc": "Cóctel fresco y equilibrado. Vodka Absolut con lima fresca, azúcar y soda bien fría.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Caminante Blanco",
+              "desc": "Intenso y refrescante. Johnnie Walker Red Label con naranja exprimida y soda, de perfil cítrico y equilibrado.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Cuba Libre",
+              "desc": "Clásico internacional. Ron Havana con Coca-Cola bien fría y un toque de limón, equilibrado y refrescante.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Daiquiri de Frutos Rojos",
+              "desc": "Clásico frutal y vibrante. Ron con frutos rojos, limón y azúcar, bien frío equilibrado y refrescante.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Daiquiri de Ananá",
+              "desc": "Ron combinado con ananá y jugo de limón, suavemente endulzado y servido bien frío.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Daiquiri de Durazno",
+              "desc": "Suave y frutal. Ron, durazno y limón, equilibrado y refrescante.",
+              "precio": 9000
+            },
+            {
+              "nombre": "Daiquiri de Frutilla",
+              "desc": "Fresco y frutal. Ron, frutilla fresca y limón, suavemente endulzado y servido bien frío.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Jager Julep",
+              "desc": "Fresco y herbal. Jägermeister, menta fresca, pomelo y limón, azúcar, equilibrado y bien frío.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Expresso Martini",
+              "desc": "Clásico contemporáneo. Vodka Smirnoff con café recién preparado y licor de café Borghetti, intenso y elegante. Servido bien frío.",
+              "precio": 10500
+            },
+            {
+              "nombre": "Lemonchamp",
+              "desc": "Helado de limón servido con champagne bien frío.",
+              "precio": 8000
+            },
+            {
+              "nombre": "Mint Tonic",
+              "desc": "Branca Menta R.I. con tónica bien fría.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Mojito",
+              "desc": "Ron, menta fresca, limón, azúcar y soda.",
+              "precio": 10500
+            },
+            {
+              "nombre": "Mojito Malibu",
+              "desc": "Ron de coco Malibu, limon, azúcar y menta",
+              "precio": 11000
+            },
+            {
+              "nombre": "Black Label Mojito",
+              "desc": "Johnnie Walker Black Label, soda, jugo de lima, menta y cáscara de lima.",
+              "precio": 25000
+            },
+            {
+              "nombre": "Negroni",
+              "desc": "Ícono de la coctelería clásica. Martini Rosso, Gin london dry y Campari, equilibrado, intenso y atemporal.",
+              "precio": 11500
+            },
+            {
+              "nombre": "Smirnoff Wild Berries con Energizante",
+              "desc": "Smirnoff Wild Berries, infusionado con notas naturales de frutos rojos, específicamente frutillas, moras silvestres, frambuesas y arándanos.",
+              "precio": 9900
+            },
+            {
+              "nombre": "Negroni Perfetto",
+              "desc": "Versión refinada del clásico. Antica Formula, gin premium y Campari, intenso, elegante y atemporal.",
+              "precio": 23000
+            },
+            {
+              "nombre": "Smirnoff Apple con Energizante",
+              "desc": "Smirnoff Apple saborizado premium, combina notas dulces de manzana verde.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Piña Colada",
+              "desc": "Clásico tropical y cremoso. Ron de coco Malibu con ananá y helado de crema americana, fresco y envolvente.",
+              "precio": 10500
+            },
+            {
+              "nombre": "Old Fashion",
+              "desc": "Ícono de la coctelería clásica. Jim Beam Bourbon refrescado con azúcar y bitter, intenso, elegante y atemporal.",
+              "precio": 9900
+            },
+            {
+              "nombre": "Smirnoff Berries Fresh",
+              "desc": "Smirnoff Wild Berries, gaseosa de lima limón, hielo y una rodaja de lima.",
+              "precio": 8900
+            },
+            {
+              "nombre": "Smirnoff Wild Caipi",
+              "desc": "Cóctel frutado y refrescante de Smirnoff Berries, con intensas notas de frutos rojos y dulzura equilibrada. Marida con postres frutales, sushi o snacks dulces.",
+              "precio": 8900
+            },
+            {
+              "nombre": "Sex on the Beach",
+              "desc": "Cóctel clásico y frutal. Vodka Smirnoff con licor de durazno, granadina y jugo de naranja. Refrescante",
+              "precio": 9900
+            },
+            {
+              "nombre": "Tom Collins",
+              "desc": "Clásico de la coctelería. Gin con jugo de limón fresco, azúcar y soda bien fría, fresco y equilibrado.",
+              "precio": 9900
+            },
+            {
+              "nombre": "Blood and Sand",
+              "desc": "Elegante y complejo. Whisky escocés, Antica Fórmula, licor de cereza y naranja exprimida, de perfil equilibrado y profundo.",
+              "precio": 14500
+            },
+            {
+              "nombre": "Vodka Tropical",
+              "desc": "Frutal y energético. Smirnoff apple, malibu ,frutos rojos y naranja exprimida, con un toque de Red bulll.",
+              "precio": 13500
+            },
+            {
+              "nombre": "Save The Moon",
+              "desc": "Cóctel de autor. Absolut Raspberry con almíbar de frutos rojos, limón y naranja, combinado con Tanqueray Sevilla y Tanqueray Dark Berry. Intenso y envolvente.",
+              "precio": 14500
+            },
+            {
+              "nombre": "Antica On The Rock",
+              "desc": "Vermut italiano, intenso y aromático, servido con hielo. Ideal como aperitivo o para acompañar tapas y quesos.",
+              "precio": 25000
+            },
+            {
+              "nombre": "Gin Hendrick's",
+              "desc": "Gin Hendrick's con tónica bien fría y botánicos a elección: pepino, limón, naranja, pomelo o frutos rojos. Elegante, fresco y aromático.",
+              "precio": 18000
+            },
+            {
+              "nombre": "Blu Gin Tonic",
+              "desc": "Blu Gin con frutas a elección.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Gin Tonic Gordon's",
+              "desc": "Gin Gordon's con frutas a elección.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Gin Tonic Tanqueray",
+              "desc": "Gin Tanqueray con frutas a elección.",
+              "precio": 13500
+            },
+            {
+              "nombre": "Gin Tanqueray Royale & Tonic",
+              "desc": "Gin tonic elegante y frutal. Tanqueray Royale con tónica bien fría y arándanos, fresco y sofisticado.",
+              "precio": 14000
+            },
+            {
+              "nombre": "Gin Trane London Dry",
+              "desc": "Con frutas a eleccion",
+              "precio": 9000
+            },
+            {
+              "nombre": "Tanqueray Flor de Sevilla & Tonic con Naranja",
+              "desc": "Tanqueray Flor de Sevilla, tónica y rodaja de naranja",
+              "precio": 14000
+            },
+            {
+              "nombre": "Gin Tonic Montebello",
+              "desc": "Gin londron dry, frutos rojos al malbec, lima, tonica",
+              "precio": 14000
+            },
+            {
+              "nombre": "Gin Tonic Rosse",
+              "desc": "Gin londron dry infusionado con petalos de rosas, trocitos de frutilla y tonica",
+              "precio": 13000
+            },
+            {
+              "nombre": "Gin Tropical Montebello",
+              "desc": "Cóctel de autor, frutal y fresco. Gin con almíbar de frutos rojos, naranja natural exprimida y Red Bull, vibrante y equilibrado.",
+              "precio": 14500
+            },
+            {
+              "nombre": "Gin Beefeater",
+              "desc": "Gin Beefeater con frutas a elección.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Medida de Baileys",
+              "desc": "Licor de crema irlandés, suave y sedoso, con notas de chocolate, caramelo y vainilla. Ideal con hielo, café o postres.",
+              "precio": 7500
+            },
+            {
+              "nombre": "Medida Jack Daniel's Honey",
+              "desc": "El Jack Daniel's Tennessee Honey es un licor que combina el clásico whisky Old No. 7 con un licor de miel natural. Destaca por su sabor suave, dulce y fácil de beber, con notas aromáticas de vainilla y canela.",
+              "precio": 14000
+            },
+            {
+              "nombre": "Chivas Regal 12 Años",
+              "precio": 13000
+            },
+            {
+              "nombre": "Piña Colada",
+              "desc": "Clásico tropical y cremoso. Ron de coco Malibu con ananá y helado de crema americana, fresco y envolvente.",
+              "precio": 10500
+            },
+            {
+              "nombre": "Medida Jack Daniel's",
+              "desc": "Tennessee whiskey suave y equilibrado, filtrado en carbón de arce. Notas de vainilla, caramelo y roble tostado. Ideal solo, con hielo o con carnes ahumadas, chocolate amargo y postres con caramelo.",
+              "precio": 14000
+            },
+            {
+              "nombre": "Medida de Coñac Otard Dupuy",
+              "desc": "Brandy clásico y accesible, de perfil suave y notas dulces. Ideal para disfrutar solo, con hielo o en cócteles tradicionales. Marida bien con chocolate, postres y café.",
+              "precio": 8000
+            },
+            {
+              "nombre": "Medida de Jager",
+              "desc": "Licor alemán de hierbas, intenso y agridulce, con notas especiadas y cítricas. Ideal bien frío en shot o en cócteles.",
+              "precio": 11000
+            },
+            {
+              "nombre": "Medida de Absolut",
+              "desc": "Vodka premium sueco, puro y suave, elaborado con trigo de invierno y agua de manantial. Ideal para tomar solo, con hielo o en cócteles clásicos.",
+              "precio": 8000
+            },
+            {
+              "nombre": "Medida Licor de Café Borghetti",
+              "desc": "Licor italiano de espresso real, intenso y sedoso, con notas de café y vainilla. Ideal solo, con hielo o junto a postres y chocolate.",
+              "precio": 6500
+            },
+            {
+              "nombre": "Medida Liquore Strega",
+              "desc": "Licor italiano de hierbas, intenso y aromático, con notas especiadas y un toque de azafrán. Elegante, herbal y persistente. Ideal como digestivo, con chocolate amargo, postres secos o un café espresso.",
+              "precio": 8000
+            },
+            {
+              "nombre": "Medida Jack Daniel's Apple",
+              "desc": "Licor de whisky suave y refrescante, con marcado sabor a manzana verde y notas de caramelo y roble. Ideal con hielo o en tragos frescos. Marida bien con postres frutales, quesos suaves o para acompañar tapeos ligeros.",
+              "precio": 17000
+            },
+            {
+              "nombre": "Medida Johnnie Black Label",
+              "desc": "Blended whisky escocés de 12 años, suave y complejo, con notas ahumadas, vainilla y especias. Ideal para disfrutar solo o con hielo.",
+              "precio": 15000
+            },
+            {
+              "nombre": "Medida Johnnie Red Label",
+              "desc": "Whisky escocés blended vibrante y especiado, ideal para cócteles. Notas de manzana, canela y un toque ahumado. Perfecto en highball con soda o ginger ale; acompaña picadas, carnes grilladas y snacks salados.",
+              "precio": 10000
+            },
+            {
+              "nombre": "Medida Johnnie Walker Gold",
+              "desc": "Blended whisky premium, suave y cremoso, con notas de miel, vainilla y frutas tropicales, y final cálido levemente ahumado. Ideal solo, con hielo o para acompañar chocolates, postres cremosos o quesos suaves.",
+              "precio": 28000
+            },
+            {
+              "nombre": "Medida Jose Cuervo Silver Blanco",
+              "desc": "Tequila cristalino de agave azul, fresco y suave, ideal para disfrutar solo, con hielo o en cócteles clásicos.",
+              "precio": 15000
+            },
+            {
+              "nombre": "Medida Amarula",
+              "desc": "Licor de crema suave y frutal, con notas de caramelo y vainilla. Ideal con hielo, café o postres.",
+              "precio": 9500
+            },
+            {
+              "nombre": "Medida Fernet",
+              "desc": "Clásico argentino. Amaro icónico, intenso y herbal, de amargor profundo y carácter balsámico. Clásico con cola o solo como digestivo.",
+              "precio": 7000
+            },
+            {
+              "nombre": "Medida Grappa Candolini",
+              "desc": "Clásica grappa italiana, suave y elegante. Ideal como digestivo, sola o con café. Maridaje perfecto con espresso, chocolate amargo o postres secos.",
+              "precio": 10000
+            },
+            {
+              "nombre": "Medida Jim Beam",
+              "desc": "Bourbon americano clásico, suave y equilibrado, con notas de vainilla, caramelo y roble. Ideal solo, con hielo o en cócteles; acompaña bien carnes grilladas y chocolates.",
+              "precio": 12000
+            },
+            {
+              "nombre": "Medida Ron Havana",
+              "desc": "Ron cubano emblemático (blanco o dorado), suave y aromático, elaborado a partir de melaza de caña y añejado en roble. Ideal para cócteles clásicos como Mojito o Cuba Libre; acompaña bien tapas caribeñas y platos especiados.",
+              "precio": 6500
+            },
+            {
+              "nombre": "Medida Sambuca Oro Borghetti",
+              "desc": "Licor italiano intenso y dulce de anís estrellado. Ideal para la sobremesa, solo, con hielo o “con mosca”. Marida muy bien con café, chocolate y postres.",
+              "precio": 9000
+            },
+            {
+              "nombre": "Medida Pisco Porton (Perú)",
+              "desc": "Pisco peruano premium, sedoso y aromático, de gran pureza. Ideal solo, bien frío, o con postres y cítricos.",
+              "precio": 19500
+            },
+            {
+              "nombre": "Whisky Jameson",
+              "desc": "Whisky irlandés triple destilado, suave y equilibrado, con notas de vainilla, especias y un final limpio. Ideal solo, con hielo o en cócteles; acompaña bien quesos suaves, frutos secos o chocolate.",
+              "precio": 11000
+            },
+            {
+              "nombre": "Medida Jose Cuervo Especial Gold",
+              "desc": "Tequila dorado suave y accesible, con notas de agave dulce, caramelo y vainilla. Ideal para Margaritas, shots o cócteles clásicos; combina bien con picadas, tacos y platos mexicanos.",
+              "precio": 13000
+            },
+            {
+              "nombre": "Medida de Sol Azteca",
+              "desc": "Tequila mixto de perfil simple y alcohólico, ideal para coctelería. Perfecto para Margaritas, Tequila Sunrise y tragos dulces; recomendado para eventos y consumo descontracturado.",
+              "precio": 9000
+            },
+            {
+              "nombre": "J. Walker Blue Label",
+              "desc": "El cenit del whisky escocés. Una obra maestra líquida creada a partir de barricas irrepetibles y exclusivas, donde solo una de cada diez mil califica para su mezcla. De carácter profundo, despliega capas aterciopeladas de miel silvestre, frutos secos y un sofisticado final ahumado de turba.",
+              "precio": 95000
+            },
+            {
+              "nombre": "Ron Barcelo",
+              "desc": "Origen: Republicxa dominicana Elaborado 100% a partir del jugo de caña de azúcar y envejecido en clima tropical, destaca por su calidad, equilibrio",
+              "precio": 7000
+            }
+          ]
+        },
+        {
+          "id": "licuados-y-smoothies",
+          "nombre": "Licuados & Smoothies",
+          "items": [
+            {
+              "nombre": "Licuado de Banana",
+              "desc": "Licuado natural de banana, preparado con agua o leche. Fresco y liviano.",
+              "precio": 6000
+            },
+            {
+              "nombre": "Licuado de Durazno",
+              "desc": "Licuado natural de durazno, preparado con agua o leche. Fresco y suave.",
+              "precio": 6000
+            },
+            {
+              "nombre": "Licuado de Frutilla",
+              "desc": "Licuado natural de frutilla, preparado con agua o leche. Fresco y liviano.",
+              "precio": 6000
+            },
+            {
+              "nombre": "Licuado de Frutos Rojos",
+              "desc": "Licuado natural de frutos rojos, con agua o leche. Fresco y equilibrado.",
+              "precio": 6500
+            },
+            {
+              "nombre": "Licuado de Frutilla-Naranja",
+              "desc": "Una combinación fresca de frutilla y jugo de naranja natural. Refrescante y vibrante.",
+              "precio": 6500
+            },
+            {
+              "nombre": "Licuado de Ananá",
+              "desc": "Licuado natural de ananá, preparado con agua o leche. Fresco y liviano.",
+              "precio": 6500
+            },
+            {
+              "nombre": "Licuado de Naranja-Durazno",
+              "desc": "Una combinación suave y refrescante de durazno y jugo de naranja natural. Ligero y revitalizante.",
+              "precio": 6500
+            },
+            {
+              "nombre": "Licuado con Leche de Almendra",
+              "desc": "Licuado suave y natural, preparado con leche de almendra, sabor a elección.",
+              "precio": 10500
+            },
+            {
+              "nombre": "Detox",
+              "desc": "Fresco y natural. Manzana verde, jengibre, ananá, pepino y apio, suavemente endulzado y servido con hielo.",
+              "precio": 8000
+            }
+          ]
+        },
+        {
+          "id": "bebidas-sin-alcohol",
+          "nombre": "Bebidas sin alcohol",
+          "items": [
+            {
+              "nombre": "Red Bull",
+              "desc": "lata 250 ml.",
+              "precio": 5500
+            },
+            {
+              "nombre": "Red Bull Summer Edition",
+              "desc": "Sugar free lata 250 ml",
+              "precio": 5500
+            },
+            {
+              "nombre": "Red Bull Sugar Free",
+              "precio": 5500
+            },
+            {
+              "nombre": "Red Bull Red Edition",
+              "precio": 5500
+            },
+            {
+              "nombre": "Limonada Montebello",
+              "desc": "Limonada natural con menta fresca y jengibre. Refrescante y equilibrada.",
+              "precio": 7500
+            },
+            {
+              "nombre": "Naranjada Montebello",
+              "desc": "Una bebida fresca y natural de naranja recién exprimida, jengibre y menta. Sin azúcar agregada.",
+              "precio": 7000
+            },
+            {
+              "nombre": "Jugo Exprimido",
+              "desc": "Jugo de naranja 100% natural, recién exprimido, fresco y revitalizante.",
+              "precio": 6500
+            },
+            {
+              "nombre": "Agua",
+              "precio": 4500
+            },
+            {
+              "nombre": "Soda",
+              "precio": 4500
+            },
+            {
+              "nombre": "Agua Saborizada 500cc H2O",
+              "desc": "Pomelada, manzana o lemoneto.",
+              "precio": 4500
+            },
+            {
+              "nombre": "Seven - Up",
+              "precio": 4500
+            },
+            {
+              "nombre": "Mirinda",
+              "precio": 4500
+            },
+            {
+              "nombre": "Paso de los Toros Pomelo",
+              "desc": "500 ML",
+              "precio": 4500
+            },
+            {
+              "nombre": "Pepsi Lata",
+              "precio": 4500
+            },
+            {
+              "nombre": "Pepsi Black Lata",
+              "precio": 4500
+            },
+            {
+              "nombre": "Corona Sin Alcohol 330cc",
+              "desc": "Lager 0.0% fresca y liviana, con notas cítricas y final limpio. Ideal con ensaladas, pescados o para cualquier momento del día",
+              "precio": 8000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "desayunos-y-meriendas",
+      "nombre": "Desayunos y Meriendas",
+      "categorias": [
+        {
+          "id": "combos",
+          "nombre": "Combos",
+          "items": [
+            {
+              "nombre": "Caserita",
+              "desc": "Una combinación dulce y salada para disfrutar la tarde: pastafrola casera de batata y membrillo, criollito y fosforito de jamón y queso. Incluye infusión a elección.",
+              "precio": 13500
+            },
+            {
+              "nombre": "De Campo",
+              "desc": "Una merienda simple y reconfortante: bollo de pan de campo con manteca y dulce de leche, jugo de naranja e infusión a elección.",
+              "precio": 11500
+            },
+            {
+              "nombre": "Montebello",
+              "desc": "La pausa Montebello. Nuestra merienda emblema: una combinación dulce y salada de jamón y queso, pan de campo tostado, medialuna y mermelada casera de frutos rojos. Incluye infusión a elección.",
+              "precio": 14500
+            },
+            {
+              "nombre": "Americano",
+              "desc": "Una merienda completa y equilibrada: tostadas de pan, huevos revueltos, panceta, queso crema y mermelada, con jugo de naranja e infusión a elección. Ideal para una merienda más completa.",
+              "precio": 14900
+            },
+            {
+              "nombre": "Medialuna",
+              "precio": 1800
+            },
+            {
+              "nombre": "Mafalda",
+              "desc": "Medialuna rellena de jamón y queso. Clásico de merienda.",
+              "precio": 4500
+            },
+            {
+              "nombre": "Adicional Bacon",
+              "precio": 2000
+            },
+            {
+              "nombre": "Avocado Montebello",
+              "desc": "Tostada de pan negro con queso finlandia, huevos fritos y palta. Ideal para una merienda liviana.",
+              "precio": 11500
+            },
+            {
+              "nombre": "Tostado de Jamon y Queso",
+              "desc": "Pan casero tostado con manteca, jamón cocido y queso, acompañado de papas copetín. Un clásico que siempre funciona.",
+              "precio": 11900
+            },
+            {
+              "nombre": "Sandwich de Campo",
+              "desc": "Pan artesanal con salame casero y queso, acompañado de papas copetín. Ideal para una merienda salada.",
+              "precio": 12500
+            }
+          ]
+        },
+        {
+          "id": "cafeteria",
+          "nombre": "Cafetería",
+          "items": [
+            {
+              "nombre": "Café en Pocillo",
+              "precio": 3000
+            },
+            {
+              "nombre": "Café en Pocillo con Crema",
+              "precio": 3300
+            },
+            {
+              "nombre": "Cortado en Pocillo",
+              "precio": 3000
+            },
+            {
+              "nombre": "Lágrima en Pocillo",
+              "precio": 3000
+            },
+            {
+              "nombre": "Café en Jarro",
+              "precio": 3300
+            },
+            {
+              "nombre": "Café con Crema en Jarro",
+              "precio": 3600
+            },
+            {
+              "nombre": "Cortado en Jarro",
+              "precio": 3300
+            },
+            {
+              "nombre": "Lágrima en Jarro",
+              "precio": 3300
+            },
+            {
+              "nombre": "Café Doble",
+              "precio": 4000
+            },
+            {
+              "nombre": "Cortado al Revés Doble",
+              "precio": 4000
+            },
+            {
+              "nombre": "Lágrima Doble",
+              "precio": 4000
+            },
+            {
+              "nombre": "Café c/ Leche Doble",
+              "precio": 4000
+            },
+            {
+              "nombre": "Café con Leche de Almendra",
+              "precio": 4500
+            },
+            {
+              "nombre": "Café con Crema Doble",
+              "precio": 4300
+            },
+            {
+              "nombre": "Café con Leche Sin Lactosa",
+              "precio": 4600
+            },
+            {
+              "nombre": "Té Negro",
+              "precio": 3000
+            },
+            {
+              "nombre": "Té Saborizado",
+              "precio": 3000
+            },
+            {
+              "nombre": "Té con Leche",
+              "precio": 3500
+            },
+            {
+              "nombre": "Té en Hebras",
+              "precio": 4000
+            },
+            {
+              "nombre": "Mate Cocido",
+              "precio": 3300
+            },
+            {
+              "nombre": "Mate Cocido con Leche",
+              "precio": 3800
+            },
+            {
+              "nombre": "Chocolatada",
+              "desc": "Exquisita chocolatada fría o caliente.",
+              "precio": 5500
+            }
+          ]
+        },
+        {
+          "id": "cafeteria-especial",
+          "nombre": "Cafeteria Especial",
+          "items": [
+            {
+              "nombre": "Latte de Avellana",
+              "desc": "Espresso intenso combinado con leche vaporizada y un delicado toque de avellana, que aporta notas dulces y tostadas. Sugerencia: NO ENDULZAR.",
+              "precio": 9000
+            },
+            {
+              "nombre": "Pistacho Latte",
+              "desc": "Expreso intenso combinado con leche vaporizada y crema de pistacho, que aporta un sabor suave, ligeramente dulce y tostado.",
+              "precio": 10000
+            },
+            {
+              "nombre": "Vainilla Caramel Macchiato",
+              "desc": "Leche cremosa infusionada con vainilla, marcada con un shot de espresso y finalizada con un suave hilo de caramelo.",
+              "precio": 9000
+            },
+            {
+              "nombre": "Café Cioccolato Bianco",
+              "desc": "Una combinación suave y cremosa de café caliente con chocolate blanco Águila, leche y espuma de leche.",
+              "precio": 9000
+            },
+            {
+              "nombre": "Café Helado",
+              "desc": "Café frío con leche y crema, servido con una bocha de helado batido a elección. Ideal para tardes cálidas.",
+              "precio": 7500
+            },
+            {
+              "nombre": "Submarino",
+              "desc": "Leche caliente con barra de chocolate para fundir en taza.",
+              "precio": 6500
+            },
+            {
+              "nombre": "Submarino con Leche de Almendra",
+              "desc": "Chocolate caliente fundido en leche de almendra, delicado, cremoso y reconfortante.",
+              "precio": 8000
+            },
+            {
+              "nombre": "Café con Baileys",
+              "desc": "Café caliente combinado con Baileys, cremoso y aromático, perfecto para el cierre.",
+              "precio": 8000
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

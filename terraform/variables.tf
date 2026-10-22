@@ -9,3 +9,16 @@ variable "bucket_name" {
   default     = "montebello-reservas-staging-756808989980"
   description = "Nombre único del bucket S3 para alojar la web estática"
 }
+
+# Secretos del panel/editor: se cargan en terraform/terraform.tfvars (ignorado por git)
+variable "admin_password" {
+  type        = string
+  sensitive   = true
+  description = "Contraseña única de acceso al panel de reservas y al editor de carta"
+}
+
+variable "jwt_secret" {
+  type        = string
+  sensitive   = true
+  description = "Clave para firmar las sesiones del staff (texto aleatorio largo)"
+}

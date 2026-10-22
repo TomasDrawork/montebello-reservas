@@ -3,6 +3,13 @@ set -e
 
 echo "🚀 Iniciando despliegue de Restaurante Montebello Reservas en AWS..."
 
+# 0. Verificar secretos (contraseña del panel y clave de sesiones)
+if [ ! -f terraform/terraform.tfvars ]; then
+  echo "❌ Falta terraform/terraform.tfvars con admin_password y jwt_secret."
+  echo "   Ver README (sección Seguridad del panel)."
+  exit 1
+fi
+
 # 1. Empaquetar backend para AWS Lambda
 echo "📦 Empaquetando backend de reservas para AWS Lambda..."
 zip -q -r terraform/lambda.zip server.js services imagenes package.json node_modules index.html app.js styles.css admin.html admin.js admin.css menu.json data
@@ -38,6 +45,9 @@ aws s3 sync . s3://${BUCKET_NAME} \
   --include "admin.html" \
   --include "admin.js" \
   --include "admin.css" \
+  --include "editor-carta.html" \
+  --include "editor-carta.js" \
+  --include "editor-carta.css" \
   --include "imagenes/*"
 
 # 5. Invalidación de caché en CloudFront

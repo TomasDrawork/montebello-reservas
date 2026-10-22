@@ -165,13 +165,24 @@
 
         // Soporte para listas planas (items) o bodegas agrupadas con títulos
         let list = '';
+        let bodegaChips = '';
         if (cat.bodegas && Array.isArray(cat.bodegas)) {
             let bodegasHtml = '';
-            cat.bodegas.forEach(bodega => {
-                const bodegaItems = (bodega.items || []).filter(i => i.disponible !== false);
-                if (bodegaItems.length > 0) {
+            const sorted = cat.bodegas
+                .map((b, i) => ({ b, id: 'bodega-' + i, items: (b.items || []).filter(it => it.disponible !== false) }))
+                .filter(x => x.items.length > 0)
+                .sort((x, y) => x.b.nombreBodega.localeCompare(y.b.nombreBodega, 'es', { sensitivity: 'base' }));
+            if (sorted.length > 1) {
+                bodegaChips = '<div class="chips-wrap bodegas-wrap"><nav class="chips" id="bodegaChips" aria-label="Bodegas">' +
+                    '<button type="button" class="chip active" data-bodega="all" id="chip-bodega-all">Todas</button>' +
+                    sorted.map(x => '<button type="button" class="chip" data-bodega="' + x.id + '" id="chip-' + x.id + '">' + esc(x.b.nombreBodega) + '</button>').join('') +
+                    '</nav></div>';
+            }
+            sorted.forEach(({ b: bodega, id, items: bodegaItems }) => {
+                {
+                    bodegasHtml += `<div class="bodega-group" data-bodega="${id}">`;
                     bodegasHtml += `<div class="bodega-group-title" style="margin: 25px 0 12px 0; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 600; color: #D4AF37; text-transform: uppercase; letter-spacing: 1px;">${esc(bodega.nombreBodega)}</div>`;
-                    bodegasHtml += '<ul class="dish-list">' + bodegaItems.map((item, idxItem) => renderDish(item, idxItem)).join('') + '</ul>';
+                    bodegasHtml += '<ul class="dish-list">' + bodegaItems.map((item, idxItem) => renderDish(item, idxItem)).join('') + '</ul></div>';
                 }
             });
             list = bodegasHtml || '<p class="empty">No hay opciones disponibles en este momento.</p>';
@@ -196,6 +207,7 @@
             '<div class="chips-wrap"><nav class="chips" aria-label="Categorías de ' + esc(sec.nombre) + '">' + chips + '</nav></div>' +
             '<h2 class="view-title">' + esc(cat.nombre) + '</h2>' +
             '<hr class="view-rule">' +
+            bodegaChips +
             list +
             pager +
             '<a href="#/' + sec.id + '" class="back-link">← Volver a ' + esc(sec.nombre) + '</a>';
@@ -207,6 +219,21 @@
         if (active) {
             const bar = active.parentElement;
             bar.scrollLeft = active.offsetLeft - (bar.clientWidth - active.offsetWidth) / 2;
+        }
+
+        // Carrusel de bodegas: filtra los vinos por bodega sin cambiar de ruta
+        const bodegaBar = view.querySelector('#bodegaChips');
+        if (bodegaBar) {
+            bodegaBar.addEventListener('click', (e) => {
+                const btn = e.target.closest('button.chip');
+                if (!btn) return;
+                const sel = btn.dataset.bodega;
+                bodegaBar.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c === btn));
+                view.querySelectorAll('.bodega-group').forEach(g => {
+                    g.hidden = sel !== 'all' && g.dataset.bodega !== sel;
+                });
+                bodegaBar.scrollTo({ left: btn.offsetLeft - (bodegaBar.clientWidth - btn.offsetWidth) / 2, behavior: 'smooth' });
+            });
         }
     }
 
@@ -226,8 +253,13 @@
 
     /* ---------- Inicio ---------- */
 
-    fetch('menu.json', { cache: 'no-cache' })
+    // La carta editable vive en /api/menu (siempre actualizada); menu.json queda como respaldo
+    const loadJson = (url) => fetch(url, { cache: 'no-cache' })
         .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then((d) => { if (!d || !Array.isArray(d.secciones)) throw new Error('formato'); return d; });
+
+    loadJson('/api/menu')
+        .catch(() => loadJson('menu.json'))
         .then((data) => {
             menu = data;
             if (data.actualizado) {

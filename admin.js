@@ -16,7 +16,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     let selectedDateFilter = null; // null = All Dates, Date object = specific day
     let searchQuery = '';
-    let authToken = sessionStorage.getItem('montebello_admin_token');
+    let authToken = localStorage.getItem('montebello_admin_token');
+
+    // Fetch autenticado: agrega el token y, si la sesión venció (401), vuelve al login
+    async function adminFetch(url, options = {}) {
+        const headers = { ...(options.headers || {}), Authorization: `Bearer ${authToken || ''}` };
+        const res = await fetch(url, { ...options, headers });
+        if (res.status === 401) {
+            localStorage.removeItem('montebello_admin_token');
+            authToken = null;
+            showLogin();
+            if (loginError) loginError.textContent = 'Tu sesión venció. Ingresá de nuevo.';
+        }
+        return res;
+    }
 
     // --- DOM ELEMENTS ---
     const loginModal = document.getElementById('loginModal');
@@ -192,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- FETCH RESERVATIONS ---
     async function fetchReservations() {
         try {
-            const res = await fetch('/api/admin/reservations');
+            const res = await adminFetch('/api/admin/reservations');
             const data = await res.json();
 
             if (data.success) {
@@ -773,7 +786,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setStatus('⏳ Guardando...', '#F59E0B');
 
         try {
-            const res = await fetch('/api/admin/availability', {
+            const res = await adminFetch('/api/admin/availability', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(availabilityConfig)
@@ -850,7 +863,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (data.success && data.token) {
                     authToken = data.token;
-                    sessionStorage.setItem('montebello_admin_token', authToken);
+                    localStorage.setItem('montebello_admin_token', authToken);
                     loginError.textContent = '';
                     showDashboard();
                     fetchReservations();
@@ -863,7 +876,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         btnLogout.addEventListener('click', () => {
-            sessionStorage.removeItem('montebello_admin_token');
+            localStorage.removeItem('montebello_admin_token');
             authToken = null;
             showLogin();
         });
@@ -980,7 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const waWin = window.open('', '_blank');
 
             try {
-                const res = await fetch(`/api/admin/reservations/${id}/status`, {
+                const res = await adminFetch(`/api/admin/reservations/${id}/status`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ status: 'CONFIRMADA', tableName, staffNotes })
@@ -1014,7 +1027,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const waWin = window.open('', '_blank');
 
             try {
-                const res = await fetch(`/api/admin/reservations/${id}/status`, {
+                const res = await adminFetch(`/api/admin/reservations/${id}/status`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ status: 'RECHAZADA', staffNotes })
@@ -1045,7 +1058,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = deleteResId.value;
 
             try {
-                const res = await fetch(`/api/admin/reservations/${id}`, { method: 'DELETE' });
+                const res = await adminFetch(`/api/admin/reservations/${id}`, { method: 'DELETE' });
                 const data = await res.json();
                 if (data.success) {
                     closeDeleteModal();
